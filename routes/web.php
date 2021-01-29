@@ -14,5 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('home');
+    return view('layout/home');
+});
+Route::get('/setting', function () {
+    return view('settingApplication/settingApplication');
 });

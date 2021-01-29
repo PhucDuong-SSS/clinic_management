@@ -1,4 +1,4 @@
-@extends('master')
+@extends('layout/master')
 @section('content')
 <div class="card">
     <div class="card-header">
