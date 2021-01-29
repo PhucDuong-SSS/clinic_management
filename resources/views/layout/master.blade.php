@@ -40,11 +40,11 @@
     <div class="wrapper">
 
         <!-- Navbar -->
-        @include('nav')
+        @include('layout/core/nav')
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        @include('sidebar')
+        @include('layout/core/sidebar')
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -66,9 +66,10 @@
         </div>
     </div>
     <!-- ./wrapper -->
-    @include('footer')
+    @include('layout/core/footer')
     <!-- jQuery -->
     <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script> --}}
     <!-- jQuery UI 1.11.4 -->
     <script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -76,14 +77,14 @@
         $.widget.bridge('uibutton', $.ui.button)
     </script>
     <!-- Bootstrap 4 -->
-    <script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    {{-- <script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script> --}}
     <!-- ChartJS -->
     <script src="{{asset('plugins/chart.js/Chart.min.js')}}"></script>
     <!-- Sparkline -->
-    <script src="{{asset('plugins/sparklines/sparkline.js')}}"></script>
+    {{-- <script src="{{asset('plugins/sparklines/sparkline.js')}}"></script> --}}
     <!-- JQVMap -->
-    <script src="{{asset('plugins/jqvmap/jquery.vmap.min.js')}}"></script>
-    <script src="{{asset('plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script>
+    {{-- <script src="{{asset('plugins/jqvmap/jquery.vmap.min.js')}}"></script> --}}
+    {{-- <script src="{{asset('plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script> --}}
     <!-- jQuery Knob Chart -->
     <script src="{{asset('plugins/jquery-knob/jquery.knob.min.js')}}"></script>
     <!-- daterangepicker -->
@@ -182,18 +183,18 @@
             //Bootstrap Duallistbox
             $('.duallistbox').bootstrapDualListbox()
 
-            //Colorpicker
-            $('.my-colorpicker1').colorpicker()
-            //color picker with addon
-            $('.my-colorpicker2').colorpicker()
+            // //Colorpicker
+            // $('.my-colorpicker1').colorpicker()
+            // //color picker with addon
+            // $('.my-colorpicker2').colorpicker()
 
-            $('.my-colorpicker2').on('colorpickerChange', function(event) {
-                $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
-            });
+            // $('.my-colorpicker2').on('colorpickerChange', function(event) {
+            //     $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
+            // });
 
-            $("input[data-bootstrap-switch]").each(function() {
-                $(this).bootstrapSwitch('state', $(this).prop('checked'));
-            });
+            // $("input[data-bootstrap-switch]").each(function() {
+            //     $(this).bootstrapSwitch('state', $(this).prop('checked'));
+            // });
 
         })
     </script>
@@ -204,15 +205,15 @@
                 "responsive": true,
                 "autoWidth": false,
             });
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
+            // $('#example2').DataTable({
+            //     "paging": true,
+            //     "lengthChange": false,
+            //     "searching": false,
+            //     "ordering": true,
+            //     "info": true,
+            //     "autoWidth": false,
+            //     "responsive": true,
+            // });
         });
     </script>
 </body>
