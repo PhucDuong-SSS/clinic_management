@@ -33,17 +33,24 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-edit"></i>
                         <p>
-                            Tạo mới bệnh nhân
+                            Quản lý đơn thuốc
+                            <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
-                </li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
-                        <p>
-                            Danh sách bệnh nhân
-                        </p>
-                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('prescription.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách đơn thuốc</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('prescription.create')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Tạo đơn thuốc mới</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 {{-- Cấu hình trang --}}
