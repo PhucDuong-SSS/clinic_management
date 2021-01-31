@@ -1,8 +1,9 @@
-@extends('master')
+@extends('layout/master')
 @section('content')
 <section class="content">
     <div class="container-fluid">
         <form role="form">
+            @csrf
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -38,31 +39,34 @@
                     </div>
 
                 </div>
-                <div class="card card-default">
-                    <div class="card-header">
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-                            <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                        </div>
-                    </div>
+                <div class="card card-default col-12">
                     <!-- /.card-header -->
+
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
                                     <label>Triệu Chứng</label>
-                                    <select class="duallistbox" multiple="multiple">
-                                        <option>Alabama</option>
-                                        <option>Alaska</option>
-                                        <option>California</option>
-                                        <option>Delaware</option>
-                                        <option>Tennessee</option>
-                                        <option>Texas</option>
-                                        <option>Washington</option>
-                                    </select>
-                                    <label>Triệu chứng khác:</label>
-                                    <textarea name="" id="" cols="100%" rows="2">
-                                    </textarea>
+                                    <div id="container" class="row">
+                                        @foreach($symptons as $sympton)
+                                        <div class="col-sm-3">
+                                            <!-- checkbox -->
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox">
+                                                    <label class="form-check-label">{{$sympton->sympton_name}}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+
+                                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
+                                            Thêm triệu chứng
+                                        </button>
+                                    <!-- /.card -->
+                                </div>
+
                                 </div>
 
                             </div>
@@ -156,7 +160,7 @@
                 <div class="col-12">
                     <label>Ghi chú:</label>
                     <textarea name="" id="" cols="100%" rows="2">
-                                    </textarea>
+                    </textarea>
                 </div>
 
 
@@ -208,6 +212,90 @@
 
     </div>
     <!-- /.row -->
+
     </div><!-- /.container-fluid -->
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm triệu chứng</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form name="userForm" class="form-horizontal">
+                        <input type="hidden" name="post_id" id="post_id">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-6">Triệu chứng</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="sympton_name" name="sympton_name" placeholder="Nhập triệu chứng">
+                                <span id="titleError" class="alert-message"></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button id="add_sympton" type="button" class="btn btn-primary">Thêm</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
 </section>
+
+
+
+
+@endsection
+@section('script')
+    <script>
+
+        $(document).ready(function() {
+            $('#add_sympton').click(function(e) {
+              const sympton_name =  $('#sympton_name').val()
+                const content = `<div class="col-sm-3">
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox">
+                                                    <label class="form-check-label">${sympton_name}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                `
+                $('#container')
+                    .append(content);
+
+                if (sympton_name) {
+                    let _url     = `/admin/sympton/add-sympton`;
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
+                    $.ajax({
+                        url: _url,
+                        type:"POST",
+                        data : {
+                            sympton_name:sympton_name,
+                        },
+                        dataType:"json",
+                        success:function(data) {
+                            $('#sympton_name').val('');
+                            $('#modal-default').modal('hide');
+                        },
+                    });
+                }else{
+                    alert('danger');
+                }
+
+            })
+        });
+
+    </script>
 @endsection
