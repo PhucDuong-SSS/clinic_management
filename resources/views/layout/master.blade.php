@@ -35,8 +35,12 @@
     <link rel="stylesheet" href="{{asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
 
+    {{-- SweetAlert2 --}}
+    <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
+
 
 </head>
+
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -220,9 +224,9 @@
             // });
         });
     </script>
-    // Them trieu chung
-
     @yield('script')
+
+    @include('sweetalert::alert')
 
 
 </body>
