@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Medicine extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     public function medCategory()
     {
