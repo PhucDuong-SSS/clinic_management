@@ -2,8 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PrescriptionController;
+use App\Http\Controllers\SettingAppController;
 use App\Http\Controllers\SymptonController;
+
 use App\Http\Controllers\PrescriptionMedicineController;
+
+use RealRashid\SweetAlert\Facades\Alert;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -19,9 +25,7 @@ use App\Http\Controllers\PrescriptionMedicineController;
 Route::get('/', function () {
     return view('layout/home');
 });
-Route::get('/setting', function () {
-    return view('settingApplication/settingApplication');
-});
+
 
 Route::prefix('admin')->group(function(){
     Route::prefix('prescription')->group(function(){
@@ -33,11 +37,22 @@ Route::prefix('admin')->group(function(){
         Route::post('add-sympton',[SymptonController::class,'addSympton']);
     });
 
+
     Route::prefix('prescription-medicine')->group(function (){
         Route::post('add-prescription-medicine',[PrescriptionMedicineController::class,'addPrescriptionMedicine'])->name('addPrescriptionMedicine');
         Route::delete('delete-prescription-medicine/{id}',[PrescriptionMedicineController::class,'delete'])->name('PrescriptionMedicine.delete');
 
     });
 
+
+
+    Route::prefix('setting')->group(function(){
+        Route::get('/',[SettingAppController::class,'index'])->name('setting.index');
+        Route::get('/create',[SettingAppController::class,'create'])->name('setting.create');
+        Route::post('/create',[SettingAppController::class,'store'])->name('setting.store');
+        Route::get('/{id}/edit',[SettingAppController::class,'edit'])->name('setting.edit');
+        Route::post('/{id}/edit',[SettingAppController::class,'update'])->name('setting.update');
+        Route::get('/{id}/destroy',[SettingAppController::class,'destroy'])->name('setting.destroy');
+    });
 
 });
