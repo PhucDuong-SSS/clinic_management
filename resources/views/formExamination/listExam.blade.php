@@ -31,10 +31,12 @@
                                     <td>{{$prescription->patient->phone_number}}</td>
                                     <td> {{$prescription->exam_date}}</td>
                                     <td>
-                                        <a href="" class="btn btn-sm btn-warning" title="Chi tiết"><i class="fa fa-eye"></i></a>
-                                        <a href="" class="btn btn-sm btn-info" title="Sửa"><i class="fa fa-edit"></i></a>
-                                        <a href="" class="btn btn-sm btn-info" title="Tái khám"><i class="far fa-plus-square"></i></a>
-                                        <a href="" class="btn btn-sm btn-danger" title="Xóa" id="delete"><i class="fa fa-trash"></i></a>
+                                        <a href="{{route('prescription.print',$prescription->id)}}" class="btn btn-sm btnprn btn-warning" title="In"><i class="fas fa-print"></i>
+
+                                        </a>
+{{--                                        <a href="" class="btn btn-sm btn-info" title="Sửa"><i class="fa fa-edit"></i></a>--}}
+                                        <a href="{{route('prescription.reExam',$prescription->id)}}" class="btn btn-sm btn-info" title="Tái khám"><i class="far fa-plus-square"></i></a>
+                                        <a href="{{route('prescription.delete',$prescription->id)}}" class="btn btn-sm btn-danger" title="Xóa" id="delete"><i class="fa fa-trash"></i></a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -53,3 +55,4 @@
     </section>
 
 @endsection
+
