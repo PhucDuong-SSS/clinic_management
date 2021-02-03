@@ -2,40 +2,77 @@
 @section('content')
 <section class="content">
     <div class="container-fluid">
-        <form role="form" action="{{route('prescription.store')}}" method="POST">
+        <form role="form"  @if(isset($patient)) action="{{route('prescription.storeExam',$id_prescription)}}"@else action="{{route('prescription.store')}}"   @endif method="POST">
             @csrf
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Tên bệnh nhân</label>
-                        <input type="text" name="full_name" class="form-control" placeholder="Tên bệnh nhân">
+                        <input type="text" name="full_name" class="form-control" placeholder="Tên bệnh nhân" @if(isset($patient)) value="{{$patient->full_name}}" @endif>
+                        @error('full_name')
+                        <div style="color: red">*{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label>Ngày sinh:</label>
-                        <input name="dob" type="date" class="form-control" placeholder="Ngày sinh">
+                        <input name="dob" type="date" class="form-control" placeholder="Ngày sinh" @if(isset($patient)) value="{{$patient->dob}}" @endif>
+                        @error('dob')
+                        <div style="color: red">*{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label>Giới tính:</label><br>
+                        @if(isset($patient))
+                            @if($patient->gender == 1)
                         <label>
-                            <input type="radio" name="gender" value="1"> Nam
+                            <input type="radio" checked name="gender" value="1"> Nam
                         </label>
                         <label>
                             <input type="radio" name="gender" value="0">Nữ
                         </label>
+                            @else
+                                <label>
+                                    <input type="radio" checked name="gender" value="1"> Nam
+                                </label>
+                                <label>
+                                    <input type="radio" checked name="gender" value="0">Nữ
+                                </label>
+                            @endif
+                        @else
+                            <label>
+                                <input type="radio" checked name="gender" value="1"> Nam
+                            </label>
+                            <label>
+                                <input type="radio" name="gender" value="0">Nữ
+                            </label>
+                        @endif
+
+                        @error('gender')
+                        <div style="color: red">*{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Người giám hộ:</label>
-                        <input name="guardian_name" type="text" class="form-control" placeholder="Tên người giám hộ">
+                        <input name="guardian_name" type="text" class="form-control" placeholder="Tên người giám hộ" @if(isset($patient)) value="{{$patient->guardian_name}}" @endif>
+                        @error('guardian_name')
+                        <div style="color: red">*{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label>Số điện thoại:</label>
-                        <input name="phone_number" type="number" class="form-control" placeholder="Số điện thoại">
+                        <input name="phone_number" type="number" class="form-control" placeholder="Số điện thoại"  @if(isset($patient)) value="{{$patient->phone_number}}" @endif >
+                        @error('phone_number')
+                        <div style="color: red">*{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label>Địa chỉ:</label>
-                        <input name="address" type="text" class="form-control" placeholder="Địa chỉ">
+                        <input name="address" type="text" class="form-control" placeholder="Địa chỉ" @if(isset($patient)) value="{{$patient->address}}" @endif>
+                        @error('address')
+                        <div style="color: red">*{{ $message }}</div>
+                        @enderror
                     </div>
 
                 </div>
@@ -78,6 +115,9 @@
                     <div class="form-group">
                         <label>Chuẩn đoán</label>
                         <textarea name="prognosis" class="form-control" rows="3" placeholder="Nhập chuẩn đoán"></textarea>
+                        @error('prognosis')
+                        <div style="color: red">*{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -137,6 +177,9 @@
                     <div class="form-group">
                         <label>Ghi chú</label>
                         <textarea name="note" class="form-control" rows="3" placeholder="Nhập ghi chú"></textarea>
+                        @error('note')
+                        <div style="color: red">*{{ $message }}</div>
+                        @enderror
                     </div>
 
                 </div>
@@ -144,12 +187,18 @@
                     <div class="form-group">
                         <label>Tiền khám</label>
                         <input type="number" name="exam_price" class="form-control" placeholder="Nhập tiền khám">
+                        @error('exam_price')
+                        <div style="color: red">*{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Ngày khám</label>
                         <input type="date" name="exam_date" class="form-control" placeholder="Nhập ngày khám">
+                        @error('exam_date')
+                        <div style="color: red">*{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -158,6 +207,14 @@
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0" style="height: 300px;">
                             <table class="table table-head-fixed text-nowrap" id="preexam_content">
+                                @if(isset($prescriptions_time))
+                                    @foreach($prescriptions_time as $index=>$prescription)
+                                        <tr>
+                                            <td>Ngày tái khám lần: {{$index+1}}</td>
+                                            <td>{{$prescription->exam_date}}</td>
+                                        </tr>
+                                    @endforeach
+                                    @endif
 
 
                                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-preexam">
@@ -176,7 +233,7 @@
 
 
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Xuât phiếu điều trị</button>
+                <button type="submit" class="btn btn-primary">Tạo đơn thuốc</button>
             </div>
         </form>
 
@@ -276,7 +333,6 @@
 
                                     @endforeach
                                 </select>
-                                <input type="hidden" name="unit_sell_price" id="unit_sell_price" value="10000">
 
                             </div>
                         </div>
@@ -298,14 +354,14 @@
                         <div class="form-group">
                             <label class="col-sm-12 control-label">Lượng thuốc buối trưa</label>
                             <div class="col-sm-12">
-                                <input type="number" class="form-control" id="midday" name="midday" placeholder="Nhập số lượng thuốc cho buổi sáng"  maxlength="50">
+                                <input type="number" class="form-control" id="midday" name="midday" placeholder="Nhập số lượng thuốc cho buổi trưa"  maxlength="50">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-12 control-label">Ghi chú thuốc buối trưa </label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="note_midday" name="note_midday" placeholder="Ghi chú cho buổi sáng"  maxlength="255">
+                                <input type="text" class="form-control" id="note_midday" name="note_midday" placeholder="Ghi chú cho buổi trưa"  maxlength="255">
                             </div>
                         </div>
 
@@ -341,6 +397,9 @@
                             <label class="col-sm-12 control-label">Số lượng ngày dùng </label>
                             <div class="col-sm-12">
                                 <input type="number" class="form-control" id="number_of_day" name="number_of_day" placeholder="Thời gian dùng cho thuốc"  maxlength="255">
+                                @error('number_of_day')
+                                <div style="color: red">*{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
@@ -348,6 +407,9 @@
                             <label class="col-sm-12 control-label">Nhập số tiền</label>
                             <div class="col-sm-12">
                                 <input type="number" class="form-control" id="sell_price" name="sell_price" placeholder="Nhâp sô tiền"  maxlength="255">
+                                @error('sell_price')
+                                <div style="color: red">*{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
