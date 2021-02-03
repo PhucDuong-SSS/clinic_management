@@ -20,12 +20,14 @@ class SymptonController extends Controller
     // Phúc
     public function addSympton(SymptonRequest $request)
     {
+            $sympton = new Sympton();
 
-            Sympton::create( [
-            'sympton_name' => $request->sympton_name
-        ]);
+            $sympton->sympton_name = $request->sympton_name;
+            $sympton->save();
+            $html = view('formExamination.contentSymptons',compact('sympton'))->render();
 
-        return response()->json(['code'=>200, 'message'=>'Post Created successfully'], 200);
+
+        return response()->json(['code'=>200, 'message'=>'Thêm triêu chứng thành công','html'=>$html], 200);
 
     }
 
