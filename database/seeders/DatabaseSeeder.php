@@ -118,35 +118,39 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        foreach (range(1, 2) as $index) {
-            DB::table('permissions')->insert([
-                'permission_name' => $faker->randomElement(['bac si', 'nhan vien'])
-            ]);
-        }
+        $permission = new Permission();
+        $permission->permission_name = "list_user";
+        $permission->permission_name2 = "Danh sách thành viên";
+        $permission->save();
+        $permission = new Permission();
+        $permission->permission_name = "edit_user";
+        $permission->permission_name2 = "Chỉnh sửa thành viên";
+        $permission->save();
+        $permission = new Permission();
+        $permission->permission_name = "delete_user";
+        $permission->permission_name2 = "Xóa thành viên";
+        $permission->save();
+        $permission = new Permission();
+        $permission->permission_name = "add_user";
+        $permission->permission_name2 = "Thêm thành viên";
+        $permission->save();
 
-        foreach (range(1, 3) as $index) {
-            DB::table('users')->insert([
-                'full_name' => $faker->unique()->name,
-                'email' => $faker->unique()->email,
-                'user_name' => $faker->unique()->name,
-                'phone' => $faker->phoneNumber,
-                'address' => $faker->address,
-                'image' => 'image.jpg',
-                'password' => bcrypt('123456@Abc')
-            ]);
+        $user = new User();
+        $user->full_name = "admin";
+        $user->email = "admin@gmail.com";
+        $user->user_name = "admin";
+        $user->password = bcrypt('123456@Abc');
+        $user->address = "hue";
+        $user->phone = "01111";
+        $user->image   = "image.jpg";
+        $user->save();
 
-            DB::table('users')->insert([
-                'full_name' => $faker->unique()->name,
-                'email' => $faker->unique()->email,
-                'user_name' => $faker->unique()->name,
-                'phone' => $faker->phoneNumber,
-                'address' => $faker->address,
-                'image' => 'image.jpg',
-                'password' => bcrypt('123456@Abc')
+        $permission = Permission::all();
+        foreach ($permission as $key => $permissionId) {
+            DB::table('user_permission')->insert([
+                'id_user' => $user->id,
+                'permission_key' => $key + 1
             ]);
-            $permission = Permission::all()->random()->id;
-            $user = User::find($index);
-            $user->permission()->attach($permission);
         }
     }
 }
