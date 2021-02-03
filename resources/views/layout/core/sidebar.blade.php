@@ -9,12 +9,17 @@
     <div class="sidebar">
 
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="image">
-                <img src="{{asset('dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
+
+            @if(isset(Illuminate\Support\Facades\Auth::user()->image))
+               <div class="image">
+                <img src="{{asset('/storage/'.substr(Illuminate\Support\Facades\Auth::user()->image,7))}}" class="img-circle elevation-2" alt="User Image">
             </div>
+             @endif
+            @if(isset(Illuminate\Support\Facades\Auth::user()->full_name))
             <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
+                <a href="#" class="d-block">{{\Illuminate\Support\Facades\Auth::user()->full_name}}</a>
             </div>
+            @endif
         </div>
 
 
@@ -26,6 +31,30 @@
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="{{route('user.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-edit"></i>
+                        <p>
+                            Danh sách thành viên
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="{{route('user.changepasswordform')}}" class="nav-link">
+                        <i class="nav-icon fas fa-edit"></i>
+                        <p>
+                            Đổi mật khẩu
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="{{route('user.changeprofileform')}}" class="nav-link">
+                        <i class="nav-icon fas fa-edit"></i>
+                        <p>
+                            Đổi thông tin cá nhân
                         </p>
                     </a>
                 </li>

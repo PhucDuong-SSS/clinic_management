@@ -118,14 +118,13 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        foreach (range(1,2) as $index) {
+        foreach (range(1, 2) as $index) {
             DB::table('permissions')->insert([
-                'permission_key' => $faker->unique()->name,
-                'permission_name' => $faker->randomElement(['bac si','nhan vien'])
+                'permission_name' => $faker->randomElement(['bac si', 'nhan vien'])
             ]);
         }
 
-        foreach (range(1,3) as $index) {
+        foreach (range(1, 3) as $index) {
             DB::table('users')->insert([
                 'full_name' => $faker->unique()->name,
                 'email' => $faker->unique()->email,
@@ -148,8 +147,6 @@ class DatabaseSeeder extends Seeder
             $permission = Permission::all()->random()->id;
             $user = User::find($index);
             $user->permission()->attach($permission);
-
-
         }
     }
 }

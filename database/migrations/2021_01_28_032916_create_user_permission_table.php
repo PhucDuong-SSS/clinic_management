@@ -16,8 +16,8 @@ class CreateUserPermissionTable extends Migration
         Schema::create('user_permission', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_user');
-            $table->string('permission_key');
-            $table->foreign('permission_key')->references('permission_key')->on('permissions');
+            $table->unsignedBigInteger('permission_key');
+            $table->foreign('permission_key')->references('id')->on('permissions');
             $table->foreign('id_user')->references('id')->on('users');
             $table->timestamps();
         });
