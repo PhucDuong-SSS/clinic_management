@@ -108,6 +108,13 @@
 
         $('#btn-save').click(function (e) {
             e.preventDefault();
+            Swal.fire({
+            title: 'Thành công!',
+            text: 'Bạn có muốn tiếp tục',
+            type: 'success',
+            confirmButtonText: 'OK'
+
+        })
 
             var sympton_id = $('#sympton_id').val();
 
@@ -130,7 +137,7 @@
                     <td>${st.sympton_name}</td>
                     <td class="d-flex justify-content-center">
                         <a href="#" class="mr-2 editSympton" data-toggle="modal" data-target='#modal-default' data-id="${st.id}"> <i class="nav-icon fas fa-edit"></i> Sửa</a>
-                        <a style="color: red" href="#" class="deleteSympton" data-toggle="tooltip" data-id="${data.sympton.id}"> <i class="nav-icon far fa-trash-alt" style="color: red"></i> Xóa</a>
+                        <a style="color: red" href="#" class="deleteSympton" data-toggle="tooltip" data-id="${st.id}"> <i class="nav-icon far fa-trash-alt" style="color: red"></i> Xóa</a>
                     </tr>
                 `, ``);
 
@@ -146,32 +153,52 @@
 
         $('body').on('click','.deleteSympton',function(){
             var sympton_id = $(this).data('id');
-            confirm('Bạn có chắc muốn xóa mục này?');
+            // confirm('Bạn có chắc muốn xóa mục này?');
+            Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        console.log(result.value)
+                        if (result.value) {
+                        $.ajax({
+                            type:"DELETE",
+                            url: `/admin/sympton/${sympton_id}/destroy`,
+                            success: function(data){
 
-            $.ajax({
-                type:"DELETE",
-                url: `/admin/sympton/${sympton_id}/destroy`,
-                success: function(data){
+                                let key = 0;
 
-                    let key = 0;
-
-                    document.querySelector("#sympton_list").innerHTML =
-                   data.sympton.reduce((docs, st) =>
-                   docs +
-                `
-                    <td>${++key}</td>
-                    <td>${st.sympton_name}</td>
-                    <td class="d-flex justify-content-center">
-                        <a href="#" class="mr-2 editSympton" data-toggle="modal" data-target='#modal-default' data-id="${st.id}"> <i class="nav-icon fas fa-edit"></i> Sửa</a>
-                        <a style="color: red" href="#" class="deleteSympton" data-toggle="tooltip" data-id="${st.id}"> <i class="nav-icon far fa-trash-alt" style="color: red"></i> Xóa</a>
-                    </tr>
-                `,``
-                );
+                                document.querySelector("#sympton_list").innerHTML =
+                                data.sympton.reduce((docs, st) =>
+                                docs +
+                                `
+                                    <td>${++key}</td>
+                                    <td>${st.sympton_name}</td>
+                                    <td class="d-flex justify-content-center">
+                                        <a href="#" class="mr-2 editSympton" data-toggle="modal" data-target='#modal-default' data-id="${st.id}"> <i class="nav-icon fas fa-edit"></i> Sửa</a>
+                                        <a style="color: red" href="#" class="deleteSympton" data-toggle="tooltip" data-id="${st.id}"> <i class="nav-icon far fa-trash-alt" style="color: red"></i> Xóa</a>
+                                    </tr>
+                                `,``
+                                );
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Your file has been deleted.',
+                                    'success'
+                                        )
                 },
                 error:function(data){
                     console.log('Error',data);
                 }
             })
+
+                        }
+})
+
+
         });
     };
 

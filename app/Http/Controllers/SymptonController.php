@@ -42,8 +42,8 @@ class SymptonController extends Controller
         $message = 'Thêm thành công!';
 
         $symptons = Sympton::all();
-        $html = view('sympton.table-ajax-user', compact('symptons'))->render();
-        return response()->json(['sympton'=>$symptons,'success'=>$message, 'view'=>$html]);
+
+        return response()->json(['sympton'=>$symptons,'success'=>$message]);
     }
 
     public function edit($id)
@@ -60,8 +60,8 @@ class SymptonController extends Controller
         $message = 'Sửa thành công';
 
         $symptons = Sympton::all();
-        $html = view('sympton.table-ajax-user', compact('symptons'))->render();
-        return response()->json(['sympton'=>$symptons,'success'=>$message, 'view'=>$html]);
+
+        return response()->json(['sympton'=>$symptons,'success'=>$message]);
     }
     public function destroy($id)
     {
@@ -69,8 +69,8 @@ class SymptonController extends Controller
         $symptons->delete();
         $message = 'Xóa thành công';
         $symptons = Sympton::all();
-        $html = view('sympton.listSympton', compact('symptons'))->render();
-        return response()->json(['sympton'=>$symptons,'success'=>$message, 'view'=>$html]);
+     
+        return response()->json(['sympton'=>$symptons,'success'=>$message]);
     }
 
 
