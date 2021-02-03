@@ -25,7 +25,7 @@ class SymptonRepository extends BaseRepository implements RepositoryInterface
 
     public function save($obj)
     {
-        return $this->symptonModel->save($obj);
+        $obj->save();
     }
 
     public function delete($obj)

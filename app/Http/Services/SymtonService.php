@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\SymptonRepository;
+use App\Models\Sympton;
 
 class SymtonService implements ServiceInterface
 {
@@ -25,7 +26,9 @@ class SymtonService implements ServiceInterface
 
     public function add($request, $obj = null)
     {
-        $obj->fill($request->all());
+        $obj = new Sympton();
+        $obj->id            = $request->id;
+        $obj->sympton_name  = $request->sympton_name;
         $this->symptonRepo->save($obj);
     }
 
@@ -36,6 +39,7 @@ class SymtonService implements ServiceInterface
 
     public function update($request, $obj = null)
     {
-        // TODO: Implement update() method.
+        $obj->fill($request->all());
+        $this->symptonRepo->save($obj);
     }
 }

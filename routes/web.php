@@ -30,7 +30,12 @@ Route::prefix('admin')->group(function(){
 
     });
     Route::prefix('sympton')->group(function (){
+        Route::get('',[SymptonController::class,'index'])->name('sympton.index');
         Route::post('add-sympton',[SymptonController::class,'addSympton']);
+        Route::post('/add-sympton',[SymptonController::class,'store'])->name('sympton.store');
+        Route::get('/{id}/edit',[SymptonController::class,'edit']);
+        Route::post('/{id}/edit',[SymptonController::class,'update']);
+        Route::delete('/{id}/destroy',[SymptonController::class,'destroy'])->name('sympton.destroy');
     });
 
     Route::prefix('setting')->group(function(){
@@ -41,4 +46,5 @@ Route::prefix('admin')->group(function(){
         Route::post('/{id}/edit',[SettingAppController::class,'update'])->name('setting.update');
         Route::get('/{id}/destroy',[SettingAppController::class,'destroy'])->name('setting.destroy');
     });
+
 });
