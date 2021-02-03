@@ -36,7 +36,12 @@ Route::prefix('admin')->group(function(){
         Route::post('store',[PrescriptionController::class,'store'])->name('prescription.store');
     });
     Route::prefix('sympton')->group(function (){
+        Route::get('',[SymptonController::class,'index'])->name('sympton.index');
         Route::post('add-sympton',[SymptonController::class,'addSympton']);
+        Route::post('/add-sympton',[SymptonController::class,'store'])->name('sympton.store');
+        Route::get('/{id}/edit',[SymptonController::class,'edit']);
+        Route::post('/{id}/edit',[SymptonController::class,'update']);
+        Route::delete('/{id}/destroy',[SymptonController::class,'destroy'])->name('sympton.destroy');
     });
 
 
@@ -77,4 +82,5 @@ Route::middleware('adminLogin')->prefix('admin')->group(function () {
         Route::get('/changeprofile', [UserController::class, 'changeprofileform'])->name('user.changeprofileform');
         Route::post('/changeprofile/{id}', [UserController::class, 'changeprofile'])->name('user.changeprofile');
     });
+
 });
