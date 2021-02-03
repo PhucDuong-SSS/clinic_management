@@ -9,5 +9,4 @@ interface RepositoryInterface
     function getAll();
     function findById($id);
     function save($obj);
-    function delete($obj);
 }

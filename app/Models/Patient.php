@@ -10,8 +10,10 @@ class Patient extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function prescriptions()
     {
-        return $this->hasMany(Prescription::class);
+        return $this->hasMany(Prescription::class,'id_patient','id');
     }
 }

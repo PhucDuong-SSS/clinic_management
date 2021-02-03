@@ -9,6 +9,7 @@
     <div class="sidebar">
 
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+
             @if(isset(Illuminate\Support\Facades\Auth::user()->image))
                <div class="image">
                 <img src="{{asset('/storage/'.substr(Illuminate\Support\Facades\Auth::user()->image,7))}}" class="img-circle elevation-2" alt="User Image">
@@ -61,22 +62,29 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-edit"></i>
                         <p>
-                            Tạo mới bệnh nhân
+                            Quản lý đơn thuốc
+                            <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
-                </li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
-                        <p>
-                            Danh sách bệnh nhân
-                        </p>
-                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('prescription.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách đơn thuốc</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('prescription.create')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Tạo đơn thuốc mới</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 {{-- Cấu hình trang --}}
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('setting.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
                             Cấu hình
