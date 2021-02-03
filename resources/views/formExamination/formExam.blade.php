@@ -98,7 +98,7 @@
                                         @endforeach
                                     </div>
 
-                                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
+                                        <button type="button" id="reset" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">
                                             Thêm triệu chứng
                                         </button>
                                     <!-- /.card -->
@@ -130,7 +130,7 @@
                             <h3 class="card-title">Toa thuốc:</h3>
                         </div>
                         <!-- /.card-header -->
-                        <div class="card-body table-responsive p-0" style="height: 200px;">
+                        <div class="card-body table-responsive p-0" >
                             <table class="table table-head-fixed text-nowrap">
                                 <thead>
                                     <tr>
@@ -156,12 +156,12 @@
                                     </tr>
                                 @endforeach
                                     <tr>
-                                        <td colspan="5">Tổng tiền : {{$newPrescriptionMedicine->totalPrice}}</td>
+                                        <td colspan="5">Tổng tiền : <strong>{{$newPrescriptionMedicine->totalPrice}} đ</strong>  </td>
                                     </tr>
                                     @endif
                                 </tbody>
                             </table>
-                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-lg">
+                            <button type="button" style="margin: 25px 25px" id="reset_add_medicine" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg">
                                 Thêm thuốc
                             </button>
 
@@ -295,7 +295,7 @@
                             <label for="name" class="col-sm-6">Triệu chứng</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="sympton_name" name="sympton_name" placeholder="Nhập triệu chứng">
-                                <span id="titleError" class="alert-message"></span>
+                                <div class="text-danger text-center symptonErr"></div>
                             </div>
                         </div>
                     </form>
@@ -332,6 +332,7 @@
                                     <option value="{{$medicine->id}}">{{$medicine->medicine_name}}</option>
 
                                     @endforeach
+
                                 </select>
 
                             </div>
@@ -341,6 +342,7 @@
                             <label class="col-sm-12 control-label">Lượng thuốc buối sáng</label>
                             <div class="col-sm-12">
                                 <input type="number" class="form-control" id="morning" name="morning" placeholder="Nhập số lượng thuốc cho buổi sáng"  maxlength="50">
+                                <div class="text-danger text-left morningErr"></div>
                             </div>
                         </div>
 
@@ -348,6 +350,8 @@
                             <label class="col-sm-12 control-label">Ghi chú thuốc buối sáng </label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="note_morning" name="note_morning" placeholder="Ghi chú cho buổi sáng"  maxlength="255">
+                                <div class="text-danger text-left note_morningErr"></div>
+
                             </div>
                         </div>
 
@@ -355,6 +359,8 @@
                             <label class="col-sm-12 control-label">Lượng thuốc buối trưa</label>
                             <div class="col-sm-12">
                                 <input type="number" class="form-control" id="midday" name="midday" placeholder="Nhập số lượng thuốc cho buổi trưa"  maxlength="50">
+                                <div class="text-danger text-left middayErr"></div>
+
                             </div>
                         </div>
 
@@ -362,6 +368,8 @@
                             <label class="col-sm-12 control-label">Ghi chú thuốc buối trưa </label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="note_midday" name="note_midday" placeholder="Ghi chú cho buổi trưa"  maxlength="255">
+                                <div class="text-danger text-left note_middayErr"></div>
+
                             </div>
                         </div>
 
@@ -369,6 +377,8 @@
                             <label class="col-sm-12 control-label">Lượng thuốc buối chiều</label>
                             <div class="col-sm-12">
                                 <input type="number" class="form-control" id="afternoon" name="afternoon" placeholder="Nhập số lượng thuốc cho buổi chiều"  maxlength="50">
+                                <div class="text-danger text-left afternoonErr"></div>
+
                             </div>
                         </div>
 
@@ -376,6 +386,7 @@
                             <label class="col-sm-12 control-label">Ghi chú thuốc buối chiều </label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="note_afternoon" name="note_afternoon" placeholder="Ghi chú thuốc cho buổi chiều"  maxlength="255">
+                                <div class="text-danger text-left note_afternoonErr"></div>
                             </div>
                         </div>
 
@@ -383,6 +394,8 @@
                             <label class="col-sm-12 control-label">Lượng thuốc buối tối</label>
                             <div class="col-sm-12">
                                 <input type="number" class="form-control" id="evening" name="evening" placeholder="Nhập số lượng thuốc cho buổi tối"  maxlength="50">
+                                <div class="text-danger text-left eveningErr"></div>
+
                             </div>
                         </div>
 
@@ -390,6 +403,8 @@
                             <label class="col-sm-12 control-label">Ghi chú thuốc buối tối </label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="note_evening" name="note_evening" placeholder="Ghi chú thuốc cho buổi tối"  maxlength="255">
+                                <div class="text-danger text-left note_eveningErr"></div>
+
                             </div>
                         </div>
 
@@ -397,9 +412,8 @@
                             <label class="col-sm-12 control-label">Số lượng ngày dùng </label>
                             <div class="col-sm-12">
                                 <input type="number" class="form-control" id="number_of_day" name="number_of_day" placeholder="Thời gian dùng cho thuốc"  maxlength="255">
-                                @error('number_of_day')
-                                <div style="color: red">*{{ $message }}</div>
-                                @enderror
+                                <div class="text-danger text-left number_of_dayErr"></div>
+
                             </div>
                         </div>
 
@@ -407,9 +421,8 @@
                             <label class="col-sm-12 control-label">Nhập số tiền</label>
                             <div class="col-sm-12">
                                 <input type="number" class="form-control" id="sell_price" name="sell_price" placeholder="Nhâp sô tiền"  maxlength="255">
-                                @error('sell_price')
-                                <div style="color: red">*{{ $message }}</div>
-                                @enderror
+                                <div class="text-danger text-left sell_priceErr"></div>
+
                             </div>
                         </div>
 
@@ -439,22 +452,26 @@
     <script>
 
         $(document).ready(function() {
+            $('#reset').click(function (){
+                $('#sympton_name').removeClass('is-invalid');
+                $('.symptonErr').html('');
+            });
+            $('#reset_add_medicine').click(function (){
+                const inputs = $('.form-control');
+                const errors = $('.text-danger');
+                $.each(inputs,function (idx,input){
+                    $(input).removeClass('is-invalid');
+                });
+                $.each(errors,function (idx,error){
+                    $(error).html('');
+                });
+            });
             $('#add_sympton').click(function(e) {
-              const sympton_name =  $('#sympton_name').val()
-                const content = `<div class="col-sm-3">
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input name="sympton[]" value="${sympton_name}" class="form-check-input" type="checkbox">
-                                                    <label class="form-check-label">${sympton_name}</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                `
-                $('#container')
-                    .append(content);
+              const sympton_name =  $('#sympton_name').val();
 
-                if (sympton_name) {
-                    let _url     = `/admin/sympton/add-sympton`;
+
+
+                let _url     = `/admin/sympton/add-sympton-ajax`;
 
                     $.ajaxSetup({
                         headers: {
@@ -470,13 +487,20 @@
                         },
                         dataType:"json",
                         success:function(data) {
+                            $('#container').append(data.html);
                             $('#sympton_name').val('');
-                            $('#modal-default').modal('hide');
+
                         },
+                        error: function (xhr){
+                            let errors = xhr.responseJSON.errors;
+                            if(errors.sympton_name){
+                                $('.symptonErr').html(errors.sympton_name[0]);
+                                $('#sympton_name').addClass('is-invalid');
+                            }
+
+                        }
                     });
-                }else{
-                    alert('danger');
-                }
+
 
             })
 
@@ -535,9 +559,7 @@
                         },
                         dataType:"json",
                         success:function(data) {
-                            console.log(data.PrescriptionMedicine);
                              $('#data_prescription').html(data.PrescriptionMedicine);
-                             $('#modal-lg').modal('hide');
                             $('#morning').val('');
                             $('#midday').val('');
                             $('#evening').val('');
@@ -547,6 +569,54 @@
                             $('#note_evening').val('');
 
                         },
+
+                        error: function (xhr){
+                            let errors = xhr.responseJSON.errors;
+                            if(errors.morning){
+                                $('.morningErr').html(errors.morning[0]);
+                                $('#morning').addClass('is-invalid');
+                            }
+                            if(errors.midday){
+                                $('.middayErr').html(errors.midday[0]);
+                                $('#midday').addClass('is-invalid');
+                            }
+                            if(errors.afternoon){
+                                $('.afternoonErr').html(errors.afternoon[0]);
+                                $('#afternoon').addClass('is-invalid');
+                            }
+                            if(errors.evening){
+                                $('.eveningErr').html(errors.evening[0]);
+                                $('#evening').addClass('is-invalid');
+                            }
+                            if(errors.note_morning){
+                                $('.note_morningErr').html(errors.note_morning[0]);
+                                $('#note_morning').addClass('is-invalid');
+                            }
+                            if(errors.note_midday){
+                                $('.note_middayErr').html(errors.note_midday[0]);
+                                $('#note_midday').addClass('is-invalid');
+                            }
+                            if(errors.note_afternoon){
+                                $('.note_afternoonErr').html(errors.note_afternoon[0]);
+                                $('#note_afternoon').addClass('is-invalid');
+                            }
+                            if(errors.note_evening){
+                                $('.note_eveningErr').html(errors.note_evening[0]);
+                                $('#note_evening').addClass('is-invalid');
+                            }
+                            if(errors.number_of_day){
+                                $('.number_of_dayErr').html(errors.number_of_day[0]);
+                                $('#number_of_day').addClass('is-invalid');
+                            }
+                            if(errors.sell_price){
+                                $('.sell_priceErr').html(errors.sell_price[0]);
+                                $('#sell_price').addClass('is-invalid');
+                            }
+
+                        }
+
+
+
                     });
 
 
