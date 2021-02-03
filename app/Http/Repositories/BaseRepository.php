@@ -1,6 +1,8 @@
 <?php
 
+
 namespace App\Http\Repositories;
+
 
 class BaseRepository
 {
@@ -9,10 +11,9 @@ class BaseRepository
         $obj->save();
     }
 
-    function  delete($obj)
+
+    function delete($obj)
     {
-        $obj->detele();
+        $obj->delete();
     }
-
 }
-
