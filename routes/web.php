@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ForgetPasswordController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -29,39 +30,41 @@ Route::get('/', function () {
 });
 
 
-Route::prefix('admin')->group(function(){
-    Route::prefix('prescription')->group(function(){
-        Route::get('',[PrescriptionController::class,'index'])->name('prescription.index');
-        Route::get('create',[PrescriptionController::class,'create'])->name('prescription.create');
-        Route::post('store',[PrescriptionController::class,'store'])->name('prescription.store');
+Route::prefix('admin')->group(function () {
+    Route::prefix('prescription')->group(function () {
+        Route::get('', [PrescriptionController::class, 'index'])->name('prescription.index');
+        Route::get('create', [PrescriptionController::class, 'create'])->name('prescription.create');
+        Route::post('store', [PrescriptionController::class, 'store'])->name('prescription.store');
     });
-    Route::prefix('sympton')->group(function (){
-        Route::post('add-sympton',[SymptonController::class,'addSympton']);
-    });
-
-
-    Route::prefix('prescription-medicine')->group(function (){
-        Route::post('add-prescription-medicine',[PrescriptionMedicineController::class,'addPrescriptionMedicine'])->name('addPrescriptionMedicine');
-        Route::delete('delete-prescription-medicine/{id}',[PrescriptionMedicineController::class,'delete'])->name('PrescriptionMedicine.delete');
-
+    Route::prefix('sympton')->group(function () {
+        Route::post('add-sympton', [SymptonController::class, 'addSympton']);
     });
 
 
-
-    Route::prefix('setting')->group(function(){
-        Route::get('/',[SettingAppController::class,'index'])->name('setting.index');
-        Route::get('/create',[SettingAppController::class,'create'])->name('setting.create');
-        Route::post('/create',[SettingAppController::class,'store'])->name('setting.store');
-        Route::get('/{id}/edit',[SettingAppController::class,'edit'])->name('setting.edit');
-        Route::post('/{id}/edit',[SettingAppController::class,'update'])->name('setting.update');
-        Route::get('/{id}/destroy',[SettingAppController::class,'destroy'])->name('setting.destroy');
+    Route::prefix('prescription-medicine')->group(function () {
+        Route::post('add-prescription-medicine', [PrescriptionMedicineController::class, 'addPrescriptionMedicine'])->name('addPrescriptionMedicine');
+        Route::delete('delete-prescription-medicine/{id}', [PrescriptionMedicineController::class, 'delete'])->name('PrescriptionMedicine.delete');
     });
 
+
+
+    Route::prefix('setting')->group(function () {
+        Route::get('/', [SettingAppController::class, 'index'])->name('setting.index');
+        Route::get('/create', [SettingAppController::class, 'create'])->name('setting.create');
+        Route::post('/create', [SettingAppController::class, 'store'])->name('setting.store');
+        Route::get('/{id}/edit', [SettingAppController::class, 'edit'])->name('setting.edit');
+        Route::post('/{id}/edit', [SettingAppController::class, 'update'])->name('setting.update');
+        Route::get('/{id}/destroy', [SettingAppController::class, 'destroy'])->name('setting.destroy');
+    });
 });
 
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('admin.login');
 Route::get('logout', [LoginController::class, 'logout'])->name('admin.logout');
+Route::get('/forgetPw', [ForgetPasswordController::class, 'getEmail'])->name('forgetPw');
+Route::post('/forgetPw', [ForgetPasswordController::class, 'postEmail'])->name('forget-password');
+Route::get('resetpw/{token}', [ForgetPasswordController::class, 'getPassword'])->name('resetPw');
+Route::post('resetpw', [ForgetPasswordController::class, 'updatePassword'])->name('updatePw');
 
 Route::middleware('adminLogin')->prefix('admin')->group(function () {
 
@@ -71,7 +74,7 @@ Route::middleware('adminLogin')->prefix('admin')->group(function () {
         Route::post('/create', [UserController::class, 'store'])->name('user.store')->middleware('permission:add_user');
         Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit')->middleware('permission:edit_user');
         Route::post('/{id}/edit', [UserController::class, 'update'])->name('user.update')->middleware('permission:edit_user');
-        Route::get('/{id}/destroy', [UserController::class, 'destroy'])->name('user.destroy')->middleware('permission:delete_user');
+        Route::delete('/destroy/{id}', [UserController::class, 'destroy'])->name('user.destroy')->middleware('permission:delete_user');
         Route::get('/changepassword', [UserController::class, 'changepasswordform'])->name('user.changepasswordform');
         Route::post('/changepassword/{id}', [UserController::class, 'changepassword'])->name('user.changepassword');
         Route::get('/changeprofile', [UserController::class, 'changeprofileform'])->name('user.changeprofileform');
