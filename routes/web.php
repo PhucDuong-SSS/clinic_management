@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\SettingAppController;
 use App\Http\Controllers\SymptonController;
-
 use App\Http\Controllers\PrescriptionMedicineController;
-
 use RealRashid\SweetAlert\Facades\Alert;
 
 
@@ -30,14 +28,24 @@ Route::get('/', function () {
 });
 
 
+
 Route::prefix('admin')->group(function () {
     Route::prefix('prescription')->group(function () {
         Route::get('', [PrescriptionController::class, 'index'])->name('prescription.index');
         Route::get('create', [PrescriptionController::class, 'create'])->name('prescription.create');
         Route::post('store', [PrescriptionController::class, 'store'])->name('prescription.store');
+        Route::get('/{id}/delete', [PrescriptionController::class, 'deletePrescription'])->name('prescription.delete');
+        Route::get('print/{id}', [PrescriptionController::class, 'print'])->name('prescription.print');
+        Route::get('re-exam/{id}', [PrescriptionController::class, 'reExam'])->name('prescription.reExam');
+        Route::post('re-exam/{id}', [PrescriptionController::class, 'storeExam'])->name('prescription.storeExam');
     });
     Route::prefix('sympton')->group(function () {
-        Route::post('add-sympton', [SymptonController::class, 'addSympton']);
+        Route::get('', [SymptonController::class, 'index'])->name('sympton.index');
+        Route::post('add-sympton-ajax', [SymptonController::class, 'addSympton']);
+        Route::post('/add-sympton', [SymptonController::class, 'store'])->name('sympton.store');
+        Route::get('/{id}/edit', [SymptonController::class, 'edit']);
+        Route::post('/{id}/edit', [SymptonController::class, 'update']);
+        Route::delete('/{id}/destroy', [SymptonController::class, 'destroy'])->name('sympton.destroy');
     });
 
 

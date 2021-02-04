@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PrescriptionMedicineRequest;
 use App\Models\Medicine;
 use App\PrescriptionMedicine;
 use Illuminate\Http\Request;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Session;
 
 class PrescriptionMedicineController extends Controller
 {
-    public function addPrescriptionMedicine(Request $request)
+    public function addPrescriptionMedicine(PrescriptionMedicineRequest $request)
     {
         $id = $request->medicine_id;
         $morning = $request->midday;

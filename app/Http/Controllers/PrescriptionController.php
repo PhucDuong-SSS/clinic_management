@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PrescriptionRequest;
 use App\Http\Services\PrescriptionService;
 use App\Http\Services\SymtonService;
 use App\Models\Medicine;
@@ -40,15 +41,69 @@ class PrescriptionController extends Controller
         return view('formExamination.formExam', compact('symptons','medicines','newPrescriptionMedicine'));
     }
 
-    public function store(Request $request)
+    public function store(PrescriptionRequest $request)
     {
         $patient_id = $this->addPatient($request);
-         $prescription =  $this->addPrescription($request,$patient_id);
-         $prescription_medicine = $this->addPescriptionPatient($patient_id);
+         $prescription_id =  $this->addPrescription($request,$patient_id);
+         $this->addPescriptionPatient($prescription_id);
+         $message = 'Thêm thành công!';
+        return redirect()->route('prescription.index')->with('toast_success',$message);
+    }
+
+    public function storeExam(PrescriptionRequest $request,$id_prescription)
+    {
+        $id_patient = Prescription::findOrFail($id_prescription)->id_patient;
+        $patient_id = $this->updatePatient($request, $id_patient);
+        $prescription_id =  $this->addPrescription($request,$patient_id,$id_prescription);
+        $this->addPescriptionPatient($prescription_id);
+        $message = 'Thêm thành công!';
+        return redirect()->route('prescription.index')->with('toast_success',$message);
+
+    }
+
+
+    public function addPrescription($request,$patient_id,$id_preexam=null)
+    {
+        $symptonsArr = $request->sympton_name;
+        $symptonsStr= implode(',',$symptonsArr);
+        $prescription  =new Prescription();
+        $prescription->id_patient= $patient_id;
+        $prescription->sympton = $symptonsStr;
+        $prescription->prognosis = $request->prognosis;
+        $prescription->exam_date = $request->exam_date;
+        $prescription->exam_price = $request->exam_price;
+        $prescription->note = $request->note;
+        $prescription->save();
+
+        $prescription_id = $prescription->id;
+        $prescription_change = Prescription::find($prescription_id);
+        if(isset($id_preexam)){
+            $prescription_time = Prescription::find($id_preexam);
+            $reexam_time = $prescription_time->reexam_time;
+        }
+        else{
+            $reexam_time =null;
+        }
+        $prescription_change->reexam_to = $id_preexam===null?$prescription_id:$id_preexam;
+
+        if($reexam_time === null){
+            $reexam_time =0;
+        }
+        else
+        {
+            $reexam_time++;
+        }
+
+        $prescription_change->reexam_time = $reexam_time;
+
+        $prescription_change->save();
+        return $prescription_id;
+
+
 
 
     }
-    public function addPrescription($request,$patient_id)
+    public function addPrescriptionReexam($request,$patient_id)
     {
         $symptonsArr = $request->sympton_name;
         $symptonsStr= implode(',',$symptonsArr);
@@ -63,6 +118,19 @@ class PrescriptionController extends Controller
         return $prescription->id;
 
     }
+    public function updatePatient($request, $id)
+    {
+        $patient = Patient::find($id);
+        $patient->full_name =  $request->full_name;
+        $patient->phone_number = $request->phone_number;
+        $patient->gender = $request->gender;
+        $patient->dob  = $request->dob;
+        $patient->address  = $request->address;
+        $patient->guardian_name = $request->guardian_name;
+        $patient->save();
+        return $patient->id;
+    }
+
 
     public function addPatient($request)
     {
@@ -104,6 +172,67 @@ class PrescriptionController extends Controller
            }
 
         }
+    }
+
+    public function deletePrescription($id)
+    {
+        $prescription = Prescription::findOrFail($id);
+        $prescription->delete();
+        DB::table('prescription_medicine')->where('id_prescrition',$id)->delete();
+
+        $message = 'Xóa thành công!';
+        return redirect()->route('prescription.index')->with('toast_success',$message);
+    }
+
+    public function print($id)
+    {
+        $prescription =  Prescription::findOrFail($id);
+        $prescription_medicines = DB::table('prescription_medicine')->where('id_prescrition',$id)->get();
+        $medicineNameArr = $this->getNameMedicine($prescription_medicines);
+        $totalPriceMedicine  = $this->getTotalPrice($id);
+        $examPrice = (int)$prescription->exam_price;
+        $totalPrice = $totalPriceMedicine + $examPrice;
+
+
+        return view('formExamination.printForm',compact('prescription','prescription_medicines','medicineNameArr','totalPrice'));
+    }
+    public function getTotalPrice($id)
+    {
+        $totalPrice= 0;
+        $prescription_medicines = DB::table('prescription_medicine')->where('id_prescrition',$id)->get();
+        foreach ($prescription_medicines as $prescription_medicine){
+            $totalPrice += (int)$prescription_medicine->amount * (int)$prescription_medicine->sell_price;
+        }
+        return $totalPrice;
+
+
+    }
+
+    public function getNameMedicine($arr)
+    {
+        $medicineNameArr = [];
+        foreach ($arr as $i=>$v)
+        {
+            $medicine = Medicine::findOrFail($v->id_medicine);
+            array_push($medicineNameArr,$medicine);
+
+        }
+        return $medicineNameArr;
+    }
+
+    public function reExam($id_prescription)
+    {
+
+        $id_patient = Prescription::findOrFail($id_prescription)->id_patient;
+        $patient = Patient::findOrFail($id_patient);
+        $prescriptions_time =  Prescription::where('reexam_to',$id_prescription)->get();
+        $newPrescriptionMedicine = session('PrescriptionMedicine');
+
+
+        $medicines = Medicine::all();
+        $symptons = $this->symtonService->getAll();
+
+        return view('formExamination.formExam', compact('patient','medicines','symptons','prescriptions_time','id_prescription','newPrescriptionMedicine'));
     }
 
 
