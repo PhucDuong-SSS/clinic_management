@@ -106,12 +106,22 @@
                 e.preventDefault();
                 var url = `/admin/sympton`;
 
+
                 $.get(`${url}`, function (data) {
                     $('#modalHeading').html('Thêm triệu chứng'),
                         $('#sympton_name').val(data.sympton_name);
                     $('#btn-save').val("addSympton");
                     $('#btn-save').html('Thêm');
                     $('#modal-default').modal('show');
+                    const inputs = $('.form-control');
+                    const errors = $('.text-danger');
+                    $.each(inputs, function (indx, input){
+                        $(input).removeClass('is-invalid');
+                    })
+                    $.each(errors,function (idx,error){
+                        $(error).html('');
+                    })
+
                 });
 
 
@@ -126,6 +136,7 @@
                 var url = `/admin/sympton`;
                 var sympton_id = $(this).data('id');
 
+
                 $.get(`${url}/${sympton_id}/edit`, function (data) {
                     $('#modalHeading').html('Sửa triệu chứng'),
                         $('#sympton_id').val(data.symptons.id);
@@ -133,6 +144,14 @@
                     $('#btn-save').val("update");
                     $('#btn-save').html("Sửa");
                     $('#modal-default').modal('show');
+                    const inputs = $('.form-control');
+                    const errors = $('.text-danger');
+                    $.each(inputs, function (indx, input){
+                        $(input).removeClass('is-invalid');
+                    })
+                    $.each(errors,function (idx,error){
+                        $(error).html('');
+                    })
                 });
             });
 
@@ -185,6 +204,7 @@
                             if(error.sympton_name) {
                                 $('#sympton_name').addClass('is-invalid');
                                 $('#titleError').html(error.sympton_name);
+
                             }
                         }
                     })
