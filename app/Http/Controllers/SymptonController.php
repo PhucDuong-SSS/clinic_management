@@ -27,7 +27,7 @@ class SymptonController extends Controller
             $html = view('formExamination.contentSymptons',compact('sympton'))->render();
 
 
-        return response()->json(['code'=>200, 'message'=>'Thêm triêu chứng thành công','html'=>$html], 200);
+        return response()->json(['code'=>200, 'success'=>'Thêm triêu chứng thành công','html'=>$html], 200);
 
     }
 
@@ -71,7 +71,7 @@ class SymptonController extends Controller
         $symptons->delete();
         $message = 'Xóa thành công';
         $symptons = Sympton::all();
-     
+
         return response()->json(['sympton'=>$symptons,'success'=>$message]);
     }
 

@@ -21,7 +21,7 @@ class PrescriptionMedicineController extends Controller
        $prescriptionMedicine = new PrescriptionMedicine($oldPrescriptionMedicine);
        $prescriptionMedicine->add($medicine,$request);
         session()->put('PrescriptionMedicine',$prescriptionMedicine);
-        return $this->showPrescriptionMedicine('Them');
+        return $this->showPrescriptionMedicine('Thêm');
 
 
 
