@@ -37,7 +37,7 @@ class SymptonController extends Controller
         return view('sympton.listSympton',compact('symptons'));
     }
 
-    public function store(Request $request)
+    public function store(SymptonRequest $request)
     {
         $symptons = $this->symtonService->add($request);
 
@@ -45,7 +45,7 @@ class SymptonController extends Controller
 
         $symptons = Sympton::all();
 
-        return response()->json(['sympton'=>$symptons,'success'=>$message]);
+        return response()->json(['symptons'=>$symptons]);
     }
 
     public function edit($id)
@@ -54,16 +54,15 @@ class SymptonController extends Controller
         return response()->json(['symptons'=>$symptons]);
     }
 
-    public function update(Request $request, $id)
+    public function update(SymptonRequest $request, $id)
     {
         $symptons = $this->symtonService->findById($id);
 
         $this->symtonService->update($request,$symptons);
-        $message = 'Sửa thành công';
 
         $symptons = Sympton::all();
 
-        return response()->json(['sympton'=>$symptons,'success'=>$message]);
+        return response()->json(['sympton'=>$symptons,'resquest'=>$request]);
     }
     public function destroy($id)
     {
@@ -71,7 +70,7 @@ class SymptonController extends Controller
         $symptons->delete();
         $message = 'Xóa thành công';
         $symptons = Sympton::all();
-     
+
         return response()->json(['sympton'=>$symptons,'success'=>$message]);
     }
 
