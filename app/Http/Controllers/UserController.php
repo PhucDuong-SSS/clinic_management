@@ -46,13 +46,15 @@ class UserController extends Controller
         $user->save();
 
         $permission = $request->permission;
-        foreach ($permission as $permissionId) {
-            DB::table('user_permission')->insert([
-                'id_user' => $user->id,
-                'permission_key' => $permissionId
-            ]);
+        if (!empty($permission)) {
+            foreach ($permission as $permissionId) {
+                DB::table('user_permission')->insert([
+                    'id_user' => $user->id,
+                    'permission_key' => $permissionId
+                ]);
+            }
         }
-        Session::flash('success', 'Successful add');
+        Session::flash('success', 'Thêm thành viên thành công');
 
         return redirect()->route('user.index');
     }
@@ -76,15 +78,18 @@ class UserController extends Controller
         $user->image = $this->UpdateUpload($id, $request);
         $user->save();
 
-
-        DB::table('user_permission')->where('id_user', $id)->delete();
         $permission = $request->permission;
-        foreach ($permission as $permissionId) {
-            DB::table('user_permission')->insert([
-                'id_user' => $id,
-                'permission_key' => $permissionId
-            ]);
+
+        if (!empty($permission)) {
+            DB::table('user_permission')->where('id_user', $id)->delete();
+            foreach ($permission as $permissionId) {
+                DB::table('user_permission')->insert([
+                    'id_user' => $id,
+                    'permission_key' => $permissionId
+                ]);
+            }
         }
+        Session::flash('success', 'Chỉnh sửa thành viên thành công');
 
         return redirect()->route('user.index');
     }
@@ -104,7 +109,9 @@ class UserController extends Controller
         DB::table('user_permission')->where('id_user', $id)->delete();
         $user = User::findOrFail($id);
         $user->delete();
-        return redirect()->route('user.index');
+        return response()->json(["success" => "Record has been delete"]);
+        // Session::flash('success', 'Xóa thành viên thành công');
+        // return redirect()->route('user.index');
     }
 
     function changepasswordform()
@@ -140,6 +147,7 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->image = $this->UpdateUpload($id, $request);
         $user->save();
+        Session::flash('success', 'Cập nhật profile thành công');
         return redirect()->route('user.index');
     }
 }
