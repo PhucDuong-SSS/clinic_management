@@ -13,6 +13,7 @@
                     <th>Name</th>
                     <th>images</th>
                     <th>UserName</th>
+                    <th>Roles</th>
                     <th>Address</th>
                     <th>Phone</th>
                     <th>Email</th>
@@ -22,15 +23,25 @@
             </thead>
             <tbody>
                 @foreach($users as $key => $user)
+                <?php ($roleOfUser = DB::table('users')
+                                        ->join('user_role', 'users.id', '=', 'user_role.id_user')
+                                        ->join('roles', 'user_role.role_key', '=', 'roles.id')
+                                        ->where('users.id', $user->id)->select('roles.*')->pluck('id')) ?>
                 <tr class="uid{{$user->id}}">
                     <td>{{$user->full_name}}</td>
                     <td><img src="{{asset('/storage/'.substr($user->image,7))}}" alt="" style="width: 100px; height:100px" ></td>
                     <td>{{$user->user_name}}</td>
+                    <td>
+                        @foreach ($roles as $role)
+                            @if ($roleOfUser->contains($role->id))
+                                 {{ $role->display_name }}
+                            @endif
+                        @endforeach
+                    </td>
                     <td>{{$user->address}}</td>
                     <td>{{$user->phone}}</td>
                     <td>{{$user->email}}</td>
                     <td><a class="btn btn-info" href="{{route('user.edit', $user->id)}}">Edit</a></td>
-                    {{-- <td><a class="btn btn-danger" href="{{route('user.destroy', $user->id)}}" onclick="return confirm('Bạn chắc chắn muốn xóa?')">Delete</a></td> --}}
                     <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteUser({{$user->id}})">Delete</a></td>
                 </tr>
                 @endforeach
@@ -40,6 +51,7 @@
                     <th>Name</th>
                     <th>images</th>
                     <th>UserName</th>
+                    <th>Roles</th>
                     <th>Address</th>
                     <th>Phone</th>
                     <th>Email</th>
@@ -83,13 +95,13 @@
                 success:function (response){
                     console.log(response);
                     $("#uid"+id).remove();
+                    location.reload();
                 }
             })
                 Swal.fire(
                     'Bạn đã xóa thành công!',
                     'success',
                     )
-                    location.reload();
                 }
 
             })

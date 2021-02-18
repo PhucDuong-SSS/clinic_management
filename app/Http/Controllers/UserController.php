@@ -7,6 +7,7 @@ use App\Http\Requests\FormEditUserRequest;
 use App\Http\Requests\FormUserRequest;
 use App\Http\Services\UserService;
 use App\Models\Permission;
+use App\Models\Roles;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,20 +19,21 @@ class UserController extends Controller
 {
     protected $userService;
 
-    function __construct(UserService $userService, Permission $permission)
+    function __construct(UserService $userService, Roles $role)
     {
         $this->userService = $userService;
-        $this->permission = $permission;
+        $this->role = $role;
     }
     function index()
     {
+        $roles = $this->role->all();
         $users = User::all();
-        return view('users.list', compact('users'));
+        return view('users.list', compact('users', 'roles'));
     }
     function create()
     {
-        $permissions = $this->permission->all();
-        return view('users.addUser', compact('permissions'));
+        $roles = $this->role->all();
+        return view('users.addUser', compact('roles'));
     }
     function store(FormUserRequest $request)
     {
@@ -44,28 +46,15 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->image   = $request->image->store('public/images');
         $user->save();
-
-        $permission = $request->permission;
-        if (!empty($permission)) {
-            foreach ($permission as $permissionId) {
-                DB::table('user_permission')->insert([
-                    'id_user' => $user->id,
-                    'permission_key' => $permissionId
-                ]);
-            }
-        }
-        Session::flash('success', 'Thêm thành viên thành công');
-
-        return redirect()->route('user.index');
+        $user->role()->attach($request->role_key);
+        return redirect()->route('user.index')->with('success', "Thêm thành viên thành công");
     }
     function edit($id)
     {
         $user = User::findOrFail($id);
-        $permissions = $this->permission->all();
-        // dd($permissions);
-        $getAllPermissionUser = DB::table('user_permission')->where('id_user', $id)->pluck('permission_key');
-        // dd($getAllPermissionUser);
-        return view('users.edit', compact('user', 'permissions', 'getAllPermissionUser'));
+        $roles = $this->role->all();
+        $roleOfUser = DB::table('user_role')->where('id_user', $id)->pluck('role_key');
+        return view('users.edit', compact('user', 'roles', 'roleOfUser'));
     }
     function update($id, FormEditUserRequest $request)
     {
@@ -77,18 +66,8 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->image = $this->UpdateUpload($id, $request);
         $user->save();
-
-        $permission = $request->permission;
-
-        if (!empty($permission)) {
-            DB::table('user_permission')->where('id_user', $id)->delete();
-            foreach ($permission as $permissionId) {
-                DB::table('user_permission')->insert([
-                    'id_user' => $id,
-                    'permission_key' => $permissionId
-                ]);
-            }
-        }
+        DB::table('user_role')->where('id_user', $id)->delete();
+        $user->role()->attach($request->role_key);
         Session::flash('success', 'Chỉnh sửa thành viên thành công');
 
         return redirect()->route('user.index');
@@ -106,7 +85,7 @@ class UserController extends Controller
     }
     function destroy($id)
     {
-        DB::table('user_permission')->where('id_user', $id)->delete();
+        DB::table('user_role')->where('id_user', $id)->delete();
         $user = User::findOrFail($id);
         $user->delete();
         return response()->json(["success" => "Record has been delete"]);
