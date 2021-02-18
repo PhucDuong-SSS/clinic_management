@@ -12,6 +12,7 @@ use App\Models\medCategory;
 use App\Models\Permission;
 use Faker\Factory as Faker;
 use App\Models\Prescription;
+use App\Models\Roles;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -120,19 +121,19 @@ class DatabaseSeeder extends Seeder
 
         $permission = new Permission();
         $permission->permission_name = "list_user";
-        $permission->permission_name2 = "Danh sách thành viên";
+        $permission->display_name = "Danh sách thành viên";
         $permission->save();
         $permission = new Permission();
         $permission->permission_name = "edit_user";
-        $permission->permission_name2 = "Chỉnh sửa thành viên";
+        $permission->display_name = "Chỉnh sửa thành viên";
         $permission->save();
         $permission = new Permission();
         $permission->permission_name = "delete_user";
-        $permission->permission_name2 = "Xóa thành viên";
+        $permission->display_name = "Xóa thành viên";
         $permission->save();
         $permission = new Permission();
         $permission->permission_name = "add_user";
-        $permission->permission_name2 = "Thêm thành viên";
+        $permission->display_name = "Thêm thành viên";
         $permission->save();
 
         $user = new User();
@@ -145,10 +146,20 @@ class DatabaseSeeder extends Seeder
         $user->image   = "image.jpg";
         $user->save();
 
+        $role = new Roles();
+        $role->role_name = "admin";
+        $role->display_name = "ADMIN";
+        $role->save();
+
+        DB::table('user_role')->insert([
+            'id_user' => $user->id,
+            'role_key' =>  1
+        ]);
+
         $permission = Permission::all();
         foreach ($permission as $key => $permissionId) {
-            DB::table('user_permission')->insert([
-                'id_user' => $user->id,
+            DB::table('role_permission')->insert([
+                'role_key' => 1,
                 'permission_key' => $key + 1
             ]);
         }

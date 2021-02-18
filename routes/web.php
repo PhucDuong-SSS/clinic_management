@@ -8,6 +8,7 @@ use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\SettingAppController;
 use App\Http\Controllers\SymptonController;
 use App\Http\Controllers\PrescriptionMedicineController;
+use App\Http\Controllers\RoleController;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
@@ -87,5 +88,14 @@ Route::middleware('adminLogin')->prefix('admin')->group(function () {
         Route::post('/changepassword/{id}', [UserController::class, 'changepassword'])->name('user.changepassword');
         Route::get('/changeprofile', [UserController::class, 'changeprofileform'])->name('user.changeprofileform');
         Route::post('/changeprofile/{id}', [UserController::class, 'changeprofile'])->name('user.changeprofile');
+    });
+
+    Route::prefix('role')->group(function () {
+        Route::get('/', [RoleController::class, 'index'])->name('role.index');
+        Route::get('/create', [RoleController::class, 'create'])->name('role.create');
+        Route::post('/create', [RoleController::class, 'store'])->name('role.store');
+        Route::get('/{id}/edit', [RoleController::class, 'edit'])->name('role.edit');
+        Route::post('/{id}/edit', [RoleController::class, 'update'])->name('role.update');
+        Route::delete('/destroy/{id}', [RoleController::class, 'destroy'])->name('role.destroy');
     });
 });
