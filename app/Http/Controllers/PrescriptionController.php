@@ -29,8 +29,18 @@ class PrescriptionController extends Controller
 
     public function index()
     {
-        $prescriptions  = $this->prescriptionService->getAll();
-        return view('formExamination.listExam', compact('prescriptions'));
+        $prescriptions  = Prescription::orderBy('reexam_to', 'DESC')->get();
+
+        $tests = Prescription::groupBy('reexam_to')->select('reexam_to', DB::raw('count(*) as idx'))->orderBy('reexam_to', 'DESC')->get();
+        $arrIndexByReExam = [];
+        $index = 0;
+        foreach ($tests as $test)
+        {
+            $index += $test['idx'];
+            array_push($arrIndexByReExam,$index);
+
+        }
+        return view('formExamination.listExam', compact('prescriptions','arrIndexByReExam'));
     }
 
     public function create()
@@ -72,7 +82,9 @@ class PrescriptionController extends Controller
         $prescription->prognosis = $request->prognosis;
         $prescription->exam_date = $request->exam_date;
         $prescription->exam_price = $request->exam_price;
-        $prescription->note = $request->note;
+        $noteArr = $request->note;
+        $noteStr= implode(',',$noteArr);
+        $prescription->note = $noteStr;
         $prescription->save();
 
         $prescription_id = $prescription->id;
@@ -153,7 +165,7 @@ class PrescriptionController extends Controller
            $prescriptionMedicineArray = $newPrescriptionMedicine->items;
            foreach ($prescriptionMedicineArray as $index=>$prescriptionMedicine)
            {
-               $sell_mode = ($prescriptionMedicine['sell_price']==$prescriptionMedicine['unit_sell_price'])?'original':'discount';
+               $sell_mode = ($prescriptionMedicine['sell_price']==$prescriptionMedicine['calc_price'])?'original':'discount';
                DB::table('prescription_medicine')->insert([
                    'id_prescrition' => $prescription_id,
                    'id_medicine' => $prescriptionMedicine['medicine']->id,
@@ -172,6 +184,8 @@ class PrescriptionController extends Controller
            }
 
         }
+        session()->forget('PrescriptionMedicine');
+
     }
 
     public function deletePrescription($id)

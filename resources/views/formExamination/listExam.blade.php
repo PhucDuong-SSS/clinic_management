@@ -32,11 +32,16 @@
                                     <td> {{$prescription->exam_date}}</td>
                                     <td>
                                         <a href="{{route('prescription.print',$prescription->id)}}" class="btn btn-sm btnprn btn-warning" title="In"><i class="fas fa-print"></i>
-
                                         </a>
-{{--                                        <a href="" class="btn btn-sm btn-info" title="Sửa"><i class="fa fa-edit"></i></a>--}}
-                                        <a href="{{route('prescription.reExam',$prescription->id)}}" class="btn btn-sm btn-info" title="Tái khám"><i class="far fa-plus-square"></i></a>
+
                                         <a href="{{route('prescription.delete',$prescription->id)}}" class="btn btn-sm btn-danger" title="Xóa" id="delete"><i class="fa fa-trash"></i></a>
+                                        @foreach($arrIndexByReExam as $arr)
+                                            @if($arr == ($index+1))
+                                               <a href="{{route('prescription.reExam',$prescription->id)}}" class="btn btn-sm btn-info" title="Tái khám"><i class="far fa-plus-square"></i></a>
+                                                <span class="badge badge-success">Đơn thuốc mới nhất</span>
+                                            @endif
+
+                                        @endforeach
                                     </td>
                                 </tr>
                                 @endforeach

@@ -32,7 +32,7 @@ class PrescriptionMedicineRequest extends FormRequest
             'note_midday' => 'required_with:midday|string|nullable',
             'note_afternoon' => 'required_with:afternoon|string|nullable',
             'note_evening' => 'required_with:evening|string|nullable',
-            'number_of_day' => 'required|integer|between:1,99',
+            'number_of_day' => 'required|integer|between:1,100',
             'sell_price' => 'required|integer',
 
         ];

@@ -24,15 +24,16 @@ class SymptonRequest extends FormRequest
     public function rules()
     {
         return [
-            'sympton_name' => 'required|max:200|min:2'
+            'sympton_name' => 'required|max:200|min:2|unique:symptons'
         ];
     }
     function messages()
     {
         return[
             'sympton_name.required'  =>'Tên triệu chứng không được để trống.',
-            'name_doctor.max'       =>'Tối đa 200 kí tự',
-            'name_doctor.min'       =>'Tối thiểu 2 kí tự',
+            'sympton_name.max'       =>'Tối đa 200 kí tự',
+            'sympton_name.min'       =>'Tối thiểu 2 kí tự',
+            'sympton_name.unique'    =>'Triệu chứng đã tồn tại',
         ];
     }
 

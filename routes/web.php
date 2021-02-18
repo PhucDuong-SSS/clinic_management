@@ -10,6 +10,7 @@ use App\Http\Controllers\SymptonController;
 use App\Http\Controllers\PrescriptionMedicineController;
 use App\Http\Controllers\RoleController;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Http\Controllers\MedicineController;
 
 
 
@@ -65,6 +66,11 @@ Route::prefix('admin')->group(function () {
         Route::post('/{id}/edit', [SettingAppController::class, 'update'])->name('setting.update');
         Route::get('/{id}/destroy', [SettingAppController::class, 'destroy'])->name('setting.destroy');
     });
+
+    Route::prefix('medicine')->group(function (){
+        Route::post('get-sell-price',[MedicineController::class,'getSellPrice']);
+    });
+
 });
 
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');

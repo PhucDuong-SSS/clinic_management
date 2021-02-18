@@ -33,6 +33,7 @@ class PrescriptionMedicine
             'note_evening'=>'',
             'number_of_day'=>0,
             'sell_price'=>0,
+            'calc_price'=>0,
             'unit_sell_price'=>0,
             'totalPrice'=>0,
         ];
@@ -54,13 +55,16 @@ class PrescriptionMedicine
 
         $storeItem['number_of_day'] = (int)$request->number_of_day;
         $storeItem['sell_price'] = (int)$request->sell_price;
+        $storeItem['calc_price'] = (int)$request->calc_price;
         $storeItem['unit_sell_price'] = (int)$medicine->sell_price;
-       $storeItem['amount'] = $storeItem['number_of_day']*($storeItem['morning']+$storeItem['midday']+$storeItem['afternoon']+$storeItem['evening']);
-       $storeItem['totalPrice'] += $storeItem['sell_price']*$storeItem['amount'];
+        $storeItem['amount'] = $storeItem['number_of_day']*($storeItem['morning']+$storeItem['midday']+$storeItem['afternoon']+$storeItem['evening']);
+        $storeItem['totalPrice'] += $storeItem['sell_price'];
+
 
         $this->items[$medicine->id] = $storeItem;
-      $this->amount += $storeItem['amount'];
-        $this->totalPrice += $storeItem['sell_price']*$storeItem['amount'];
+        $this->amount += $storeItem['amount'];
+        $this->totalPrice += $storeItem['totalPrice'];
+
     }
     public function delete($id)
     {
@@ -71,17 +75,5 @@ class PrescriptionMedicine
             unset($this->items[$id]);
         }
     }
-//    public function decrease($medicine){
-//        if(array_key_exists($medicine,$this->items)){
-//            $storeItem = $this->items[$medicine];
-//            $storeItem['amount']--;
-//            $storeItem['totalPrice']-= $this->items[$medicine]['medicine']->price;
-//            $this->items[$medicine] = $storeItem;
-//            $this->amount --;
-//            $this->totalPrice -= $this->items[$medicine]['medicine']->price;
-//            if($storeItem['amount'] == 0){
-//                unset($this->items[$medicine]);
-//            }
-//        }
-//    }
+
 }
