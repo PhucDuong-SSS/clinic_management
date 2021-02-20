@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
 
         foreach (range(1, 3) as $index) {
             DB::table('units')->insert([
-                'name' => $faker->randomElement(['vỉ', 'chai', 'ống']),
+                'unit_name' => $faker->randomElement(['vỉ', 'chai', 'ống']),
             ]);
         }
 

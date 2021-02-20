@@ -12,8 +12,7 @@ use App\Http\Controllers\PrescriptionMedicineController;
 use App\Http\Controllers\RoleController;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\MedicineController;
-
-
+use App\Http\Controllers\UnitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,18 +67,17 @@ Route::prefix('admin')->group(function () {
         Route::get('/{id}/destroy', [SettingAppController::class, 'destroy'])->name('setting.destroy');
     });
 
-    Route::prefix('medicine')->group(function (){
-        Route::post('get-sell-price',[MedicineController::class,'getSellPrice']);
+    Route::prefix('medicine')->group(function () {
+        Route::post('get-sell-price', [MedicineController::class, 'getSellPrice']);
     });
 
-    Route::prefix('medCategory')->group(function (){
-        Route::get('',[MedCategoryController::class,'index'])->name('medCategory.index');
-        Route::get('/add-med-category',[MedCategoryController::class,'store'])->name('medCategory.store');
-        Route::get('{id}/edit',[MedCategoryController::class,'edit']);
-        Route::post('/{id}/edit',[MedCategoryController::class,'update']);
-        Route::delete('/{id}/destroy',[MedCategoryController::class,'destroy']);
+    Route::prefix('medCategory')->group(function () {
+        Route::get('', [MedCategoryController::class, 'index'])->name('medCategory.index');
+        Route::get('/add-med-category', [MedCategoryController::class, 'store'])->name('medCategory.store');
+        Route::get('{id}/edit', [MedCategoryController::class, 'edit']);
+        Route::post('/{id}/edit', [MedCategoryController::class, 'update']);
+        Route::delete('/{id}/destroy', [MedCategoryController::class, 'destroy']);
     });
-
 });
 
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
@@ -112,5 +110,13 @@ Route::middleware('adminLogin')->prefix('admin')->group(function () {
         Route::get('/{id}/edit', [RoleController::class, 'edit'])->name('role.edit');
         Route::post('/{id}/edit', [RoleController::class, 'update'])->name('role.update');
         Route::delete('/destroy/{id}', [RoleController::class, 'destroy'])->name('role.destroy');
+    });
+
+    Route::prefix('unit')->group(function () {
+        Route::get('/', [UnitController::class, 'index'])->name('unit.index');
+        Route::post('/create', [UnitController::class, 'store'])->name('unit.store');
+        Route::get('/{id}/edit', [UnitController::class, 'edit'])->name('unit.edit');
+        Route::post('/{id}/edit', [UnitController::class, 'update'])->name('unit.update');
+        Route::delete('/destroy/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
     });
 });
