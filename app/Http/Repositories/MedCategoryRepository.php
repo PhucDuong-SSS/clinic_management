@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Repositories;
 
 use App\Models\medCategory;
@@ -23,7 +24,7 @@ class MedCategoryRepository extends BaseRepository implements RepositoryInterfac
 
     public function save($obj)
     {
-        parent::save($obj);
+        $obj->save();
     }
 
     public function delete($obj)
