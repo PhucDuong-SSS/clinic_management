@@ -41,8 +41,6 @@ class SymptonController extends Controller
     {
         $symptons = $this->symtonService->add($request);
 
-        $message = 'Thêm thành công!';
-
         $symptons = Sympton::all();
 
         return response()->json(['symptons'=>$symptons]);
@@ -62,7 +60,7 @@ class SymptonController extends Controller
 
         $symptons = Sympton::all();
 
-        return response()->json(['sympton'=>$symptons,'resquest'=>$request]);
+        return response()->json(['sympton'=>$symptons,'request'=>$request]);
     }
     public function destroy($id)
     {
