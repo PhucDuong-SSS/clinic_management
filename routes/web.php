@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ForgetPasswordController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MedCategoryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PrescriptionController;
@@ -68,6 +69,14 @@ Route::prefix('admin')->group(function () {
 
     Route::prefix('medicine')->group(function (){
         Route::post('get-sell-price',[MedicineController::class,'getSellPrice']);
+    });
+
+    Route::prefix('medCategory')->group(function (){
+        Route::get('',[MedCategoryController::class,'index'])->name('medCategory.index');
+        Route::get('/add-med-category',[MedCategoryController::class,'store'])->name('medCategory.store');
+        Route::get('{id}/edit',[MedCategoryController::class,'edit']);
+        Route::post('/{id}/edit',[MedCategoryController::class,'update']);
+        Route::delete('/{id}/destroy',[MedCategoryController::class,'destroy']);
     });
 
 });
