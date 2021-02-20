@@ -303,7 +303,7 @@
                                 console.log('Error', data);
                                 Swal.fire(
                                     'Bạn không thể xóa!',
-                                    'warning'
+                                    'Muốn xóa bạn phải xóa hết các thuốc sử dụng đơn vị này'
                                 )
                             }
                         })

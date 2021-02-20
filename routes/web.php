@@ -73,8 +73,8 @@ Route::prefix('admin')->group(function () {
 
     Route::prefix('medCategory')->group(function () {
         Route::get('', [MedCategoryController::class, 'index'])->name('medCategory.index');
-        Route::get('/add-med-category', [MedCategoryController::class, 'store'])->name('medCategory.store');
-        Route::get('{id}/edit', [MedCategoryController::class, 'edit']);
+        Route::post('/add-med-category', [MedCategoryController::class, 'store'])->name('medCategory.store');
+        Route::get('/{id}/edit', [MedCategoryController::class, 'edit']);
         Route::post('/{id}/edit', [MedCategoryController::class, 'update']);
         Route::delete('/{id}/destroy', [MedCategoryController::class, 'destroy']);
     });
