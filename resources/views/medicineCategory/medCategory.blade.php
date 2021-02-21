@@ -3,31 +3,33 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Danh sách triệu chứng</h3>
-            <a href="#" class="btn btn-primary float-right" id="createSympton" data-toggle="modal"
+            <h3 class="card-title">Danh sách loại thuốc</h3>
+            <a href="#" class="btn btn-primary float-right" id="createMedCatorgy" data-toggle="modal"
                data-target="#modal-default">Thêm+</a>
         </div>
         <!-- /.card-header -->
         <div class="card-body" id="table-ajax-user">
-            <table id="tableSympton" class="table table-bordered table-striped">
+            <table id="tableMedCategory" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                     <th>STT</th>
-                    <th>Tên triệu chứng</th>
+                    <th>Loại thuốc</th>
+                    <th>Mô tả</th>
                     <th></th>
 
                 </tr>
                 </thead>
-                <tbody id="sympton_list">
-                @foreach($symptons as $key =>$sympton)
-                    <tr id="sympton_id_{{$sympton->id}}">
+                <tbody id="medCategory_list">
+                @foreach($medCategories as $key =>$medCategory)
+                    <tr id="medCategory_id_{{$medCategory->id}}">
                         <td>{{ ++$key }}</td>
-                        <td>{{ $sympton->sympton_name }}</td>
+                        <td>{{ $medCategory->med_category_name }}</td>
+                        <td>{{ $medCategory->description }}</td>
                         <td class="d-flex justify-content-center">
-                            <a href="#" class="mr-2 editSympton" data-toggle="modal" data-id="{{ $sympton->id }}"> <i
+                            <a href="#" class="mr-2 editMedCategory" data-toggle="modal" data-id="{{ $medCategory->id }}"> <i
                                     class="nav-icon fas fa-edit"></i> Sửa</a>
-                            <a style="color: red" href="#" class="deleteSympton" data-toggle="tooltip"
-                               data-id="{{ $sympton->id }}"> <i class="nav-icon far fa-trash-alt"
+                            <a style="color: red" href="#" class="deleteMedCategory" data-toggle="tooltip"
+                               data-id="{{ $medCategory->id }}"> <i class="nav-icon far fa-trash-alt"
                                                                 style="color: red"></i> Xóa</a>
                         </td>
                     </tr>
@@ -48,13 +50,20 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="symptonForm" name="userForm" class="form-horizontal">
-                        <input type="hidden" name="sympton_id" id="sympton_id">
+                    <form id="medCategoryForm" name="userForm" class="form-horizontal">
+                        <input type="hidden" name="medCategory_id" id="medCategory_id">
                         <div class="form-group">
-                            <label for="name" class="col-sm-6">Name</label>
+                            <label for="name" class="col-sm-6">Tên loại thuốc:</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="sympton_name" name="sympton_name">
+                                <input type="text" class="form-control" id="med_category_name" name="med_category_name">
                                 <span id="titleError" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-6">Miêu tả:</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="description" name="description">
+                                <span id="titleError1" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-between">
@@ -76,7 +85,7 @@
 @section('script')
     <script>
         $(function () {
-            $('#tableSympton').DataTable({
+            $('#tableMedCategory').DataTable({
                 "reponsive": true,
                 "autoWidth": false
             });
@@ -101,16 +110,17 @@
 
             //ADD
             $('#btn-close-modal').click();
-            $('body').off('click', '#createSympton');
-            $('body').on('click', '#createSympton', function (e) {
+            $('body').off('click', '#createMedCatorgy');
+            $('body').on('click', '#createMedCatorgy', function (e) {
                 e.preventDefault();
-                var url = `/admin/sympton`;
+                var url = `/admin/medCategory`;
 
 
                 $.get(`${url}`, function (data) {
-                    $('#modalHeading').html('Thêm triệu chứng'),
-                        $('#sympton_name').val(data.sympton_name);
-                    $('#btn-save').val("addSympton");
+                    $('#modalHeading').html('Thêm loại thuốc'),
+                        $('#med_category_name').val(data.med_category_name);
+                    $('#description').val(data.description);
+                    $('#btn-save').val("addMedCategory");
                     $('#btn-save').html('Thêm');
                     $('#modal-default').modal('show');
                     const inputs = $('.form-control');
@@ -129,18 +139,20 @@
 
             // EDIT
             $('#btn-close-modal').click();
-            $('body').off('click', '.editSympton');
-            $('body').on('click', '.editSympton', function (event) {
+            $('body').off('click', '.editMedCategory');
+            $('body').on('click', '.editMedCategory', function (event) {
                 event.preventDefault();
 
-                var url = `/admin/sympton`;
-                var sympton_id = $(this).data('id');
+                var url = `/admin/medCategory`;
+                var medCategory_id = $(this).data('id');
 
 
-                $.get(`${url}/${sympton_id}/edit`, function (data) {
-                    $('#modalHeading').html('Sửa triệu chứng'),
-                        $('#sympton_id').val(data.symptons.id);
-                    $('#sympton_name').val(data.symptons.sympton_name);
+
+                $.get(`${url}/${medCategory_id}/edit`, function (data) {
+                    $('#modalHeading').html('Sửa loại thuốc'),
+                        $('#medCategory_id').val(data.medCategories.id);
+                    $('#med_category_name').val(data.medCategories.med_category_name);
+                    $('#description').val(data.medCategories.description);
                     $('#btn-save').val("update");
                     $('#btn-save').html("Sửa");
                     $('#modal-default').modal('show');
@@ -160,17 +172,17 @@
                 e.preventDefault();
 
 
-                var sympton_id = $('#sympton_id').val();
+                var medCategory_id = $('#medCategory_id').val();
                 var valSubmit = $(this).val();
 
-                if (valSubmit == 'addSympton') {
+                if (valSubmit == 'addMedCategory') {
                     $.ajax({
                         type: "POST",
-                        url: "/admin/sympton/add-sympton",
-                        data: $("#symptonForm").serialize(),
+                        url: "/admin/medCategory/add-med-category",
+                        data: $("#medCategoryForm").serialize(),
 
                         success: function (data) {
-                            $('#symptonForm').trigger("reset");
+                            $('#medCategoryForm').trigger("reset");
                             $('#modal-default').modal('hide');
                             Swal.fire({
                                 title: 'Thành công!',
@@ -183,16 +195,17 @@
                             let key = 0;
 
                             // render
-                            document.querySelector("#sympton_list").innerHTML =
+                            document.querySelector("#medCategory_list").innerHTML =
 
-                                data.symptons.reduce((docs, st) =>
+                                data.medCategories.reduce((docs, st) =>
                                     docs +
-                                    ` <tr id="sympton_id_${st.id}">
+                                    ` <tr id="medCategory_id_${st.id}">
                                         <td>${++key}</td>
-                                        <td>${st.sympton_name}</td>
+                                        <td>${st.med_category_name}</td>
+                                        <td>${st.description}</td>
                                         <td class="d-flex justify-content-center">
-                                            <a href="#" class="mr-2 editSympton" data-toggle="modal" data-target='#modal-default' data-id="${st.id}"> <i class="nav-icon fas fa-edit"></i> Sửa</a>
-                                            <a style="color: #ff0000" href="#" class="deleteSympton" data-toggle="tooltip" data-id="${st.id}"> <i class="nav-icon far fa-trash-alt" style="color: #ff0000"></i> Xóa</a>
+                                            <a href="#" class="mr-2 editMedCategory" data-toggle="modal" data-target='#modal-default' data-id="${st.id}"> <i class="nav-icon fas fa-edit"></i> Sửa</a>
+                                            <a style="color: #ff0000" href="#" class="deleteMedCategory" data-toggle="tooltip" data-id="${st.id}"> <i class="nav-icon far fa-trash-alt" style="color: #ff0000"></i> Xóa</a>
                                         </tr>
                                     `, ``);
 
@@ -200,10 +213,15 @@
                         },
                         error: function (data) {
                             let error = data.responseJSON.errors;
+                            console.log(error);
+                            if(error.med_category_name) {
+                                $('#med_category_name').addClass('is-invalid');
+                                $('#titleError').html(error.med_category_name);
 
-                            if(error.sympton_name) {
-                                $('#sympton_name').addClass('is-invalid');
-                                $('#titleError').html(error.sympton_name);
+                            }
+                            if(error.description) {
+                                $('#description').addClass('is-invalid');
+                                $('#titleError1').html(error.description);
 
                             }
                         }
@@ -212,12 +230,12 @@
 
                 if (valSubmit == 'update') {
                     $.ajax({
-                        data: $('#symptonForm').serialize(),
-                        url: `/admin/sympton/${sympton_id}/edit`,
+                        data: $('#medCategoryForm').serialize(),
+                        url: `/admin/medCategory/${medCategory_id}/edit`,
                         type: "POST",
                         dataType: 'json',
                         success: function (data) {
-                            $('#symptonForm').trigger("reset");
+                            $('#medCategoryForm').trigger("reset");
                             Swal.fire({
                                 title: 'Thành công!',
                                 text: 'Bạn có muốn tiếp tục',
@@ -229,15 +247,17 @@
                             let key = 0;
 
                             // render
-                            document.querySelector("#sympton_list").innerHTML =
-                                data.sympton.reduce((docs, st) =>
+                            document.querySelector("#medCategory_list").innerHTML =
+
+                                data.medCategories.reduce((docs, st) =>
                                     docs +
-                                    `<tr id="sympton_id_${st.id}">
+                                    `<tr id="medCategory_id_${st.id}">
                                             <td>${++key}</td>
-                                            <td>${st.sympton_name}</td>
+                                            <td>${st.med_category_name}</td>
+                                             <td>${st.description}</td>
                                             <td class="d-flex justify-content-center">
-                                                <a href="#" class="mr-2 editSympton" data-toggle="modal" data-target='#modal-default' data-id="${st.id}"> <i class="nav-icon fas fa-edit"></i> Sửa</a>
-                                                <a style="color: #ff0000" href="#" class="deleteSympton" data-toggle="tooltip" data-id="${st.id}"> <i class="nav-icon far fa-trash-alt" style="color: #ff0000"></i> Xóa</a>
+                                                <a href="#" class="mr-2 editMedCategory" data-toggle="modal" data-target='#modal-default' data-id="${st.id}"> <i class="nav-icon fas fa-edit"></i> Sửa</a>
+                                                <a style="color: #ff0000" href="#" class="deleteMedCategory" data-toggle="tooltip" data-id="${st.id}"> <i class="nav-icon far fa-trash-alt" style="color: #ff0000"></i> Xóa</a>
                                             </tr>
                                         `, ``);
 
@@ -247,9 +267,14 @@
                         error: function (data) {
                             let error = data.responseJSON.errors;
 
-                            if(error.sympton_name) {
-                                $('#sympton_name').addClass('is-invalid');
-                                $('#titleError').html(error.sympton_name);
+                            if(error.med_category_name) {
+                                $('#med_category_name').addClass('is-invalid');
+                                $('#titleError').html(error.med_category_name);
+                            }
+                            if(error.description) {
+                                $('#description').addClass('is-invalid');
+                                $('#titleError1').html(error.description);
+
                             }
                         }
                     });
@@ -259,8 +284,8 @@
 
             //DELETE
 
-            $('body').on('click', '.deleteSympton', function () {
-                var sympton_id = $(this).data('id');
+            $('body').on('click', '.deleteMedCategory', function () {
+                var medCategory_id = $(this).data('id');
                 // confirm('Bạn có chắc muốn xóa mục này?');
                 Swal.fire({
                     title: 'Bạn có chắc không?',
@@ -274,20 +299,21 @@
                     if (result.value) {
                         $.ajax({
                             type: "DELETE",
-                            url: `/admin/sympton/${sympton_id}/destroy`,
+                            url: `/admin/medCategory/${medCategory_id}/destroy`,
                             success: function (data) {
 
                                 let key = 0;
 
-                                document.querySelector("#sympton_list").innerHTML =
-                                    data.sympton.reduce((docs, st) =>
+                                document.querySelector("#medCategory_list").innerHTML =
+                                    data.medCategories.reduce((docs, st) =>
                                         docs +
                                         `
                                     <td>${++key}</td>
-                                    <td>${st.sympton_name}</td>
+                                    <td>${st.med_category_name}</td>
+                                    <td>${st.description}</td>
                                     <td class="d-flex justify-content-center">
-                                        <a href="#" class="mr-2 editSympton" data-toggle="modal" data-target='#modal-default' data-id="${st.id}"> <i class="nav-icon fas fa-edit"></i> Sửa</a>
-                                        <a style="color: red" href="#" class="deleteSympton" data-toggle="tooltip" data-id="${st.id}"> <i class="nav-icon far fa-trash-alt" style="color: red"></i> Xóa</a>
+                                        <a href="#" class="mr-2 editMedCategory" data-toggle="modal" data-target='#modal-default' data-id="${st.id}"> <i class="nav-icon fas fa-edit"></i> Sửa</a>
+                                        <a style="color: red" href="#" class="deleteMedCategory" data-toggle="tooltip" data-id="${st.id}"> <i class="nav-icon far fa-trash-alt" style="color: red"></i> Xóa</a>
                                     </tr>
                                 `, ``
                                     );
@@ -299,6 +325,10 @@
                             },
                             error: function (data) {
                                 console.log('Error', data);
+                                 Swal.fire(
+                                    'Bạn không thể xóa!',
+                                    'Muốn xóa bạn phải xóa hết các thuốc có loại thuốc này'
+                                )
                             }
                         })
 

@@ -34,6 +34,9 @@ class SymptonRequest extends FormRequest
             'sympton_name.unique'  =>'Tên triệu chứng đã tồn tại.',
             'name_doctor.max'       =>'Tối đa 200 kí tự',
             'name_doctor.min'       =>'Tối thiểu 2 kí tự',
+            'sympton_name.max'       =>'Tối đa 200 kí tự',
+            'sympton_name.min'       =>'Tối thiểu 2 kí tự',
+            'sympton_name.unique'    =>'Triệu chứng đã tồn tại',
         ];
     }
 

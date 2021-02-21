@@ -12,7 +12,7 @@
 
             @if(isset(Illuminate\Support\Facades\Auth::user()->image))
                <div class="image">
-                <img src="{{asset('/storage/'.substr(Illuminate\Support\Facades\Auth::user()->image,7))}}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{asset('/storage/'.substr(Illuminate\Support\Facades\Auth::user()->image,7))}}" style="object-fit:contain;width: 50px;height: 50px" class="img-circle elevation-2" alt="User Image">
             </div>
              @endif
             @if(isset(Illuminate\Support\Facades\Auth::user()->full_name))
@@ -96,6 +96,14 @@
                         <i class="nav-icon fas fa-table"></i>
                         <p>
                             Triệu chứng
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="{{route('medCategory.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-table"></i>
+                        <p>
+                            Danh mục
                         </p>
                     </a>
                 </li>
