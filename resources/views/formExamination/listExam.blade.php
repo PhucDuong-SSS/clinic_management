@@ -33,6 +33,8 @@
                                     <td>
                                         <a href="{{route('prescription.print',$prescription->id)}}" class="btn btn-sm btnprn btn-warning" title="In"><i class="fas fa-print"></i>
                                         </a>
+                                        <a href="{{route('prescription.exportWord',$prescription->id)}}" class="btn btn-sm btnprn btn-warning" title="Export word"><i class="fas fa-file-export"></i>
+                                        </a>
 
                                         <a href="{{route('prescription.delete',$prescription->id)}}" class="btn btn-sm btn-danger" title="Xóa" id="delete"><i class="fa fa-trash"></i></a>
                                         @foreach($arrIndexByReExam as $arr)
