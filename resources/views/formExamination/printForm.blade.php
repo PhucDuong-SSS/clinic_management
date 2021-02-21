@@ -84,7 +84,7 @@
 
     <div class="row">
         <div class="col-md-6">
-            <h6>Giới tính: {{$prescription->patient->phone_number =='1'?'Nam':'Nữ'}}</h6>
+            <h6>Giới tính: {{$prescription->patient->gender =='1'?'Nam':'Nữ'}}</h6>
         </div>
         <div class="col-md-6">
             <h6>Địa chỉ: {{$prescription->patient->address}}</h6>
