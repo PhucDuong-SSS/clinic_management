@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PrescriptionRequest;
-use App\Http\Services\PrescriptionService;
-use App\Http\Services\SymtonService;
-use App\Models\Medicine;
 use App\Models\Patient;
+use App\Models\Medicine;
+use MongoDB\Driver\Session;
 use App\Models\Prescription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use MongoDB\Driver\Session;
+use App\Http\Services\SymtonService;
+use PhpOffice\PhpWord\TemplateProcessor;
+use App\Http\Requests\PrescriptionRequest;
+use App\Http\Services\PrescriptionService;
 
 class PrescriptionController extends Controller
 {
@@ -56,8 +57,8 @@ class PrescriptionController extends Controller
         $patient_id = $this->addPatient($request);
          $prescription_id =  $this->addPrescription($request,$patient_id);
          $this->addPescriptionPatient($prescription_id);
-         $message = 'Thêm thành công!';
-        return redirect()->route('prescription.index')->with('toast_success',$message);
+         $message = 'Thêm đơn thuốc thành công!';
+        return redirect()->route('prescription.index')->with('success',$message);
     }
 
     public function storeExam(PrescriptionRequest $request,$id_prescription)
@@ -66,8 +67,8 @@ class PrescriptionController extends Controller
         $patient_id = $this->updatePatient($request, $id_patient);
         $prescription_id =  $this->addPrescription($request,$patient_id,$id_prescription);
         $this->addPescriptionPatient($prescription_id);
-        $message = 'Thêm thành công!';
-        return redirect()->route('prescription.index')->with('toast_success',$message);
+        $message = 'Thêm đơn tái khám thành công!';
+        return redirect()->route('prescription.index')->with('success',$message);
 
     }
 
@@ -210,6 +211,74 @@ class PrescriptionController extends Controller
 
         return view('formExamination.printForm',compact('prescription','prescription_medicines','medicineNameArr','totalPrice'));
     }
+
+    public function exportWord($id)
+    {
+        $prescription =  Prescription::findOrFail($id);
+        $prescription_medicines = DB::table('prescription_medicine')->where('id_prescrition',$id)->get();
+        $medicineNameArr = $this->getNameMedicine($prescription_medicines);
+        $totalPriceMedicine  = $this->getTotalPrice($id);
+        $examPrice = (int)$prescription->exam_price;
+        $totalPrice = $totalPriceMedicine + $examPrice;
+        $arrayNote = $this->stringToArray($prescription->note);
+
+        $medicine = '';
+        $noteValue = '';
+
+        $templateProcessor = new TemplateProcessor('word-template/PhieuKhamBenh.docx');
+        $templateProcessor->setValue('exam_date',$prescription->exam_date);
+        $templateProcessor->setValue('full_name',$prescription->patient->full_name);
+        $templateProcessor->setValue('guardian_name',$prescription->patient->guardian_name);
+        $templateProcessor->setValue('dob',$prescription->patient->dob);
+        $templateProcessor->setValue('phone',$prescription->patient->phone_number);
+        $templateProcessor->setValue('gender',$prescription->patient->gender =='1'?'Nam':'Nữ');
+        $templateProcessor->setValue('address',$prescription->patient->address);
+        $templateProcessor->setValue('sympton',$prescription->sympton);
+        $templateProcessor->setValue('prognosis',$prescription->prognosis);
+        $templateProcessor->setValue('totalPrice',$totalPrice);
+        foreach($arrayNote as $index => $value)
+            {
+                if($index === 0 )
+                {
+                    $noteValue .= $value.'<w:br/>';
+                }
+                if($index % 2 === 1 )
+                {
+
+                    $noteValue .= 'Tái khám lần '.$value.'    '.$arrayNote[$index+1].'<w:br/>';
+                }
+            }
+        foreach($prescription_medicines as $index=> $prescription_medicine)
+        {
+
+
+                    $medicine .= $medicineNameArr[$index]->medicine_name.'SL: '.$prescription_medicine->amount.' '.$prescription_medicine->number_of_day.'ngày'.'<w:br/>';
+
+
+                    $medicine .= ($prescription_medicine->morning !== null)?"Sáng: ".$prescription_medicine->morning." viên ":"";
+                    $medicine .= ($prescription_medicine->note_morning !== null)?$prescription_medicine->note_morning.", ":""."<w:br/>";
+
+                    $medicine .=  ($prescription_medicine->midday !== null)?"Trưa: ".$prescription_medicine->midday." viên ":"";
+                     $medicine .= ($prescription_medicine->note_midday !== null)?$prescription_medicine->note_midday.", ":""."";
+
+                    $medicine .=  ($prescription_medicine->afternoon !== null)?"Chiều: ".$prescription_medicine->afternoon." viên ":"";
+                    $medicine .= ($prescription_medicine->note_afternoon !== null)?$prescription_medicine->note_afternoon.", ":""."<w:br/>";
+
+                    $medicine .= ($prescription_medicine->evening !== null)?"Tối: ".$prescription_medicine->evening." viên ":"";
+                    $medicine .= ($prescription_medicine->note_evening !== null)?$prescription_medicine->note_evening:""."<w:br/>";
+
+
+        }
+        $templateProcessor->setValue('medicine',$medicine);
+        $templateProcessor->setValue('note_doctor',$noteValue);
+
+
+
+        $fileName = $prescription->patient->full_name;
+        $templateProcessor->saveAs($fileName . '.docx');
+        return response()->download($fileName . '.docx')->deleteFileAfterSend(true);
+    }
+
     public function getTotalPrice($id)
     {
         $totalPrice= 0;
@@ -247,6 +316,11 @@ class PrescriptionController extends Controller
         $symptons = $this->symtonService->getAll();
 
         return view('formExamination.formExam', compact('patient','medicines','symptons','prescriptions_time','id_prescription','newPrescriptionMedicine'));
+    }
+
+    public function stringToArray($string)
+    {
+        return explode(',',$string);
     }
 
 

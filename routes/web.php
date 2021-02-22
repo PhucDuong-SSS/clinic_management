@@ -39,6 +39,7 @@ Route::prefix('admin')->group(function () {
         Route::post('store', [PrescriptionController::class, 'store'])->name('prescription.store');
         Route::get('/{id}/delete', [PrescriptionController::class, 'deletePrescription'])->name('prescription.delete');
         Route::get('print/{id}', [PrescriptionController::class, 'print'])->name('prescription.print');
+        Route::get('exportWord/{id}', [PrescriptionController::class, 'exportWord'])->name('prescription.exportWord');
         Route::get('re-exam/{id}', [PrescriptionController::class, 'reExam'])->name('prescription.reExam');
         Route::post('re-exam/{id}', [PrescriptionController::class, 'storeExam'])->name('prescription.storeExam');
     });

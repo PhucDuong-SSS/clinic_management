@@ -40,7 +40,7 @@ class PrescriptionMedicine
 
         if(array_key_exists($medicine->id,$this->items)){
             $storeItem = $this->items[$medicine->id];
-            return;
+            return ;
         }
 
         $storeItem['morning'] = (int)$request->morning;
