@@ -15,21 +15,20 @@ class Medicine extends Model
 
     public function medCategory()
     {
-        return $this->belongsTo(medCategory::class);
+        return $this->belongsTo(medCategory::class, 'id_category', 'id');
     }
 
     public function unit()
     {
-        return $this->belongsTo(Unit::class);
+        return $this->belongsTo(Unit::class, 'id_unit', 'id');
     }
 
-    public function lot()
-    {
-        return $this->belongsTo(Lot::class);
-    }
+    // public function lot()
+    // {
+    //     return $this->belongsTo(Lot::class);
+    // }
     public function prescription()
     {
-        return $this->belongsToMany(Medicine::class,'prescription_medicine','id_medicine','id_prescrition');
+        return $this->belongsToMany(Medicine::class, 'prescription_medicine', 'id_medicine', 'id_prescrition');
     }
-
 }

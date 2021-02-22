@@ -12,6 +12,6 @@ class Unit extends Model
 
     public function medicines()
     {
-        return $this->hasMany(Medicine::class);
+        return $this->hasMany(Medicine::class, 'id_unit', 'id');
     }
 }

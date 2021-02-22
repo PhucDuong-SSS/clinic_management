@@ -19,13 +19,13 @@ class CreateMedicinesTable extends Migration
             $table->integer('medicine_amount');
             $table->integer('sell_price');
             $table->unsignedBigInteger('id_category');
-            $table->unsignedBigInteger('id_lot');
+            // $table->unsignedBigInteger('id_lot');
             $table->unsignedBigInteger('id_unit');
             $table->foreign('id_category')->references('id')->on('med_categories');
-            $table->foreign('id_lot')->references('id')->on('lots');
+            // $table->foreign('id_lot')->references('id')->on('lots');
             $table->foreign('id_unit')->references('id')->on('units');
             $table->string('image');
-            $table->integer('unit_volume');
+            // $table->integer('unit_volume');
             $table->timestamps();
         });
     }

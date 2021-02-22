@@ -10,8 +10,10 @@ class Lot extends Model
 {
     use HasFactory;
 
-    public function medicines()
-    {
-        return $this->hasMany(Medicine::class);
-    }
+    protected $table = 'lots';
+
+    // public function medicines()
+    // {
+    //     return $this->hasMany(Medicine::class);
+    // }
 }

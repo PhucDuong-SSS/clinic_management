@@ -45,6 +45,7 @@ class DatabaseSeeder extends Seeder
         foreach (range(1, 10) as $index) {
             DB::table('lots')->insert([
                 'code' => $faker->unique()->word,
+                'medicine_name' => $faker->randomElement(['thuoc1', 'thuoc2', 'thuoc3']),
                 'unit_price' => 10000,
                 'expired_date' => $faker->dateTimeBetween($startDate = 'now + 2 years', $endDate = 'now + 3 years'),
                 'receipt_date' => $faker->dateTimeBetween($startDate = '- 1 year', $endDate = 'now'),
@@ -54,17 +55,17 @@ class DatabaseSeeder extends Seeder
 
         foreach (range(1, 20) as $index) {
             $categories = medCategory::all();
-            $lots = Lot::all();
+            // $lots = Lot::all();
             $units = Unit::all();
             DB::table('medicines')->insert([
                 'medicine_name' => $faker->unique()->word,
                 'medicine_amount' => 100,
                 'sell_price' => 12000,
                 'id_category' => $categories->random()->id,
-                'id_lot' => $lots->random()->id,
+                // 'id_lot' => $lots->random()->id,
                 'id_unit' => $units->random()->id,
                 'image' => 'noimage.jpg',
-                'unit_volume' => 100,
+                // 'unit_volume' => 100,
             ]);
         }
 

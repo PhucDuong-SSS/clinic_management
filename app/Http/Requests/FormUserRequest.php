@@ -48,7 +48,7 @@ class FormUserRequest extends FormRequest
             'email.unique' => 'Email đã có người dùng',
             'email.email' => 'Sai định dạng email',
             'phone.required' => 'Bạn phải điền số điện thoại',
-            'phone.min' => 'Số điện thoại phải là dạng số',
+            'phone.numeric' => 'Số điện thoại phải là dạng số',
             'phone.unique' => 'Số điện thoại đã có người dùng',
             'address.required' => 'Bạn phải điền địa chỉ',
             'address.min' => 'Địa chỉ phải có ít nhất 2 ký tự',

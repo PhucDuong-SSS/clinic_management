@@ -3,6 +3,7 @@
 use App\Http\Controllers\ForgetPasswordController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MedCategoryController;
+use App\Http\Controllers\MedController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PrescriptionController;
@@ -119,5 +120,13 @@ Route::middleware('adminLogin')->prefix('admin')->group(function () {
         Route::get('/{id}/edit', [UnitController::class, 'edit'])->name('unit.edit');
         Route::post('/{id}/edit', [UnitController::class, 'update'])->name('unit.update');
         Route::delete('/destroy/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
+    });
+    Route::prefix('med')->group(function () {
+        Route::get('/', [MedController::class, 'index'])->name('med.index');
+        Route::get('/create', [MedController::class, 'create'])->name('med.create');
+        Route::post('/create', [MedController::class, 'store'])->name('med.store');
+        Route::get('/{id}/edit', [MedController::class, 'edit'])->name('med.edit');
+        Route::post('/{id}/edit', [MedController::class, 'update'])->name('med.update');
+        Route::delete('/destroy/{id}', [MedController::class, 'destroy'])->name('med.destroy');
     });
 });
