@@ -4,7 +4,23 @@
     <div class="card-header">
         <h3 class="card-title">Danh sách Thuốc</h3>
     </div>
+    <div style="display: flex;justify-content: space-between">
+    <div class="pt-3 ml-3" >
+
+            <select class="pl-3 " id="myselect" style="background:#007bff; color: white;border: none; border-radius: 3px; height: 30px" name="myselect">
+                <option value="{{route('med.index')}}">Tất cả</option>
+                @foreach($med_categories as $key => $medicine)
+                    <option value="{{route('med.category', $medicine->id)}}"
+                        selected="selected"
+                    >{{$medicine->med_category_name}}</option>
+                @endforeach
+
+            </select>
+
+    </div>
+
     <div class="d-flex flex-row-reverse mr-3 mt-3"><a href="{{route('med.create')}}" class="btn btn-primary">Thêm thuốc</a></div>
+    </div>
     <!-- /.card-header -->
     <div class="card-body">
         <table id="example1" class="table table-bordered table-striped">
@@ -93,6 +109,17 @@
 
             })
         }
+
+</script>
+<script>
+  document.getElementById("myselect").onchange = function (){
+      choosenCategory();
+  };
+  function choosenCategory(){
+      var category = document.getElementById("myselect");
+      window.location.href = category.value;
+  }
+
 
 </script>
 @endsection
