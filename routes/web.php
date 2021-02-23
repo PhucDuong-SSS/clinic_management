@@ -128,5 +128,6 @@ Route::middleware('adminLogin')->prefix('admin')->group(function () {
         Route::get('/{id}/edit', [MedController::class, 'edit'])->name('med.edit');
         Route::post('/{id}/edit', [MedController::class, 'update'])->name('med.update');
         Route::delete('/destroy/{id}', [MedController::class, 'destroy'])->name('med.destroy');
+        Route::get('/{id}/category',[MedController::class,'showMedByCategory'])->name('med.category');
     });
 });
