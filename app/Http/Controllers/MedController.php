@@ -15,8 +15,9 @@ class MedController extends Controller
 {
     function index()
     {
+        $med_categories = medCategory::all();
         $medicines = Medicine::all();
-        return view('medicine.listMedicine', compact('medicines'));
+        return view('medicine.listMedicine', compact('medicines', 'med_categories'));
     }
 
     function create()
@@ -43,6 +44,8 @@ class MedController extends Controller
         $medCategories = medCategory::all();
         $medicine = Medicine::findOrFail($id);
         $units = Unit::all();
+
+
         return view('medicine.editMedicine', compact('medicine', 'medCategories', 'units'));
     }
     function update($id, MedEditRequest $request)
@@ -76,9 +79,18 @@ class MedController extends Controller
         return response()->json(["success" => "Record has been delete"]);
     }
 
+
     function almostOver()
     {
         $medicines = Medicine::where('medicine_amount', '<', 50)->get();
         return view('medicine.almostOver', compact('medicines'));
+    }
+
+    function showMedByCategory($id_category)
+    {
+        $medicines = Medicine::where('id_category', $id_category)->get();
+
+        $med_categories = medCategory::all();
+        return view('medicine.listMedicine', compact('med_categories', 'medicines', 'id_category'));
     }
 }
