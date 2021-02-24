@@ -13,10 +13,14 @@ use SebastianBergmann\Environment\Console;
 
 class MedController extends Controller
 {
-    function index()
+    function index($category = null)
     {
         $med_categories = medCategory::all();
-        $medicines = Medicine::all();
+        if (!empty($category)) {
+            $medicines = Medicine::where('id_category', $category)->get();
+        } else {
+            $medicines = Medicine::all();
+        }
         return view('medicine.listMedicine', compact('medicines', 'med_categories'));
     }
 
@@ -84,13 +88,5 @@ class MedController extends Controller
     {
         $medicines = Medicine::where('medicine_amount', '<', 50)->get();
         return view('medicine.almostOver', compact('medicines'));
-    }
-
-    function showMedByCategory($id_category)
-    {
-        $medicines = Medicine::where('id_category', $id_category)->get();
-
-        $med_categories = medCategory::all();
-        return view('medicine.listMedicine', compact('med_categories', 'medicines', 'id_category'));
     }
 }
