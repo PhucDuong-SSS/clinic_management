@@ -42,16 +42,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        foreach (range(1, 10) as $index) {
-            DB::table('lots')->insert([
-                'code' => $faker->unique()->word,
-                'medicine_name' => $faker->randomElement(['thuoc1', 'thuoc2', 'thuoc3']),
-                'unit_price' => 10000,
-                'expired_date' => $faker->dateTimeBetween($startDate = 'now + 2 years', $endDate = 'now + 3 years'),
-                'receipt_date' => $faker->dateTimeBetween($startDate = '- 1 year', $endDate = 'now'),
-                'total_price' => 1000000,
-            ]);
-        }
 
         foreach (range(1, 20) as $index) {
             $categories = medCategory::all();
@@ -66,6 +56,19 @@ class DatabaseSeeder extends Seeder
                 'id_unit' => $units->random()->id,
                 'image' => 'noimage.jpg',
                 // 'unit_volume' => 100,
+            ]);
+        }
+
+        foreach (range(1, 10) as $index) {
+            $medicines = Medicine::all();
+            DB::table('lots')->insert([
+                'code' => $faker->unique()->word,
+                'id_med' =>  $medicines->random()->id,
+                'medicine_amount' => 50,
+                'unit_price' => 10000,
+                'expired_date' => $faker->dateTimeBetween($startDate = 'now + 2 years', $endDate = 'now + 3 years'),
+                'receipt_date' => $faker->dateTimeBetween($startDate = '- 1 year', $endDate = 'now'),
+                'total_price' => 1000000,
             ]);
         }
 

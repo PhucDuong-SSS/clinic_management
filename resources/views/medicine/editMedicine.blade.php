@@ -27,13 +27,13 @@
                                    <div style="color: red">*{{ $message }}</div>
                         @enderror
                     </div>
-                    {{-- <div class="form-group">
+                    <div class="form-group">
                         <label for="name" class="col-sm-6">Số lượng:</label>
                         <input type="number" class="form-control" value="{{($medicine->medicine_amount)}}" id="medicine_amount" name="medicine_amount">
                         @error('medicine_amount')
                                    <div style="color: red">*{{ $message }}</div>
                         @enderror
-                    </div> --}}
+                    </div>
                     <div class="form-group">
                         <label for="name" class="col-sm-6">Giá bán:</label>
                         <input type="number" value="{{($medicine->sell_price)}}" class="form-control" id="sell_price" name="sell_price">
