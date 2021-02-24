@@ -26,6 +26,7 @@ class MedEditRequest extends FormRequest
         return [
             'category' => 'required',
             'medicine_name' => 'required|unique:medicines,medicine_name,' . $this->id,
+            'medicine_amount' => 'required|numeric',
             'sell_price' => 'required|numeric',
             'unit' => 'required',
         ];
@@ -36,6 +37,8 @@ class MedEditRequest extends FormRequest
             'category.required' => 'Bạn phải chọn loại thuốc',
             'medicine_name.required' => 'Bạn phải điền tên thuốc',
             'medicine_name.unique' => 'Tên thuốc này đã được có',
+            'medicine_amount.required' => 'Bạn phải điền số lượng',
+            'medicine_amount.numeric' => 'Số lượng là dạng số',
             'sell_price.required' => 'Bạn phải điền giá bán',
             'sell_price.numeric' => 'Giá bán phải là dạng số',
             'unit.unique' => 'Bạn phải chọn đơn vị',

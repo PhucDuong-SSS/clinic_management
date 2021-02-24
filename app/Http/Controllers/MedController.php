@@ -8,6 +8,7 @@ use App\Models\medCategory;
 use App\Models\Medicine;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use SebastianBergmann\Environment\Console;
 
 class MedController extends Controller
@@ -49,6 +50,7 @@ class MedController extends Controller
         $medicine = Medicine::findOrFail($id);
         $medicine->id_category = $request->category;
         $medicine->medicine_name = $request->medicine_name;
+        $medicine->medicine_amount = $request->medicine_amount;
         $medicine->sell_price = $request->sell_price;
         $medicine->id_unit = $request->unit;
         $medicine->image = $this->UpdateUpload($id, $request);
@@ -72,5 +74,11 @@ class MedController extends Controller
         $medicine = Medicine::findOrFail($id);
         $medicine->delete();
         return response()->json(["success" => "Record has been delete"]);
+    }
+
+    function almostOver()
+    {
+        $medicines = Medicine::where('medicine_amount', '<', 50)->get();
+        return view('medicine.almostOver', compact('medicines'));
     }
 }
