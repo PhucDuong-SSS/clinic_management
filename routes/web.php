@@ -123,14 +123,14 @@ Route::middleware('adminLogin')->prefix('admin')->group(function () {
         Route::delete('/destroy/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
     });
     Route::prefix('med')->group(function () {
-        Route::get('/', [MedController::class, 'index'])->name('med.index');
+        Route::get('{category?}', [MedController::class, 'index'])->name('med.index');
         Route::get('/almostOver', [MedController::class, 'almostOver'])->name('med.aboutToExpire');
         Route::get('/create', [MedController::class, 'create'])->name('med.create');
         Route::post('/create', [MedController::class, 'store'])->name('med.store');
         Route::get('/{id}/edit', [MedController::class, 'edit'])->name('med.edit');
         Route::post('/{id}/edit', [MedController::class, 'update'])->name('med.update');
         Route::delete('/destroy/{id}', [MedController::class, 'destroy'])->name('med.destroy');
-        Route::get('/{id}/category',[MedController::class,'showMedByCategory'])->name('med.category');
+        // Route::get('/{id}/category',[MedController::class,'showMedByCategory'])->name('med.category');
     });
     Route::prefix('lots')->group(function () {
         Route::get('/', [LotsController::class, 'index'])->name('lots.index');
