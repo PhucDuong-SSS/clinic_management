@@ -27,8 +27,9 @@ class Medicine extends Model
     // {
     //     return $this->belongsTo(Lot::class);
     // }
-    public function prescription()
+    public function prescriptions()
     {
-        return $this->belongsToMany(Medicine::class, 'prescription_medicine', 'id_medicine', 'id_prescrition');
+        return $this->belongsToMany(Medicine::class, 'prescription_medicine', 'id_medicine', 'id_prescrition')
+        ;
     }
 }

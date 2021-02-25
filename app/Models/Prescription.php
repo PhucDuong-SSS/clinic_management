@@ -10,9 +10,11 @@ class Prescription extends Model
 {
     use HasFactory;
 
-    public function medicine()
+    public function medicines()
     {
-        return $this->belongsToMany(Prescription::class,'prescription_medicine','id_prescrition','id_medicine');
+        return $this->belongsToMany(Prescription::class,'prescription_medicine','id_prescrition','id_medicine')
+        ->withPivot('sell_price')
+        ->withTimestamps();
     }
 
     public function patient()

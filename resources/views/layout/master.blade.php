@@ -219,6 +219,7 @@
                 format: 'LT'
             })
 
+
             //Bootstrap Duallistbox
             $('.duallistbox').bootstrapDualListbox()
 
