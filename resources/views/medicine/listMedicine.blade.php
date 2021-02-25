@@ -7,15 +7,18 @@
     <div style="display: flex;justify-content: space-between">
     <div class="pt-3 ml-3" >
 
-            <select class="pl-3 " id="myselect" style="background:#007bff; color: white;border: none; border-radius: 3px; height: 30px" name="myselect">
-                <option value="{{route('med.index')}}">Tất cả</option>
+           <form action="{{route('med.index')}}" method="get">
+                <select class="pl-3 " id="myselect" name="myselect" style="background:#007bff; color: white;border: none; border-radius: 3px; height: 30px">
+                 <option disabled selected multiple="">--chọn--</option>
+                <option value="/admin/med">Tất cả</option>
                 @foreach($med_categories as $key => $medicine)
-                    <option value="{{route('med.category', $medicine->id)}}"
-                        selected="selected"
+                    <option value="/admin/med/{{$medicine->id}}"
+                        {{(old('myselect') == $medicine->id) ? "selected":""}}
                     >{{$medicine->med_category_name}}</option>
                 @endforeach
 
-            </select>
+                </select>
+           </form>
 
     </div>
 

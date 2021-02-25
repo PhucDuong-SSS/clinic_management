@@ -12,8 +12,8 @@ class Lot extends Model
 
     protected $table = 'lots';
 
-    // public function medicines()
-    // {
-    //     return $this->hasMany(Medicine::class);
-    // }
+    public function medicines()
+    {
+        return $this->belongsTo(Medicine::class, 'id_med', 'id');
+    }
 }
