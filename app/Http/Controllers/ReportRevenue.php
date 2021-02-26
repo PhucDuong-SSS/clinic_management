@@ -32,10 +32,12 @@ class ReportRevenue extends Controller
         {
             $date = $year.'-'.$month.'-'.$day;
             $prescriptions  = Prescription::where('created_at','like','%'.$date.'%')->get();
+
         }
         if(isset($month) && isset($year) && !isset($day))
         {
             $prescriptions  = Prescription::whereMonth('created_at','=',$month)->whereYear('created_at','=',$year)->get();
+
 
         }
         if(isset($year) && !isset($month) && !isset($day))
@@ -65,12 +67,11 @@ class ReportRevenue extends Controller
             $totalProfit = $dateRenueveExamPrice + $medicineProfit;
             $totalDateReneuve = $dateRenueveExamPrice+$dateRenueveMedicine;
             $html = view('report.htmlReport',compact('dateRenueveExamPrice','dateRenueveMedicine','totalDateReneuve','medicineProfit','totalProfit'))->render();
-            return response()->json(['html'=>$html, 'id'=>$medicineOriginal]);
+            return response()->json(['html'=>$html, 'date'=>$prescriptions]);
         }
-        return response()->json(['html'=>"<div><h3 style='text-align:center;'>Khong tim thay du lieu</h3></div>"]);
+        return response()->json(['html'=>"<div><h3 style='text-align:center;'>Khong tim thay du lieu</h3></div>",'year'=>$prescriptions]);
 
 
-        // $prescriptions  = Prescription::whereYear('created_at','=',2020)->get();
 
     }
 
@@ -96,13 +97,12 @@ class ReportRevenue extends Controller
         {
             $id_medicine = $medicine->id_medicine;
             $amount = $medicine->amount;
-            $medicine = Medicine::find($id_medicine);
-            $id_lot = $medicine->id_lot;
-            $unit_price =(int)Lot::find($id_lot)->unit_price;
+
+            $unit_price = DB::table('lots')->where('id_med',$id_medicine)->value('unit_price');
+
 
             $medicineOriginal += $amount*$unit_price;
         }
-
         return $medicineOriginal;
     }
 }
