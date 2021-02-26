@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lot;
 use App\Models\Patient;
 use App\Models\Medicine;
 use MongoDB\Driver\Session;
@@ -182,7 +183,42 @@ class PrescriptionController extends Controller
                    'unit_sell_price' => $prescriptionMedicine['unit_sell_price'],
                    'sell_mode' => $sell_mode
                ]);
-               
+                $buyAmount = $prescriptionMedicine['amount'];
+               $changeMedicine = Medicine::find($prescriptionMedicine['medicine']->id);
+               $amount = $changeMedicine->medicine_amount;
+               $changeMedicine->medicine_amount = $amount - $buyAmount;
+               $changeMedicine->save();
+
+               $medicineLots = Lot::where('id_med',$prescriptionMedicine['medicine']->id)
+               ->where('medicine_amount','>',0)
+               ->orderBy('expired_date')
+               ->get();
+               while($buyAmount >0)
+               {
+               foreach($medicineLots as $medicineLot)
+                {
+
+                        $code = $medicineLot->code;
+                        $medicineAmountLot = $medicineLot->medicine_amount;
+                        if($buyAmount >= $medicineAmountLot)
+                        {
+                            $changeAmountLot = Lot::where('code',$code)->first();
+                            $changeAmountLot->medicine_amount = 0;
+                            $changeAmountLot->save();
+                            $buyAmount = $buyAmount - $medicineAmountLot;
+                        }
+                        else
+                        {
+                            $changeAmountLot = Lot::where('code',$code)->first();
+                            $amout2 = $changeAmountLot->medicine_amount;
+                            $changeAmountLot->medicine_amount = $amout2 - $buyAmount;
+                            $changeAmountLot->save();
+                            $buyAmount = $buyAmount - $medicineAmountLot;
+                        }
+
+                }
+            }
+
            }
 
         }
