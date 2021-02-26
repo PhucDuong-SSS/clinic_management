@@ -93,15 +93,36 @@ class ReportRevenue extends Controller
     {
         $medicineOriginal = 0;
         $amount= 0 ;
+
         foreach($prescription_medicine as $medicine)
         {
             $id_medicine = $medicine->id_medicine;
-            $amount = $medicine->amount;
+            $amountBuy = $medicine->amount;
+            $medicineLots = Lot::where('id_med',$id_medicine)
+               ->orderBy('expired_date')
+               ->get();
+            while($amountBuy > 0){
+                foreach($medicineLots as $medicieneLot){
+                    $amountInLot = $medicieneLot->medicine_amount;
+                    $unitPriceInLot = $medicieneLot->unit_price;
+                    $totalPriceInLot = $medicieneLot->total_price;
+                    $amountOriginal = (int)$totalPriceInLot/$unitPriceInLot;
+                    if($amountInLot <$amountOriginal)
+                    {
+                        $amountDecrese = $amountOriginal - $amountInLot;
+                        $medicineOriginal += ($unitPriceInLot*$amountDecrese);
+                        $amountBuy -= $amountDecrese;
+                    }
 
-            $unit_price = DB::table('lots')->where('id_med',$id_medicine)->value('unit_price');
+                }
+
+            }
+            // $amount = $medicine->amount;
+
+            // $unit_price = DB::table('lots')->where('id_med',$id_medicine)->value('unit_price');
 
 
-            $medicineOriginal += $amount*$unit_price;
+            // $medicineOriginal += $amount*$unit_price;
         }
         return $medicineOriginal;
     }
