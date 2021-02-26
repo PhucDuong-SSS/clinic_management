@@ -47,7 +47,7 @@ class PrescriptionController extends Controller
     public function create()
     {
         $newPrescriptionMedicine = session('PrescriptionMedicine');
-        $medicines = Medicine::all();
+        $medicines = Medicine::where('medicine_amount','>',0)->get();
         $symptons = $this->symtonService->getAll();
         return view('formExamination.formExam', compact('symptons','medicines','newPrescriptionMedicine'));
     }
@@ -182,6 +182,7 @@ class PrescriptionController extends Controller
                    'unit_sell_price' => $prescriptionMedicine['unit_sell_price'],
                    'sell_mode' => $sell_mode
                ]);
+               
            }
 
         }
