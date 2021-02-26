@@ -29,7 +29,7 @@ use App\Http\Controllers\ReportRevenue;
 */
 
 Route::get('/', function () {
-    return view('layout/home');
+    return view('index');
 });
 
 
