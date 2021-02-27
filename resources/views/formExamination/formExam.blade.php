@@ -653,7 +653,6 @@
                             type: "delete",
                             dataType: "json",
                             success: function (data) {
-                                console.log(data);
                                 $('#data_prescription').html(data.PrescriptionMedicine);
                             },
                         });

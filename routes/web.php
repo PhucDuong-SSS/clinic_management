@@ -16,6 +16,7 @@ use App\Http\Controllers\RoleController;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\ReportRevenue;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,7 @@ use App\Http\Controllers\UnitController;
 */
 
 Route::get('/', function () {
-    return view('layout/home');
+    return view('index');
 });
 
 
@@ -45,6 +46,14 @@ Route::prefix('admin')->group(function () {
         Route::get('re-exam/{id}', [PrescriptionController::class, 'reExam'])->name('prescription.reExam');
         Route::post('re-exam/{id}', [PrescriptionController::class, 'storeExam'])->name('prescription.storeExam');
     });
+
+    Route::prefix('report-revenue')->group(function () {
+        Route::get('show', [ReportRevenue::class, 'show'])->name('report.show');
+        Route::post('show-date-report', [ReportRevenue::class, 'dateReport'])->name('datereport.show');
+    });
+
+
+
     Route::prefix('sympton')->group(function () {
         Route::get('', [SymptonController::class, 'index'])->name('sympton.index');
         Route::post('add-sympton-ajax', [SymptonController::class, 'addSympton']);

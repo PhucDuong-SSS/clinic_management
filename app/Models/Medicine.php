@@ -23,12 +23,19 @@ class Medicine extends Model
         return $this->belongsTo(Unit::class, 'id_unit', 'id');
     }
 
+
+    // public function lot()
+    // {
+    //     return $this->belongsTo(Lot::class);
+    // }
+
     public function lot()
     {
         return $this->hasMany(Lot::class, 'id_med', 'id');
     }
 
     public function prescription()
+
     {
         return $this->belongsToMany(Medicine::class, 'prescription_medicine', 'id_medicine', 'id_prescrition');
     }

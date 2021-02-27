@@ -77,6 +77,25 @@
                     </ul>
                 </li>
 
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-money-bill-alt"></i>
+                        <p>
+                            Báo cáo doanh thu
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('report.show')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Doanh thu</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
                 {{-- Cấu hình trang --}}
                 <li class="nav-item has-treeview">
                     <a href="{{route('setting.index')}}" class="nav-link">
