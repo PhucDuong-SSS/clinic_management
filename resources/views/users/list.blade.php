@@ -1,3 +1,17 @@
+<?php
+            $a=Illuminate\Support\Facades\Auth::user()->id;
+            $permissionOfRole = DB::table('roles')
+            ->join('role_permission', 'roles.id', '=', 'role_permission.role_key')
+            ->join('permissions', 'role_permission.permission_key', '=', 'permissions.id')
+            ->where('roles.id', $a)
+            ->select('permissions.*')->get()->pluck('id')->unique();
+            $checkListUser = DB::table('permissions')->where('permission_name', 'list_user')->value('id');
+            $checkEditUser = DB::table('permissions')->where('permission_name', 'edit_user')->value('id');
+            $checkDeleteUser = DB::table('permissions')->where('permission_name', 'delete_user')->value('id');
+
+            $checkListUnit = DB::table('permissions')->where('permission_name', 'list_unit')->value('id');
+
+?>
 @extends('layout/master')
 @section('content')
 <div class="card">
@@ -17,8 +31,12 @@
                     <th>Address</th>
                     <th>Phone</th>
                     <th>Email</th>
+                    @if($permissionOfRole->contains($checkEditUser))
                     <th>Edit</th>
+                    @endif
+                    @if($permissionOfRole->contains($checkDeleteUser))
                     <th>Delete</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -41,8 +59,14 @@
                     <td>{{$user->address}}</td>
                     <td>{{$user->phone}}</td>
                     <td>{{$user->email}}</td>
+                    @if($permissionOfRole->contains($checkEditUser))
                     <td><a class="btn btn-info" href="{{route('user.edit', $user->id)}}">Edit</a></td>
+                    @endif
+                    @if($permissionOfRole->contains($checkDeleteUser))
                     <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteUser({{$user->id}})">Delete</a></td>
+                    @endif
+                    {{-- <td><a class="btn btn-info" href="{{route('user.edit', $user->id)}}">Edit</a></td>
+                    <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteUser({{$user->id}})">Delete</a></td> --}}
                 </tr>
                 @endforeach
             </tbody>
@@ -55,8 +79,12 @@
                     <th>Address</th>
                     <th>Phone</th>
                     <th>Email</th>
+                    @if($permissionOfRole->contains($checkEditUser))
                     <th>Edit</th>
+                    @endif
+                    @if($permissionOfRole->contains($checkDeleteUser))
                     <th>Delete</th>
+                    @endif
                 </tr>
             </tfoot>
         </table>

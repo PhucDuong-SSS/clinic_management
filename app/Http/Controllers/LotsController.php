@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Http\Requests\LotsRequest;
 use App\Models\Lot;
 use App\Models\Medicine;
@@ -9,10 +10,18 @@ use Illuminate\Http\Request;
 
 class LotsController extends Controller
 {
-    function index()
+    function index($data = null)
     {
+        // dd($data);
+        $medicines = Medicine::all();
         $lots = Lot::all();
-        return view('warehouse.listWahouse', compact('lots'));
+        if (!empty($data)) {
+            $lots = Lot::where('id_med', $data)->get();
+        } else {
+            $lots = Lot::all();
+            $data = '-1';
+        }
+        return view('warehouse.listWahouse', compact('lots', 'medicines', 'data'));
     }
 
     function create()
@@ -63,5 +72,15 @@ class LotsController extends Controller
         $lots = Lot::findOrFail($id);
         $lots->delete();
         return response()->json(["success" => "Record has been delete"]);
+    }
+
+    function search(Request $request)
+    {
+        $medicines = Medicine::all();
+        $lots = Lot::where('created_at', '>=', $request->dateFrom)
+            ->where('created_at', '<=', $request->dateTo)
+            ->get();
+        $data = '-2';
+        return view('warehouse.listWahouse', compact('lots', 'medicines', 'data'));
     }
 }

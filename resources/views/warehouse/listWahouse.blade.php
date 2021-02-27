@@ -1,10 +1,67 @@
+
+<?php
+$unit;
+$total_medicine=0;
+$total_money=0;
+if($data!='-1' && $data!='-2'){
+    foreach ($lots as $key => $lot) {
+        $total_medicine+=$lot->medicine_amount;
+        $total_money+=$lot->total_price;
+    }
+    foreach ($medicines as $key => $medicine) {
+        if($data == $medicine->id)
+        $unit=$medicine->unit->unit_name;
+    }
+}
+if($data=='-2'){
+    foreach ($lots as $key => $lot) {
+        $total_money+=$lot->total_price;
+    }
+}
+?>
 @extends('layout/master')
 @section('content')
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">Kho Thuốc</h3>
     </div>
-    <div class="d-flex flex-row-reverse mr-3 mt-3"><a href="{{route('lots.create')}}" class="btn btn-primary">Nhập kho</a></div>
+   <div style="display: flex;justify-content: space-between">
+        <div class="pt-3 ml-3" >
+
+            <form action="{{route('lots.index')}}" method="get">
+                    <select class="pl-3 " id="myselect" name="myselect" style="background:#007bff; color: white;border: none; border-radius: 3px; height: 30px">
+                    <option value="" disabled selected>--chọn--</option>
+                    <option value="/admin/lotsList">Tất cả</option>
+                    @foreach($medicines as $key => $medicine)
+                        <option value="/admin/lotsList/{{$medicine->id}}"
+                            {{($data == $medicine->id) ? "selected" : ""}}
+                        >{{$medicine->medicine_name}}</option>
+                    @endforeach
+
+                    </select>
+            </form>
+
+        </div>
+
+        <div class="d-flex flex-row-reverse mr-3 mt-3"><a href="{{route('lots.create')}}" class="btn btn-primary">Nhập kho</a></div>
+    </div>
+
+    <form role="form" action="{{route('lots.search')}}" method="post" >
+                @csrf
+    <div class="d-flex">
+        <div class="m-3">
+            <label for="name" >Từ:</label>
+            <input type="date" value="{{old('dateFrom')}}"  id="dateFrom" name="dateFrom">
+        </div>
+        <div class="m-3">
+            <label for="name" >Đến:</label>
+            <input type="date" value="{{old('dateTo')}}"  id="dateTo" name="dateTo">
+        </div>
+        <div class="m-3">
+          <button type="submit" class="btn btn-primary">Tìm</button>
+        </div>
+    </div>
+    </form>
     <!-- /.card-header -->
     <div class="card-body">
         <table id="example1" class="table table-bordered table-striped">
@@ -29,10 +86,10 @@
                     <td>{{$lot->code}}</td>
                     <td>{{$lot->medicines->medicine_name}}</td>
                     <td>{{ $lot->medicine_amount }}</td>
-                    <td>{{ $lot->unit_price }}</td>
+                    <td>{{number_format($lot->unit_price, 0, '', ',')}}</td>
                     <td>{{ $lot->expired_date }}</td>
                     <td>{{ $lot->receipt_date }}</td>
-                    <td>{{ $lot->total_price }}</td>
+                    <td>{{number_format($lot->total_price, 0, '', ',')}}</td>
                     <td><a class="btn btn-info" href="{{route('lots.edit', $lot->id)}}">Edit</a></td>
                     <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteLots({{$lot->id}})">Delete</a></td>
                 </tr>
@@ -53,6 +110,17 @@
                 </tr>
             </tfoot>
         </table>
+        <div class="mt-3 d-flex justify-content-between" style="font-size: 20px">
+            @if($data!= '-1' && $data!= '-2')
+            <div class="ml-3"><strong class="pr-3">Tông số thuốc nhập:</strong>{{$total_medicine}} {{$unit}}</div>
+            <div class="mr-3" ><strong class="pr-3">Tông tiền:</strong>{{number_format($total_money, 0, '', ',')}}</div>
+            @endif
+        </div>
+        <div class="mt-3 d-flex justify-content-end" style="font-size: 20px">
+            @if($data == '-2')
+            <div class="mr-3" ><strong class="pr-3">Tông tiền:</strong>{{number_format($total_money, 0, '', ',')}}</div>
+            @endif
+        </div>
     </div>
     <!-- /.card-body -->
 </div>
@@ -99,6 +167,17 @@
 
             })
         }
+
+</script>
+<script>
+  document.getElementById("myselect").onchange = function (){
+      choosenMed();
+  };
+  function choosenMed(){
+      var data = document.getElementById("myselect");
+      window.location.href = data.value;
+  }
+
 
 </script>
 @endsection
