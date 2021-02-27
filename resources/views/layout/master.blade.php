@@ -1,3 +1,17 @@
+<?php
+            $a=Illuminate\Support\Facades\Auth::user()->id;
+            $permissionOfRole = DB::table('roles')
+            ->join('role_permission', 'roles.id', '=', 'role_permission.role_key')
+            ->join('permissions', 'role_permission.permission_key', '=', 'permissions.id')
+            ->where('roles.id', $a)
+            ->select('permissions.*')->get()->pluck('id')->unique();
+            $checkListUser = DB::table('permissions')->where('permission_name', 'list_user')->value('id');
+            $checkEditUser = DB::table('permissions')->where('permission_name', 'edit_user')->value('id');
+            $checkDeleteUser = DB::table('permissions')->where('permission_name', 'delete_user')->value('id');
+
+            $checkListUnit = DB::table('permissions')->where('permission_name', 'list_unit')->value('id');
+
+?>
 <!DOCTYPE html>
 <html>
 
@@ -82,7 +96,7 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
-            <div class="content-header">
+            {{-- <div class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
@@ -90,7 +104,7 @@
                         </div><!-- /.col -->
                     </div><!-- /.row -->
                 </div><!-- /.container-fluid -->
-            </div>
+            </div> --}}
             <!-- /.content-header -->
 
             <!-- Main content -->

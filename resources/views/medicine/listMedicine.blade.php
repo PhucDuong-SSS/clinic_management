@@ -9,11 +9,10 @@
 
            <form action="{{route('med.index')}}" method="get">
                 <select class="pl-3 " id="myselect" name="myselect" style="background:#007bff; color: white;border: none; border-radius: 3px; height: 30px">
-                 <option disabled selected multiple="">--chọn--</option>
-                <option value="/admin/med">Tất cả</option>
+                <option value="/admin/medicine" selected>Tất cả</option>
                 @foreach($med_categories as $key => $medicine)
-                    <option value="/admin/med/{{$medicine->id}}"
-                        {{(old('myselect') == $medicine->id) ? "selected":""}}
+                    <option value="/admin/medicine/{{$medicine->id}}"
+                        {{($category == $medicine->id) ? "selected" : ""}}
                     >{{$medicine->med_category_name}}</option>
                 @endforeach
 
@@ -46,7 +45,7 @@
                     <td><img src="{{asset('/storage/'.substr($medicine->image,7))}}" alt="" style="width: 100px; height:100px" ></td>
                     <td>{{ $medicine->medicine_name }}</td>
                     <td>{{ $medicine->medicine_amount }}</td>
-                    <td>{{ $medicine->sell_price }}</td>
+                    <td>{{number_format($medicine->sell_price, 0, '', ',')}}</td>
                     <td>{{ $medicine->unit->unit_name }}</td>
                     <td><a class="btn btn-info" href="{{route('med.edit', $medicine->id)}}">Edit</a></td>
                     <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteMed({{$medicine->id}})">Delete</a></td>

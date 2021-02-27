@@ -20,8 +20,9 @@ class MedController extends Controller
             $medicines = Medicine::where('id_category', $category)->get();
         } else {
             $medicines = Medicine::all();
+            $category = '-1';
         }
-        return view('medicine.listMedicine', compact('medicines', 'med_categories'));
+        return view('medicine.listMedicine', compact('medicines', 'med_categories', 'category'));
     }
 
     function create()

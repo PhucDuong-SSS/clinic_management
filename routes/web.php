@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ForgetPasswordController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LotsController;
 use App\Http\Controllers\MedCategoryController;
@@ -107,37 +108,45 @@ Route::middleware('adminLogin')->prefix('admin')->group(function () {
     });
 
     Route::prefix('role')->group(function () {
-        Route::get('/', [RoleController::class, 'index'])->name('role.index');
-        Route::get('/create', [RoleController::class, 'create'])->name('role.create');
-        Route::post('/create', [RoleController::class, 'store'])->name('role.store');
-        Route::get('/{id}/edit', [RoleController::class, 'edit'])->name('role.edit');
-        Route::post('/{id}/edit', [RoleController::class, 'update'])->name('role.update');
-        Route::delete('/destroy/{id}', [RoleController::class, 'destroy'])->name('role.destroy');
+        Route::get('/', [RoleController::class, 'index'])->name('role.index')->middleware('permission:list_role');
+        Route::get('/create', [RoleController::class, 'create'])->name('role.create')->middleware('permission:add_role');
+        Route::post('/create', [RoleController::class, 'store'])->name('role.store')->middleware('permission:add_role');
+        Route::get('/{id}/edit', [RoleController::class, 'edit'])->name('role.edit')->middleware('permission:edit_role');
+        Route::post('/{id}/edit', [RoleController::class, 'update'])->name('role.update')->middleware('permission:edit_role');
+        Route::delete('/destroy/{id}', [RoleController::class, 'destroy'])->name('role.destroy')->middleware('permission:delete_role');
     });
 
     Route::prefix('unit')->group(function () {
-        Route::get('/', [UnitController::class, 'index'])->name('unit.index');
-        Route::post('/create', [UnitController::class, 'store'])->name('unit.store');
-        Route::get('/{id}/edit', [UnitController::class, 'edit'])->name('unit.edit');
-        Route::post('/{id}/edit', [UnitController::class, 'update'])->name('unit.update');
-        Route::delete('/destroy/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
+        Route::get('/', [UnitController::class, 'index'])->name('unit.index')->middleware('permission:list_unit');
+        Route::post('/create', [UnitController::class, 'store'])->name('unit.store')->middleware('permission:add_unit');
+        Route::get('/{id}/edit', [UnitController::class, 'edit'])->name('unit.edit')->middleware('permission:edit_unit');
+        Route::post('/{id}/edit', [UnitController::class, 'update'])->name('unit.update')->middleware('permission:edit_unit');
+        Route::delete('/destroy/{id}', [UnitController::class, 'destroy'])->name('unit.destroy')->middleware('permission:delete_unit');
+    });
+    Route::prefix('medicine')->group(function () {
+        Route::get('{category?}', [MedController::class, 'index'])->name('med.index')->middleware('permission:list_med');
     });
     Route::prefix('med')->group(function () {
-        Route::get('{category?}', [MedController::class, 'index'])->name('med.index');
-        Route::get('/almostOver', [MedController::class, 'almostOver'])->name('med.aboutToExpire');
-        Route::get('/create', [MedController::class, 'create'])->name('med.create');
-        Route::post('/create', [MedController::class, 'store'])->name('med.store');
-        Route::get('/{id}/edit', [MedController::class, 'edit'])->name('med.edit');
-        Route::post('/{id}/edit', [MedController::class, 'update'])->name('med.update');
-        Route::delete('/destroy/{id}', [MedController::class, 'destroy'])->name('med.destroy');
-        // Route::get('/{id}/category',[MedController::class,'showMedByCategory'])->name('med.category');
+        Route::get('/create', [MedController::class, 'create'])->name('med.create')->middleware('permission:add_med');
+        Route::post('/create', [MedController::class, 'store'])->name('med.store')->middleware('permission:add_med');
+        Route::get('/{id}/edit', [MedController::class, 'edit'])->name('med.edit')->middleware('permission:edit_med');
+        Route::post('/{id}/edit', [MedController::class, 'update'])->name('med.update')->middleware('permission:edit_med');
+        Route::delete('/destroy/{id}', [MedController::class, 'destroy'])->name('med.destroy')->middleware('permission:delete_med');
+        Route::get('/almostOver', [MedController::class, 'almostOver'])->name('med.aboutToExpire')->middleware('permission:list_almostOver');
+    });
+    Route::prefix('lotsList')->group(function () {
+        Route::get('{data?}', [LotsController::class, 'index'])->name('lots.index')->middleware('permission:list_lot');
     });
     Route::prefix('lots')->group(function () {
-        Route::get('/', [LotsController::class, 'index'])->name('lots.index');
-        Route::get('/create', [LotsController::class, 'create'])->name('lots.create');
-        Route::post('/create', [LotsController::class, 'store'])->name('lots.store');
-        Route::get('/{id}/edit', [LotsController::class, 'edit'])->name('lots.edit');
-        Route::post('/{id}/edit', [LotsController::class, 'update'])->name('lots.update');
-        Route::delete('/destroy/{id}', [LotsController::class, 'destroy'])->name('lots.destroy');
+        Route::post('/searchDate', [LotsController::class, 'search'])->name('lots.search');
+        Route::get('/create', [LotsController::class, 'create'])->name('lots.create')->middleware('permission:add_lot');
+        Route::post('/create', [LotsController::class, 'store'])->name('lots.store')->middleware('permission:add_lot');
+        Route::get('/{id}/edit', [LotsController::class, 'edit'])->name('lots.edit')->middleware('permission:edit_lot');
+        Route::post('/{id}/edit', [LotsController::class, 'update'])->name('lots.update')->middleware('permission:edit_lot');
+        Route::delete('/destroy/{id}', [LotsController::class, 'destroy'])->name('lots.destroy')->middleware('permission:delete_lot');
+    });
+
+    Route::prefix('history')->group(function () {
+        Route::get('/', [HistoryController::class, 'index'])->name('history.index')->middleware('permission:list_history');
     });
 });

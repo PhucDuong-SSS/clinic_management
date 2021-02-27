@@ -1,3 +1,4 @@
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
     <a href="index3.html" class="brand-link">
@@ -25,16 +26,10 @@
 
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
-                <li class="nav-item has-treeview menu-open">
-                    <a href="" class="nav-link active">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Dashboard
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview
+                {{$permissionOfRole->contains($checkListUser) ? '': 'd-none'}}
+                "
+                >
                     <a href="{{route('user.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-edit"></i>
                         <p>
@@ -100,6 +95,14 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
+                    <a href="{{route('med.aboutToExpire')}}" class="nav-link">
+                        <i class="nav-icon fas fa-table"></i>
+                        <p>
+                           Các thuốc sắp hết
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview">
                     <a href="{{route('medCategory.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -123,7 +126,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview {{$permissionOfRole->contains($checkListUnit) ? '': 'd-none'}}">
                     <a href="{{route('unit.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
