@@ -167,7 +167,7 @@ class PrescriptionController extends Controller
            $prescriptionMedicineArray = $newPrescriptionMedicine->items;
            foreach ($prescriptionMedicineArray as $index=>$prescriptionMedicine)
            {
-               $sell_mode = ($prescriptionMedicine['sell_price']==$prescriptionMedicine['calc_price'])?'original':'discount';
+               $sell_mode = ($prescriptionMedicine['sell_price']==($prescriptionMedicine['unit_sell_price'])*$prescriptionMedicine['amount'])?'original':'discount';
                DB::table('prescription_medicine')->insert([
                    'id_prescrition' => $prescription_id,
                    'id_medicine' => $prescriptionMedicine['medicine']->id,

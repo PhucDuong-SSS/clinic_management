@@ -67,9 +67,10 @@ class ReportRevenue extends Controller
             $totalProfit = $dateRenueveExamPrice + $medicineProfit;
             $totalDateReneuve = $dateRenueveExamPrice+$dateRenueveMedicine;
             $html = view('report.htmlReport',compact('dateRenueveExamPrice','dateRenueveMedicine','totalDateReneuve','medicineProfit','totalProfit'))->render();
-            return response()->json(['html'=>$html, 'date'=>$prescriptions]);
+            return response()->json(['html'=>$html]);
         }
-        return response()->json(['html'=>"<div><h3 style='text-align:center;'>Khong tim thay du lieu</h3></div>",'year'=>$prescriptions]);
+        $html = view('report.noResult')->render();
+        return response()->json(['html'=> $html]);
 
 
 
@@ -117,12 +118,7 @@ class ReportRevenue extends Controller
                 }
 
             }
-            // $amount = $medicine->amount;
 
-            // $unit_price = DB::table('lots')->where('id_med',$id_medicine)->value('unit_price');
-
-
-            // $medicineOriginal += $amount*$unit_price;
         }
         return $medicineOriginal;
     }
