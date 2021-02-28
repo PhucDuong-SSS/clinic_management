@@ -330,119 +330,124 @@
                     <div class="modal-body">
                         <form id="productForm" name="productForm" class="form-horizontal" method="POST" >
                             @csrf
-                            <div class="form-group">
-                                <label for="name" class="col-sm-12 control-label">Tên thuốc</label>
-                                <div class="col-sm-12">
-                                    <select name="medicine_id" id="medicine_id" data-live-search="true" data-live-search-style="startsWith" class="selectpicker form-control" >
-                                        @foreach($medicines as $medicine)
-                                            <option value="{{$medicine->id}}">{{$medicine->medicine_name}}</option>
 
-                                        @endforeach
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="name" class="col-sm-12 control-label">Tên thuốc</label>
+                                            <div class="col-sm-12">
+                                                <select name="medicine_id" id="medicine_id" data-live-search="true" data-live-search-style="startsWith" class="selectpicker form-control" >
+                                                    @foreach($medicines as $medicine)
+                                                        <option value="{{$medicine->id}}">{{$medicine->medicine_name}}</option>
 
-                                    </select>
+                                                    @endforeach
+                                                </select>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-12 control-label">Lượng thuốc buối sáng</label>
+                                            <div class="col-sm-12">
+                                                <input type="number" class="form-control" id="morning" name="morning" min="1" max="100" placeholder="Nhập số lượng thuốc cho buổi sáng"  maxlength="50">
+                                                <div class="text-danger text-left morningErr"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-12 control-label">Ghi chú thuốc buối sáng </label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" id="note_morning" name="note_morning" placeholder="Ghi chú cho buổi sáng"  maxlength="255">
+                                                <div class="text-danger text-left note_morningErr"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-12 control-label">Lượng thuốc buối chiều</label>
+                                        <div class="col-sm-12">
+                                            <input type="number" class="form-control" id="afternoon" min="1" max="100" name="afternoon" placeholder="Nhập số lượng thuốc cho buổi chiều"  maxlength="50">
+                                            <div class="text-danger text-left afternoonErr"></div>
+
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-12 control-label">Lượng thuốc buối sáng</label>
-                                <div class="col-sm-12">
-                                    <input type="number" class="form-control" id="morning" name="morning" min="1" max="100" placeholder="Nhập số lượng thuốc cho buổi sáng"  maxlength="50">
-                                    <div class="text-danger text-left morningErr"></div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-12 control-label">Ghi chú thuốc buối chiều </label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="note_afternoon" name="note_afternoon" placeholder="Ghi chú thuốc cho buổi chiều"  maxlength="255">
+                                            <div class="text-danger text-left note_afternoonErr"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-12 control-label">Lượng thuốc buối tối</label>
+                                        <div class="col-sm-12">
+                                            <input type="number" class="form-control" id="evening" name="evening" min="1" placeholder="Nhập số lượng thuốc cho buổi tối"  maxlength="50">
+                                            <div class="text-danger text-left eveningErr"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-12 control-label">Ghi chú thuốc buối sáng </label>
-                                <div class="col-sm-12">
-                                    <input type="text" class="form-control" id="note_morning" name="note_morning" placeholder="Ghi chú cho buổi sáng"  maxlength="255">
-                                    <div class="text-danger text-left note_morningErr"></div>
-
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-12 control-label">Ghi chú thuốc buối tối </label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="note_evening" name="note_evening" placeholder="Ghi chú thuốc cho buổi tối"  maxlength="255">
+                                            <div class="text-danger text-left note_eveningErr"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-12 control-label">Lượng thuốc buối trưa</label>
-                                <div class="col-sm-12">
-                                    <input type="number" class="form-control" id="midday" name="midday" min="1" max="100" placeholder="Nhập số lượng thuốc cho buổi trưa"  maxlength="50">
-                                    <div class="text-danger text-left middayErr"></div>
-
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-12 control-label">Số lượng ngày dùng </label>
+                                        <div class="col-sm-12">
+                                            <input type="number" class="form-control" id="number_of_day" name="number_of_day" value="1" min="1" placeholder="Thời gian dùng cho thuốc"  maxlength="255">
+                                            <div class="text-danger text-left number_of_dayErr"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-12 control-label">Ghi chú thuốc buối trưa </label>
-                                <div class="col-sm-12">
-                                    <input type="text" class="form-control" id="note_midday" name="note_midday" placeholder="Ghi chú cho buổi trưa"  maxlength="255">
-                                    <div class="text-danger text-left note_middayErr"></div>
-
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-12 control-label">Lượng thuốc buối chiều</label>
-                                <div class="col-sm-12">
-                                    <input type="number" class="form-control" id="afternoon" min="1" max="100" name="afternoon" placeholder="Nhập số lượng thuốc cho buổi chiều"  maxlength="50">
-                                    <div class="text-danger text-left afternoonErr"></div>
-
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-12 control-label">Tiền tạm tính</label>
+                                        <div class="col-sm-12">
+                                            <input type="number" class="form-control" id="calc_price" name="calc_price" value="" maxlength="255">
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-12 control-label">Nhập số tiền thực tính</label>
+                                        <div class="col-sm-12">
+                                            <input type="number" class="form-control" id="sell_price" name="sell_price" placeholder="Nhâp sô tiền"  maxlength="255">
+                                            <div class="text-danger text-left sell_priceErr"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-12 control-label">Ghi chú thuốc buối chiều </label>
-                                <div class="col-sm-12">
-                                    <input type="text" class="form-control" id="note_afternoon" name="note_afternoon" placeholder="Ghi chú thuốc cho buổi chiều"  maxlength="255">
-                                    <div class="text-danger text-left note_afternoonErr"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="col-sm-12 control-label">Lượng thuốc buối tối</label>
-                                <div class="col-sm-12">
-                                    <input type="number" class="form-control" id="evening" name="evening" min="1" placeholder="Nhập số lượng thuốc cho buổi tối"  maxlength="50">
-                                    <div class="text-danger text-left eveningErr"></div>
-
+                              </div>
+                              <div class="col-sm-12">
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default"   data-dismiss="modal">Close</button>
+                                    <button id="add_prescription" type="button" class="btn btn-primary">Thêm thuốc</button>
                                 </div>
+                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-12 control-label">Ghi chú thuốc buối tối </label>
-                                <div class="col-sm-12">
-                                    <input type="text" class="form-control" id="note_evening" name="note_evening" placeholder="Ghi chú thuốc cho buổi tối"  maxlength="255">
-                                    <div class="text-danger text-left note_eveningErr"></div>
-
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-12 control-label">Số lượng ngày dùng </label>
-                                <div class="col-sm-12">
-                                    <input type="number" class="form-control" id="number_of_day" name="number_of_day" value="1" min="1" placeholder="Thời gian dùng cho thuốc"  maxlength="255">
-                                    <div class="text-danger text-left number_of_dayErr"></div>
-
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-12 control-label">Tiền tạm tính</label>
-                                <div class="col-sm-12">
-                                    <input type="number" class="form-control" id="calc_price" name="calc_price" value="" maxlength="255">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-12 control-label">Nhập số tiền thực tính</label>
-                                <div class="col-sm-12">
-                                    <input type="number" class="form-control" id="sell_price" name="sell_price" placeholder="Nhâp sô tiền"  maxlength="255">
-                                    <div class="text-danger text-left sell_priceErr"></div>
-
-                                </div>
-                            </div>
-
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default"   data-dismiss="modal">Close</button>
-                                <button id="add_prescription" type="button" class="btn btn-primary">Thêm thuốc</button>
-                            </div>
-
 
                         </form>
                     </div>

@@ -19,8 +19,8 @@
 
             </div>
             <div class="col-md-6 ">
-                <div class="form-group">
-                    <label>Pick chọn thời gian</label>
+                <div class="form-group" >
+                    <span id='showtitle'></span>
                     <div class="input-group" id="set">
 
                     </div>
@@ -30,23 +30,27 @@
             </div>
 
 
-            <div class="col-md-12 ">
-                <div class="text-center ">
-                    <button id="show" type="button " class="btn btn-primary btn-lg btn3d "><span><i class="fas fa-search-dollar "></i>
+            <div class="col-md-12" id="showbtn">
 
-                    </span></button>
-                </div>
             </div>
             <br>
             <br>
             <br>
-           <span id="content"></span>
+           {{-- <span id="content"></span> --}}
+           <div class="container-fluid" id="content">
+            </div>
         </div>
         <!-- /.container-fluid -->
 </section>
 
 @endsection @section('script')
 <script>
+    let showbtn =`  <div class="text-center ">
+                    <button id="show" type="button " class="btn btn-primary btn-lg btn3d "><span><i class="fas fa-search-dollar "></i>
+
+                    </span></button>
+                </div>`;
+    let showtitle = `<label>Pick chọn thời gian</label>`;
     $(document).ready(function() {
 
         $(".customer ").toggle();
@@ -70,16 +74,26 @@
                               <option value="<?=$year;?>"><?=$year;?></option>
                             <?php endfor; ?>
                            </select>`;
+
+
+                     $("#showbtn").html(showbtn);
                      $("#set").html(set);
+                     $("#showtitle").html(showtitle);
 
             }
             if (a == 2) {
                 let set = `<input id="type_date" type="month" class="form-control" />`
                 $("#set").html(set);
+                $("#showbtn").html(showbtn);
+                $("#showtitle").html(showtitle);
+
+
             }
             if (a == 1 || a == 0) {
                 let set = `<input id="type_date" type="date" class="form-control" />`
                 $("#set").html(set);
+                $("#showbtn").html(showbtn);
+                $("#showtitle").html(showtitle);
             }
             $(".customer ").show();
         });
