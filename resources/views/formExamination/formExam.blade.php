@@ -213,12 +213,16 @@
                             <div class="card-body table-responsive p-0" style="height: 300px;">
                                 <table class="table table-head-fixed text-nowrap" id="preexam_content">
                                     <tbody>
-                                    @if(isset($prescriptions_time))
-                                        @foreach($prescriptions_time as $index=>$prescription)
+                                    @if(isset($oldarrayNote))
+
+                                        @foreach($oldarrayNote as $index=>$prescription)
+
+                                        @if($index > 1 )
                                             <tr>
-                                                <td>Ngày tái khám lần: {{$index+1}}</td>
-                                                <td>{{$prescription->exam_date}}</td>
+                                                <td>Ngày tái khám lần: {{$oldarrayNote[$index-1]}}</td>
+                                                <td>{{$prescription}}</td>
                                             </tr>
+                                            @endif
                                         @endforeach
                                     @endif
                                     </tbody>

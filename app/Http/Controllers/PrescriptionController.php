@@ -65,10 +65,23 @@ class PrescriptionController extends Controller
     }
 
     public function storeExam(PrescriptionRequest $request,$id_prescription)
-    {
-        $id_patient = Prescription::findOrFail($id_prescription)->id_patient;
+    {   $oldPrescription =Prescription::findOrFail($id_prescription);
+        $id_patient = $oldPrescription->id_patient;
         $patient_id = $this->updatePatient($request, $id_patient);
-        $prescription_id =  $this->addPrescription($request,$patient_id,$id_prescription);
+        $old_reexam = $oldPrescription->reexam_time;
+        $old_reexamTo = $oldPrescription->reexam_to;
+        if($old_reexam == 0)
+        {
+            $prescription_id =  $this->addPrescription($request,$patient_id,$id_prescription,$id_prescription);
+
+        }
+        else
+        {
+           $oldestPres =  Prescription::where('reexam_to', $old_reexamTo)->where('reexam_time',0)->first();
+
+           $oldestPrescription_id  = $oldestPres->id;
+           $prescription_id =  $this->addPrescription($request,$patient_id,$id_prescription,$oldestPrescription_id);
+        }
         $this->addPescriptionPatient($prescription_id);
         $message = 'Thêm đơn tái khám thành công!';
         return redirect()->route('prescription.index')->with('success',$message);
@@ -76,7 +89,7 @@ class PrescriptionController extends Controller
     }
 
 
-    public function addPrescription($request,$patient_id,$id_preexam=null)
+    public function addPrescription($request,$patient_id,$id_preexam=null,$id_oldest=null)
     {
         $symptonsArr = $request->sympton_name;
         $symptonsStr= implode(',',$symptonsArr);
@@ -100,7 +113,7 @@ class PrescriptionController extends Controller
         else{
             $reexam_time =null;
         }
-        $prescription_change->reexam_to = $id_preexam===null?$prescription_id:$id_preexam;
+        $prescription_change->reexam_to = $id_preexam===null?$prescription_id:$id_oldest;
 
         if($reexam_time === null){
             $reexam_time =0;
@@ -366,9 +379,14 @@ class PrescriptionController extends Controller
 
     public function reExam($id_prescription)
     {
+        $oldPre = Prescription::findOrFail($id_prescription);
+        $id_patient = $oldPre->id_patient;
+        $old_note = $oldPre->note;
+        $oldarrayNote = $this->stringToArray($old_note);
 
-        $id_patient = Prescription::findOrFail($id_prescription)->id_patient;
+
         $patient = Patient::findOrFail($id_patient);
+
         $prescriptions_time =  Prescription::where('reexam_to',$id_prescription)->get();
         $newPrescriptionMedicine = session('PrescriptionMedicine');
 
@@ -376,7 +394,7 @@ class PrescriptionController extends Controller
         $medicines = Medicine::all();
         $symptons = $this->symtonService->getAll();
 
-        return view('formExamination.formExam', compact('patient','medicines','symptons','prescriptions_time','id_prescription','newPrescriptionMedicine'));
+        return view('formExamination.formExam', compact('patient','medicines','symptons','prescriptions_time','oldarrayNote','id_prescription','newPrescriptionMedicine'));
     }
 
     public function stringToArray($string)
