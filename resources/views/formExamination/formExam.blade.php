@@ -89,6 +89,9 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label>Triệu Chứng</label>
+                                        @error('sympton_name')
+                                        <div style="color: red">*{{ $message }}</div>
+                                        @enderror
                                         <div id="container" class="row">
                                             @foreach($symptons as $sympton)
                                                 <div class="col-sm-3">
@@ -97,7 +100,9 @@
                                                         <div class="form-check">
                                                             <input name="sympton_name[]" value="{{$sympton->sympton_name}}" class="form-check-input" type="checkbox">
                                                             <label class="form-check-label">{{$sympton->sympton_name}}</label>
+
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             @endforeach

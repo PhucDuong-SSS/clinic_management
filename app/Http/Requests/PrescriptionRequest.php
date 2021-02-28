@@ -33,6 +33,7 @@ class PrescriptionRequest extends FormRequest
             'prognosis'           =>  'required|string',
             'exam_price'           =>  'required|integer',
             'exam_date'           =>  'required|date',
+            'sympton_name'         => 'required',
 
 
 
@@ -61,6 +62,7 @@ class PrescriptionRequest extends FormRequest
             'exam_price.integer'           => 'Tiền cần nhập số nguyên',
             'exam_date.required'           => 'Ngày khám không được để trống',
             'exam_date.date'               => 'Nhập ngày tháng năm',
+            'sympton_name.required'         => 'Triệu chứng không được để trống',
         ];
     }
 }
