@@ -366,7 +366,25 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-12 control-label">Lượng thuốc buối trưa</label>
+                                            <div class="col-sm-12">
+                                                <input type="number" class="form-control" id="midday" min="1" max="100" name="midday" placeholder="Nhập số lượng thuốc cho buổi trưa"  maxlength="50">
+                                                <div class="text-danger text-left middayErr"></div>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-12 control-label">Ghi chú thuốc buối trưa </label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" id="note_midday" name="note_midday" placeholder="Ghi chú thuốc cho buổi trưa"  maxlength="255">
+                                                <div class="text-danger text-left note_middayErr"></div>
+                                            </div>
+                                        </div>
+                                    </div>
 
 
 

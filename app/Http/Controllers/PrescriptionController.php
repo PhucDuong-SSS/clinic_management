@@ -13,6 +13,8 @@ use App\Http\Services\SymtonService;
 use PhpOffice\PhpWord\TemplateProcessor;
 use App\Http\Requests\PrescriptionRequest;
 use App\Http\Services\PrescriptionService;
+use Carbon\Carbon;
+
 
 class PrescriptionController extends Controller
 {
@@ -173,6 +175,7 @@ class PrescriptionController extends Controller
                    'id_medicine' => $prescriptionMedicine['medicine']->id,
                    'amount' => $prescriptionMedicine['amount'],
                    'morning' => $prescriptionMedicine['morning'],
+                   'midday' => $prescriptionMedicine['midday'],
                    'afternoon' => $prescriptionMedicine['afternoon'],
                    'evening' => $prescriptionMedicine['evening'],
                    'note_morning' => $prescriptionMedicine['note_morning'],
@@ -244,9 +247,30 @@ class PrescriptionController extends Controller
         $totalPriceMedicine  = $this->getTotalPrice($id);
         $examPrice = (int)$prescription->exam_price;
         $totalPrice = $totalPriceMedicine + $examPrice;
+        $dob = $prescription->patient->dob;
+        $arrayNote = $this->stringToArray($prescription->note);
+        $noteValue = "";
+        foreach($arrayNote as $index => $value)
+        {
+            if($index === 0 )
+            {
+                $noteValue .= $value.'<br>';
+            }
+            if($index % 2 === 1 )
+            {
 
+                $noteValue .= 'Tái khám lần '.$value.'    '.$arrayNote[$index+1].'<br>';
+            }
+        }
 
-        return view('formExamination.printForm',compact('prescription','prescription_medicines','medicineNameArr','totalPrice'));
+        $user_age = $this->calculationAge($dob);
+
+        return view('formExamination.printForm',compact('prescription','prescription_medicines','medicineNameArr','totalPrice','user_age','noteValue'));
+    }
+
+    public function calculationAge($dob)
+    {
+        return Carbon::parse($dob)->diff(Carbon::now())->format('%y tuổi, %m tháng and %d ngày');
     }
 
     public function exportWord($id)
@@ -289,21 +313,21 @@ class PrescriptionController extends Controller
         {
 
 
-                    $medicine .= $medicineNameArr[$index]->medicine_name.'SL: '.$prescription_medicine->amount.' '.$prescription_medicine->number_of_day.'ngày'.'<w:br/>';
+                    $medicine .= $medicineNameArr[$index]->medicine_name.'                         SL:  '.$prescription_medicine->amount.'                              '.$prescription_medicine->number_of_day.'ngày'.'<w:br/>';
 
 
-                    $medicine .= ($prescription_medicine->morning !== null)?"Sáng: ".$prescription_medicine->morning." viên ":"";
-                    $medicine .= ($prescription_medicine->note_morning !== null)?$prescription_medicine->note_morning.", ":""."<w:br/>";
+                    $medicine .= ($prescription_medicine->morning != 0)?"Sáng: ".$prescription_medicine->morning." viên ":"";
+                    $medicine .= ($prescription_medicine->note_morning !== null)?$prescription_medicine->note_morning.", ":"";
 
-                    $medicine .=  ($prescription_medicine->midday !== null)?"Trưa: ".$prescription_medicine->midday." viên ":"";
+                    $medicine .=  ($prescription_medicine->midday != 0)?"Trưa: ".$prescription_medicine->midday." viên ":"";
                      $medicine .= ($prescription_medicine->note_midday !== null)?$prescription_medicine->note_midday.", ":""."";
 
-                    $medicine .=  ($prescription_medicine->afternoon !== null)?"Chiều: ".$prescription_medicine->afternoon." viên ":"";
-                    $medicine .= ($prescription_medicine->note_afternoon !== null)?$prescription_medicine->note_afternoon.", ":""."<w:br/>";
+                    $medicine .=  ($prescription_medicine->afternoon != 0)?"Chiều: ".$prescription_medicine->afternoon." viên ":"";
+                    $medicine .= ($prescription_medicine->note_afternoon !== null)?$prescription_medicine->note_afternoon.", ":"";
 
-                    $medicine .= ($prescription_medicine->evening !== null)?"Tối: ".$prescription_medicine->evening." viên ":"";
-                    $medicine .= ($prescription_medicine->note_evening !== null)?$prescription_medicine->note_evening:""."<w:br/>";
-
+                    $medicine .= ($prescription_medicine->evening != 0)?"Tối: ".$prescription_medicine->evening." viên ":"";
+                    $medicine .= ($prescription_medicine->note_evening !== null)?$prescription_medicine->note_evening:"";
+                    $medicine .= "<w:br/>";
 
         }
         $templateProcessor->setValue('medicine',$medicine);
