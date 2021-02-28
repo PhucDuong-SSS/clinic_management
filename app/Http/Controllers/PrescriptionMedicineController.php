@@ -13,7 +13,6 @@ class PrescriptionMedicineController extends Controller
     public function addPrescriptionMedicine(PrescriptionMedicineRequest $request)
     {
         $id = $request->medicine_id;
-        $morning = $request->midday;
 
         $medicine = Medicine::findorFail($id);
         $oldPrescriptionMedicine = session('PrescriptionMedicine');

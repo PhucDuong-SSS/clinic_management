@@ -59,48 +59,49 @@
     <br>
     <div class="row">
         <div class="col-md-6">
-            <h6>Ngày khám bệnh: {{$prescription->exam_date}}</h6>
+            <strong>Ngày khám bệnh: </strong> &ensp; {{$prescription->exam_date}}
         </div>
     </div>
     <br>
     <div class="row">
         <div class="col-md-6">
-            <h6>Họ tên bênh nhân: {{$prescription->patient->full_name}}</h6>
+            <strong>Họ tên bênh nhân: </strong> &ensp; {{$prescription->patient->full_name}}
         </div>
         <div class="col-md-6">
-            <h6>Họ tên người giám hộ: {{$prescription->patient->guardian_name}}</h6>
+            <strong>Họ tên người giám hộ: </strong> &ensp; {{$prescription->patient->guardian_name}}
         </div>
     </div>
     <br>
     <div class="row">
-        <div class="col-md-6">
-            <h6>Ngày sinh: {{$prescription->patient->dob}}</h6>
+        <div class="col-md-6 flex-row d-flex">
+                <strong>Ngày sinh:</strong> &ensp;     {{$prescription->patient->dob}}  &ensp;  ({{ $user_age }})
+
         </div>
         <div class="col-md-6">
-            <h6>Số điện thoại: {{$prescription->patient->phone_number}}</h6>
+            <strong>Số điện thoại:</strong> &ensp;  {{$prescription->patient->phone_number}}
         </div>
     </div>
     <br>
 
     <div class="row">
         <div class="col-md-6">
-            <h6>Giới tính: {{$prescription->patient->gender =='1'?'Nam':'Nữ'}}</h6>
+            <strong>Giới tính:</strong> &ensp; {{$prescription->patient->gender =='1'?'Nam':'Nữ'}}
         </div>
         <div class="col-md-6">
-            <h6>Địa chỉ: {{$prescription->patient->address}}</h6>
+            <strong>Địa chỉ:</strong> &ensp;{{$prescription->patient->address}}
         </div>
     </div>
     <br>
 
     <div class="row">
         <div class="col-md-12">
-            <h6>Triệu chứng: {{$prescription->sympton}}</h6>
+            <strong>Triệu chứng:</strong> &ensp; {{$prescription->sympton}}
         </div>
     </div>
     <br>
     <div class="row">
         <div class="col-md-12">
-            <h6>Chuẩn đoán: {{$prescription->prognosis}}</h6>
+            <strong>Chuẩn đoán:</strong> {{$prescription->prognosis}}
         </div>
     </div>
     <br>
@@ -112,7 +113,7 @@
             <div class="row">
                 @foreach($prescription_medicines as $index=> $prescription_medicine)
                 <div class="col-md-4">
-                    <h6>Tên thuốc: {{$medicineNameArr[$index]->medicine_name}}</h6>
+                    <h6>{{$medicineNameArr[$index]->medicine_name}}</h6>
                 </div>
                 <div class="col-md-4">
                     <h6>SL:{{$prescription_medicine->amount}}</h6>
@@ -122,14 +123,14 @@
                 </div>
                 <div class="col-md-12">
                     <p>
-                        {{$prescription_medicine->morning !== null?"Sáng: ".$prescription_medicine->morning." viên ":"" }}{{($prescription_medicine->note_morning !== null)?$prescription_medicine->note_morning.", ":""}}
-                        <br>
-                        {{($prescription_medicine->midday !== null)?"Trưa: ".$prescription_medicine->midday." viên ":""}}{{($prescription_medicine->note_midday !== null)?$prescription_medicine->note_midday.", ":""}}
-                        <br>
-                        {{($prescription_medicine->afternoon !== null)?"Chiều: ".$prescription_medicine->afternoon." viên ":""}}{{($prescription_medicine->note_afternoon !== null)?$prescription_medicine->note_afternoon.", ":""}}
-                        <br>
-                        {{($prescription_medicine->evening !== null)?"Tối: ".$prescription_medicine->evening." viên ":""}}{{($prescription_medicine->note_evening !== null)?$prescription_medicine->note_evening:""}}
+                        {{$prescription_medicine->morning != 0?"Sáng: ".$prescription_medicine->morning." viên ":"" }}{{($prescription_medicine->note_morning !== null)?$prescription_medicine->note_morning.", ":""}}
 
+                        {{($prescription_medicine->midday != 0)?"Trưa: ".$prescription_medicine->midday." viên ":""}}{{($prescription_medicine->note_midday !== null)?$prescription_medicine->note_midday.", ":""}}
+
+                        {{($prescription_medicine->afternoon != 0)?"Chiều: ".$prescription_medicine->afternoon." viên ":""}}{{($prescription_medicine->note_afternoon !== null)?$prescription_medicine->note_afternoon.", ":""}}
+
+                        {{($prescription_medicine->evening != 0)?"Tối: ".$prescription_medicine->evening." viên ":""}}{{($prescription_medicine->note_evening !== null)?$prescription_medicine->note_evening:""}}
+                        <br>
                     </p>
 
                 </div>
@@ -148,7 +149,7 @@
                 <br>
                 <br>
                 <br>
-                <h6 class="name-text">Nguyễn Văn A</h6>
+                {{-- <h6 class="name-text">Nguyễn Văn A</h6> --}}
             </div>
 
         </div>
@@ -158,7 +159,8 @@
     <div class="col-md-12">
         <div class="f" >
             <h6>Ghi chú</h6>
-            <p>{{$prescription->note}}</p>
+
+            <p>{!! $noteValue !!}</p>
         </div>
     </div>
 
@@ -168,7 +170,7 @@
 </div>
 <div class="button">
     <button class="btnprn btn pre-btn btn-primary">Print Preview</button>
-    <button onclick="goBack()" class="btn btn-primary">Go Back</button>
+    <a href="{{ route('prescription.index') }}"><button  class="btn btn-primary">Go Back</button></a>
 
 </div>
 
@@ -180,7 +182,7 @@
 <script type="text/javascript">
 
         function goBack() {
-        window.history.back();
+        window.history.back(-1);
     }
     $(document).ready(function(){
 
