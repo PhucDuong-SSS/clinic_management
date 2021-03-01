@@ -45,4 +45,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'user_role', 'id_user', 'role_key');
     }
+    public function getUrl()
+    {
+        return "https://phucduongc8.s3.amazonaws.com/";
+    }
+
 }

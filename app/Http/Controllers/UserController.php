@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+
 
 class UserController extends Controller
 {
@@ -46,7 +48,9 @@ class UserController extends Controller
         $user->password = bcrypt($request->password);
         $user->address = $request->address;
         $user->phone = $request->phone;
-        $user->image   = $request->image->store('public/images');
+        $pathImage = Storage::disk('s3')->put('clinicImages',$request->image,'public');
+        $user->image   = $pathImage;
+//        $user->image   = $request->image->store('public/images');
         $user->save();
         $user->role()->attach($request->role_key);
         return redirect()->route('user.index')->with('success', "Thêm thành viên thành công");
@@ -77,9 +81,13 @@ class UserController extends Controller
     public function UpdateUpload($id, $request)
     {
         $user = User::findOrFail($id);
+        $oldImage = $user->image;
         if ($request->hasFile('image')) {
-            $img = $request->image;
-            $path = $img->store('public/images');
+//            $img = $request->image;//
+//            $path = $img->store('public/images');
+            $path= Storage::disk('s3')->put('clinicImages',$request->image,'public');
+            Storage::delete($oldImage);
+
             return $path;
         } else {
             return $user->image;
@@ -89,7 +97,9 @@ class UserController extends Controller
     {
         DB::table('user_role')->where('id_user', $id)->delete();
         $user = User::findOrFail($id);
+        $oldImage = $user->image;
         $user->delete();
+        Storage::delete($oldImage);
         return response()->json(["success" => "Record has been delete"]);
         // Session::flash('success', 'Xóa thành viên thành công');
         // return redirect()->route('user.index');
