@@ -103,12 +103,18 @@
                     console.log(response);
                     $("#rid"+id).remove();
                     location.reload();
-                }
-            })
-                Swal.fire(
+                    Swal.fire(
                     'Bạn đã xóa thành công!',
                     'success',
                     )
+                },
+                error: function (response) {
+                    console.log('Error', response);
+                        Swal.fire(
+                        'Bạn không thể xóa!',
+                    )
+                }
+            })
                 }
 
             })
