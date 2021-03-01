@@ -49,6 +49,6 @@ class Permission
         if ($permissionOfRole->contains($checkPermission)) {
             return $next($request);
         }
-        return abort(401);
+        return redirect()->back()->with('alert', 'Bạn không có quyền truy cập!');;
     }
 }

@@ -1,11 +1,28 @@
+<?php
+             $roleOfUser = DB::table('users')
+            ->join('user_role', 'users.id', '=', 'user_role.id_user')
+            ->join('roles', 'user_role.role_key', '=', 'roles.id')
+            ->where('users.id', auth()->id())->select('roles.*')->get()->pluck('id');
+            $permissionOfRole = DB::table('roles')
+            ->join('role_permission', 'roles.id', '=', 'role_permission.role_key')
+            ->join('permissions', 'role_permission.permission_key', '=', 'permissions.id')
+            ->where('roles.id', $roleOfUser)
+            ->select('permissions.*')->get()->pluck('id')->unique();
+            $checkEditUnit = DB::table('permissions')->where('permission_name', 'edit_unit')->value('id');
+            $checkDeleteUnit = DB::table('permissions')->where('permission_name', 'delete_unit')->value('id');
+            $checkCreateUnit = DB::table('permissions')->where('permission_name', 'add_unit')->value('id');
+?>
+
 @extends('layout/master')
 @section('content')
 
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Danh sách Đơn vị</h3>
+            @if($permissionOfRole->contains($checkCreateUnit))
             <a href="#" class="btn btn-primary float-right" id="createUnit" data-toggle="modal"
                data-target="#modal-default">Thêm+</a>
+            @endif
         </div>
         <!-- /.card-header -->
         <div class="card-body" id="table-ajax-user">
@@ -24,11 +41,15 @@
                         <td>{{ ++$key }}</td>
                         <td>{{ $unit->unit_name }}</td>
                         <td class="d-flex justify-content-center">
+                             @if($permissionOfRole->contains($checkEditUnit))
                             <a href="#" class="mr-2 editUnit" data-toggle="modal" data-id="{{ $unit->id }}"> <i
                                     class="nav-icon fas fa-edit"></i> Sửa</a>
+                            @endif
+                             @if($permissionOfRole->contains($checkDeleteUnit))
                             <a style="color: red" href="#" class="deleteUnit" data-toggle="tooltip"
                                data-id="{{ $unit->id }}"> <i class="nav-icon far fa-trash-alt"
                                                                 style="color: red"></i> Xóa</a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

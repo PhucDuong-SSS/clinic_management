@@ -5,7 +5,7 @@
         <form role="form" action="" method="post" enctype="multipart/form-data">
             @csrf
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-12">
                     <div class="form-group">
                         <label >Tên:</label>
                         <input type="text" class="form-control" value="{{$role->role_name}}" name="role_name"  placeholder="Họ và tên">
@@ -23,12 +23,11 @@
 
 
                 </div>
-                <div class="col-md-6">
-
-                   <div class="form-group">
-                        <label >Chọn quyền:</label>
+                <div class="col-12">
+                    <label >Chọn quyền:</label>
+                   <div class="form-group d-flex" style="flex-wrap: wrap;">
                         @foreach($permissions as $permission)
-                     <div class="form-check">
+                     <div class="form-check col-md-3">
                         <input type="checkbox"
                         {{$permissionOfRole->contains($permission->id) ? "checked" : ""}}
                         class="form-check-input" value="{{$permission->id}}" name="permission[]">

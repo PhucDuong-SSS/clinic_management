@@ -1,11 +1,28 @@
+<?php
+             $roleOfUser = DB::table('users')
+            ->join('user_role', 'users.id', '=', 'user_role.id_user')
+            ->join('roles', 'user_role.role_key', '=', 'roles.id')
+            ->where('users.id', auth()->id())->select('roles.*')->get()->pluck('id');
+            $permissionOfRole = DB::table('roles')
+            ->join('role_permission', 'roles.id', '=', 'role_permission.role_key')
+            ->join('permissions', 'role_permission.permission_key', '=', 'permissions.id')
+            ->where('roles.id', $roleOfUser)
+            ->select('permissions.*')->get()->pluck('id')->unique();
+            $checkEditMedCategory = DB::table('permissions')->where('permission_name', 'edit_medCategory')->value('id');
+            $checkDeleteMedCategory = DB::table('permissions')->where('permission_name', 'delete_medCategory')->value('id');
+            $checkCreateMedCategory = DB::table('permissions')->where('permission_name', 'add_medCategory')->value('id');
+?>
+
 @extends('layout/master')
 @section('content')
 
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Danh sách loại thuốc</h3>
+            @if($permissionOfRole->contains($checkCreateMedCategory))
             <a href="#" class="btn btn-primary float-right" id="createMedCatorgy" data-toggle="modal"
                data-target="#modal-default">Thêm+</a>
+            @endif
         </div>
         <!-- /.card-header -->
         <div class="card-body" id="table-ajax-user">
@@ -26,11 +43,15 @@
                         <td>{{ $medCategory->med_category_name }}</td>
                         <td>{{ $medCategory->description }}</td>
                         <td class="d-flex justify-content-center">
+                            @if($permissionOfRole->contains($checkEditMedCategory))
                             <a href="#" class="mr-2 editMedCategory" data-toggle="modal" data-id="{{ $medCategory->id }}"> <i
                                     class="nav-icon fas fa-edit"></i> Sửa</a>
+                            @endif
+                            @if($permissionOfRole->contains($checkDeleteMedCategory))
                             <a style="color: red" href="#" class="deleteMedCategory" data-toggle="tooltip"
                                data-id="{{ $medCategory->id }}"> <i class="nav-icon far fa-trash-alt"
                                                                 style="color: red"></i> Xóa</a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
