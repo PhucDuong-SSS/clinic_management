@@ -13,6 +13,8 @@ use App\Http\Services\SymtonService;
 use PhpOffice\PhpWord\TemplateProcessor;
 use App\Http\Requests\PrescriptionRequest;
 use App\Http\Services\PrescriptionService;
+use Carbon\Carbon;
+
 
 class PrescriptionController extends Controller
 {
@@ -63,10 +65,23 @@ class PrescriptionController extends Controller
     }
 
     public function storeExam(PrescriptionRequest $request,$id_prescription)
-    {
-        $id_patient = Prescription::findOrFail($id_prescription)->id_patient;
+    {   $oldPrescription =Prescription::findOrFail($id_prescription);
+        $id_patient = $oldPrescription->id_patient;
         $patient_id = $this->updatePatient($request, $id_patient);
-        $prescription_id =  $this->addPrescription($request,$patient_id,$id_prescription);
+        $old_reexam = $oldPrescription->reexam_time;
+        $old_reexamTo = $oldPrescription->reexam_to;
+        if($old_reexam == 0)
+        {
+            $prescription_id =  $this->addPrescription($request,$patient_id,$id_prescription,$id_prescription);
+
+        }
+        else
+        {
+           $oldestPres =  Prescription::where('reexam_to', $old_reexamTo)->where('reexam_time',0)->first();
+
+           $oldestPrescription_id  = $oldestPres->id;
+           $prescription_id =  $this->addPrescription($request,$patient_id,$id_prescription,$oldestPrescription_id);
+        }
         $this->addPescriptionPatient($prescription_id);
         $message = 'Thêm đơn tái khám thành công!';
         return redirect()->route('prescription.index')->with('success',$message);
@@ -74,7 +89,7 @@ class PrescriptionController extends Controller
     }
 
 
-    public function addPrescription($request,$patient_id,$id_preexam=null)
+    public function addPrescription($request,$patient_id,$id_preexam=null,$id_oldest=null)
     {
         $symptonsArr = $request->sympton_name;
         $symptonsStr= implode(',',$symptonsArr);
@@ -98,7 +113,7 @@ class PrescriptionController extends Controller
         else{
             $reexam_time =null;
         }
-        $prescription_change->reexam_to = $id_preexam===null?$prescription_id:$id_preexam;
+        $prescription_change->reexam_to = $id_preexam===null?$prescription_id:$id_oldest;
 
         if($reexam_time === null){
             $reexam_time =0;
@@ -167,12 +182,13 @@ class PrescriptionController extends Controller
            $prescriptionMedicineArray = $newPrescriptionMedicine->items;
            foreach ($prescriptionMedicineArray as $index=>$prescriptionMedicine)
            {
-               $sell_mode = ($prescriptionMedicine['sell_price']==$prescriptionMedicine['calc_price'])?'original':'discount';
+               $sell_mode = ($prescriptionMedicine['sell_price']==($prescriptionMedicine['unit_sell_price'])*$prescriptionMedicine['amount'])?'original':'discount';
                DB::table('prescription_medicine')->insert([
                    'id_prescrition' => $prescription_id,
                    'id_medicine' => $prescriptionMedicine['medicine']->id,
                    'amount' => $prescriptionMedicine['amount'],
                    'morning' => $prescriptionMedicine['morning'],
+                   'midday' => $prescriptionMedicine['midday'],
                    'afternoon' => $prescriptionMedicine['afternoon'],
                    'evening' => $prescriptionMedicine['evening'],
                    'note_morning' => $prescriptionMedicine['note_morning'],
@@ -233,7 +249,7 @@ class PrescriptionController extends Controller
         DB::table('prescription_medicine')->where('id_prescrition',$id)->delete();
 
         $message = 'Xóa thành công!';
-        return redirect()->route('prescription.index')->with('toast_success',$message);
+        return back()->with('success',$message);
     }
 
     public function print($id)
@@ -244,9 +260,30 @@ class PrescriptionController extends Controller
         $totalPriceMedicine  = $this->getTotalPrice($id);
         $examPrice = (int)$prescription->exam_price;
         $totalPrice = $totalPriceMedicine + $examPrice;
+        $dob = $prescription->patient->dob;
+        $arrayNote = $this->stringToArray($prescription->note);
+        $noteValue = "";
+        foreach($arrayNote as $index => $value)
+        {
+            if($index === 0 )
+            {
+                $noteValue .= $value.'<br>';
+            }
+            if($index % 2 === 1 )
+            {
 
+                $noteValue .= 'Tái khám lần '.$value.'    '.$arrayNote[$index+1].'<br>';
+            }
+        }
 
-        return view('formExamination.printForm',compact('prescription','prescription_medicines','medicineNameArr','totalPrice'));
+        $user_age = $this->calculationAge($dob);
+
+        return view('formExamination.printForm',compact('prescription','prescription_medicines','medicineNameArr','totalPrice','user_age','noteValue'));
+    }
+
+    public function calculationAge($dob)
+    {
+        return Carbon::parse($dob)->diff(Carbon::now())->format('%y tuổi, %m tháng and %d ngày');
     }
 
     public function exportWord($id)
@@ -289,21 +326,21 @@ class PrescriptionController extends Controller
         {
 
 
-                    $medicine .= $medicineNameArr[$index]->medicine_name.'SL: '.$prescription_medicine->amount.' '.$prescription_medicine->number_of_day.'ngày'.'<w:br/>';
+                    $medicine .= $medicineNameArr[$index]->medicine_name.'                         SL:  '.$prescription_medicine->amount.'                              '.$prescription_medicine->number_of_day.'ngày'.'<w:br/>';
 
 
-                    $medicine .= ($prescription_medicine->morning !== null)?"Sáng: ".$prescription_medicine->morning." viên ":"";
-                    $medicine .= ($prescription_medicine->note_morning !== null)?$prescription_medicine->note_morning.", ":""."<w:br/>";
+                    $medicine .= ($prescription_medicine->morning != 0)?"Sáng: ".$prescription_medicine->morning." viên ":"";
+                    $medicine .= ($prescription_medicine->note_morning !== null)?$prescription_medicine->note_morning.", ":"";
 
-                    $medicine .=  ($prescription_medicine->midday !== null)?"Trưa: ".$prescription_medicine->midday." viên ":"";
+                    $medicine .=  ($prescription_medicine->midday != 0)?"Trưa: ".$prescription_medicine->midday." viên ":"";
                      $medicine .= ($prescription_medicine->note_midday !== null)?$prescription_medicine->note_midday.", ":""."";
 
-                    $medicine .=  ($prescription_medicine->afternoon !== null)?"Chiều: ".$prescription_medicine->afternoon." viên ":"";
-                    $medicine .= ($prescription_medicine->note_afternoon !== null)?$prescription_medicine->note_afternoon.", ":""."<w:br/>";
+                    $medicine .=  ($prescription_medicine->afternoon != 0)?"Chiều: ".$prescription_medicine->afternoon." viên ":"";
+                    $medicine .= ($prescription_medicine->note_afternoon !== null)?$prescription_medicine->note_afternoon.", ":"";
 
-                    $medicine .= ($prescription_medicine->evening !== null)?"Tối: ".$prescription_medicine->evening." viên ":"";
-                    $medicine .= ($prescription_medicine->note_evening !== null)?$prescription_medicine->note_evening:""."<w:br/>";
-
+                    $medicine .= ($prescription_medicine->evening != 0)?"Tối: ".$prescription_medicine->evening." viên ":"";
+                    $medicine .= ($prescription_medicine->note_evening !== null)?$prescription_medicine->note_evening:"";
+                    $medicine .= "<w:br/>";
 
         }
         $templateProcessor->setValue('medicine',$medicine);
@@ -342,9 +379,14 @@ class PrescriptionController extends Controller
 
     public function reExam($id_prescription)
     {
+        $oldPre = Prescription::findOrFail($id_prescription);
+        $id_patient = $oldPre->id_patient;
+        $old_note = $oldPre->note;
+        $oldarrayNote = $this->stringToArray($old_note);
 
-        $id_patient = Prescription::findOrFail($id_prescription)->id_patient;
+
         $patient = Patient::findOrFail($id_patient);
+
         $prescriptions_time =  Prescription::where('reexam_to',$id_prescription)->get();
         $newPrescriptionMedicine = session('PrescriptionMedicine');
 
@@ -352,7 +394,7 @@ class PrescriptionController extends Controller
         $medicines = Medicine::all();
         $symptons = $this->symtonService->getAll();
 
-        return view('formExamination.formExam', compact('patient','medicines','symptons','prescriptions_time','id_prescription','newPrescriptionMedicine'));
+        return view('formExamination.formExam', compact('patient','medicines','symptons','prescriptions_time','oldarrayNote','id_prescription','newPrescriptionMedicine'));
     }
 
     public function stringToArray($string)
