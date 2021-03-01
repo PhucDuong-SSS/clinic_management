@@ -134,10 +134,10 @@ class UserController extends Controller
 
     function home()
     {
-        $medicines = Medicine::where('medicine_amount', '<', 50)->get();
+        $medicines1 = Medicine::where('medicine_amount', '<', 50)->get();
         $patient = Patient::all();
         $users = User::all();
         $medicines = Medicine::all();
-        return view('layout.home', compact('medicines', 'patient', 'users', 'medicines'));
+        return view('layout.home', compact('medicines1', 'patient', 'users', 'medicines'));
     }
 }

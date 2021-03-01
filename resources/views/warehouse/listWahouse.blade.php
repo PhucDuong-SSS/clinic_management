@@ -90,10 +90,10 @@ if($data=='-2'){
                     <th>Ngày hết hạn</th>
                     <th>Tổng giá</th>
                     @if($permissionOfRole->contains($checkEditLots))
-                    <th>Edit</th>
+                    <th>Sửa</th>
                     @endif
                     @if($permissionOfRole->contains($checkDeleteLots))
-                    <th>Delete</th>
+                    <th>Xóa</th>
                     @endif
                 </tr>
             </thead>
@@ -109,32 +109,14 @@ if($data=='-2'){
                     <td>{{ $lot->receipt_date }}</td>
                     <td>{{number_format($lot->total_price, 0, '', ',')}}</td>
                     @if($permissionOfRole->contains($checkEditLots))
-                    <td><a class="btn btn-info" href="{{route('lots.edit', $lot->id)}}">Edit</a></td>
+                    <td><a class="btn btn-info" href="{{route('lots.edit', $lot->id)}}">Sửa</a></td>
                     @endif
                     @if($permissionOfRole->contains($checkDeleteLots))
-                    <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteLots({{$lot->id}})">Delete</a></td>
+                    <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteLots({{$lot->id}})">Xóa</a></td>
                     @endif
                 </tr>
                 @endforeach
             </tbody>
-            <tfoot>
-                <tr>
-                    <th>Ngày nhập</th>
-                    <th>Mã Đơn Hàng</th>
-                    <th>Tên thuốc</th>
-                    <th>Số lượng</th>
-                    <th>Giá nhập</th>
-                    <th>Ngày sản xuất</th>
-                    <th>Ngày hết hạn</th>
-                    <th>Tổng giá</th>
-                    @if($permissionOfRole->contains($checkEditLots))
-                    <th>Edit</th>
-                    @endif
-                    @if($permissionOfRole->contains($checkDeleteLots))
-                    <th>Delete</th>
-                    @endif
-                </tr>
-            </tfoot>
         </table>
         <div class="mt-3 d-flex justify-content-between" style="font-size: 20px">
             @if($data!= '-1' && $data!= '-2')

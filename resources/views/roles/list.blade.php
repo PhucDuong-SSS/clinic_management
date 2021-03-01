@@ -28,13 +28,13 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Name</th>
-                    <th>Display_Name</th>
+                    <th>Tên</th>
+                    <th>Tên hiển thị</th>
                     @if($permissionOfRole->contains($checkEditRole))
-                    <th>Edit</th>
+                    <th>Sửa</th>
                     @endif
                     @if($permissionOfRole->contains($checkDeleteRole))
-                    <th>Delete</th>
+                    <th>Xóa</th>
                     @endif
                 </tr>
             </thead>
@@ -45,27 +45,14 @@
                     <td>{{$role->role_name}}</td>
                     <td>{{$role->display_name}}</td>
                     @if($permissionOfRole->contains($checkEditRole))
-                    <td><a class="btn btn-info" href="{{route('role.edit', $role->id)}}">Edit</a></td>
+                    <td><a class="btn btn-info" href="{{route('role.edit', $role->id)}}">Sửa</a></td>
                     @endif
                     @if($permissionOfRole->contains($checkDeleteRole))
-                    <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteRole({{$role->id}})">Delete</a></td>
+                    <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteRole({{$role->id}})">Xóa</a></td>
                      @endif
                 </tr>
                 @endforeach
             </tbody>
-            <tfoot>
-                <tr>
-                    <th></th>
-                    <th>Name</th>
-                    <th>Display_Name</th>
-                    @if($permissionOfRole->contains($checkEditRole))
-                    <th>Edit</th>
-                    @endif
-                    @if($permissionOfRole->contains($checkDeleteRole))
-                    <th>Delete</th>
-                    @endif
-                </tr>
-            </tfoot>
         </table>
     </div>
     <!-- /.card-body -->
