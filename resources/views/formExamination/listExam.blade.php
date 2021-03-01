@@ -52,15 +52,11 @@
                                         @if($permissionOfRole->contains($checkExPres))
                                         <a href="{{route('prescription.exportWord',$prescription->id)}}" class="btn btn-sm btnprn btn-warning" title="Export word"><i class="fas fa-file-export"></i>
                                         </a>
-<<<<<<< HEAD
                                         @endif
                                          @if($permissionOfRole->contains($checkDeletePres))
                                         <a href="{{route('prescription.delete',$prescription->id)}}" class="btn btn-sm btn-danger" title="Xóa" id="delete"><i class="fa fa-trash"></i></a>
                                         @endif
-=======
 
-                                        <a href="{{route('prescription.delete',$prescription->id)}}" class="btn btn-sm btn-danger delete-confirm" title="Xóa" id="delete"><i class="fa fa-trash"></i></a>
->>>>>>> master
                                         @foreach($arrIndexByReExam as $arr)
                                             @if($arr == ($index+1))
                                                <a href="{{route('prescription.reExam',$prescription->id)}}" class="btn btn-sm btn-info" title="Tái khám"><i class="far fa-plus-square"></i></a>
