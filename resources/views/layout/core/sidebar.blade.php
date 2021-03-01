@@ -1,11 +1,28 @@
+<?php
+            $roleOfUser = DB::table('users')
+            ->join('user_role', 'users.id', '=', 'user_role.id_user')
+            ->join('roles', 'user_role.role_key', '=', 'roles.id')
+            ->where('users.id', auth()->id())->select('roles.*')->get()->pluck('id');
+            $permissionOfRole = DB::table('roles')
+            ->join('role_permission', 'roles.id', '=', 'role_permission.role_key')
+            ->join('permissions', 'role_permission.permission_key', '=', 'permissions.id')
+            ->where('roles.id', $roleOfUser)
+            ->select('permissions.*')->get()->pluck('id')->unique();
+            $checkListUser = DB::table('permissions')->where('permission_name', 'list_user')->value('id');
+            $checkListUnit = DB::table('permissions')->where('permission_name', 'list_unit')->value('id');
+            $checkListRole= DB::table('permissions')->where('permission_name', 'list_role')->value('id');
+            $checkListMed = DB::table('permissions')->where('permission_name', 'list_med')->value('id');
+            $checkListLot = DB::table('permissions')->where('permission_name', 'list_lot')->value('id');
+            $checkListMedCategory = DB::table('permissions')->where('permission_name', 'list_medCategory')->value('id');
+            $checkListAlmostOver = DB::table('permissions')->where('permission_name', 'list_almostOver')->value('id');
+            $checkListSymton = DB::table('permissions')->where('permission_name', 'list_symton')->value('id');
+            $checkSetting = DB::table('permissions')->where('permission_name', 'list_setting')->value('id');
+            $checkReport = DB::table('permissions')->where('permission_name', 'report_revenue')->value('id');
+            $checkListPrescription = DB::table('permissions')->where('permission_name', 'list_prescription')->value('id');
+            $checkCreatePrescription = DB::table('permissions')->where('permission_name', 'add_prescription')->value('id');
 
+?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-
-    <a href="index3.html" class="brand-link">
-        <img src="{{asset('dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">AdminLTE 3</span>
-    </a>
-
 
     <div class="sidebar">
 
@@ -13,12 +30,14 @@
 
             @if(isset(Illuminate\Support\Facades\Auth::user()->image))
                <div class="image">
+                   <a href="{{route('home.index')}}">
                 <img src="{{asset('/storage/'.substr(Illuminate\Support\Facades\Auth::user()->image,7))}}" style="object-fit:contain;width: 50px;height: 50px" class="img-circle elevation-2" alt="User Image">
+                   </a>
             </div>
              @endif
             @if(isset(Illuminate\Support\Facades\Auth::user()->full_name))
             <div class="info">
-                <a href="#" class="d-block">{{\Illuminate\Support\Facades\Auth::user()->full_name}}</a>
+                <a href="{{route('home.index')}}" class="d-block">{{\Illuminate\Support\Facades\Auth::user()->full_name}}</a>
             </div>
             @endif
         </div>
@@ -26,6 +45,7 @@
 
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
                 <li class="nav-item has-treeview
                 {{$permissionOfRole->contains($checkListUser) ? '': 'd-none'}}
                 "
@@ -53,7 +73,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview {{($permissionOfRole->contains($checkListPrescription) | $permissionOfRole->contains($checkCreatePrescription)) ? '': 'd-none'}}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-edit"></i>
                         <p>
@@ -62,13 +82,14 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
+                        <li class="nav-item
+                        {{$permissionOfRole->contains($checkListPrescription) ? '': 'd-none'}}">
                             <a href="{{route('prescription.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách đơn thuốc</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{$permissionOfRole->contains($checkCreatePrescription) ? '': 'd-none'}}">
                             <a href="{{route('prescription.create')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Tạo đơn thuốc mới</p>
@@ -77,7 +98,9 @@
                     </ul>
                 </li>
 
-                <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview
+                {{$permissionOfRole->contains($checkReport) ? '': 'd-none'}}
+                ">
                     <a href="#" class="nav-link">
                         <i class="far fa-money-bill-alt"></i>
                         <p>
@@ -97,7 +120,9 @@
                 </li>
 
                 {{-- Cấu hình trang --}}
-                <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview
+                {{$permissionOfRole->contains($checkSetting) ? '': 'd-none'}}
+                ">
                     <a href="{{route('setting.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -105,7 +130,9 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview
+                {{$permissionOfRole->contains($checkListSymton) ? '': 'd-none'}}
+                ">
                     <a href="{{route('sympton.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -113,7 +140,9 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview
+                {{$permissionOfRole->contains($checkListAlmostOver) ? '': 'd-none'}}
+                ">
                     <a href="{{route('med.aboutToExpire')}}" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -121,7 +150,9 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview
+                {{$permissionOfRole->contains($checkListMedCategory) ? '': 'd-none'}}
+                ">
                     <a href="{{route('medCategory.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -129,7 +160,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview {{$permissionOfRole->contains($checkListLot) ? '': 'd-none'}}">
                     <a href="{{route('lots.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -137,7 +168,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview {{$permissionOfRole->contains($checkListMed) ? '': 'd-none'}}">
                     <a href="{{route('med.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -150,6 +181,16 @@
                         <i class="nav-icon fas fa-table"></i>
                         <p>
                             Đơn vị
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview
+                {{$permissionOfRole->contains($checkListRole) ? '': 'd-none'}}
+                ">
+                    <a href="{{route('role.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-table"></i>
+                        <p>
+                            Quyền
                         </p>
                     </a>
                 </li>

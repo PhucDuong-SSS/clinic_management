@@ -1,3 +1,18 @@
+<?php
+             $roleOfUser = DB::table('users')
+            ->join('user_role', 'users.id', '=', 'user_role.id_user')
+            ->join('roles', 'user_role.role_key', '=', 'roles.id')
+            ->where('users.id', auth()->id())->select('roles.*')->get()->pluck('id');
+            $permissionOfRole = DB::table('roles')
+            ->join('role_permission', 'roles.id', '=', 'role_permission.role_key')
+            ->join('permissions', 'role_permission.permission_key', '=', 'permissions.id')
+            ->where('roles.id', $roleOfUser)
+            ->select('permissions.*')->get()->pluck('id')->unique();
+            $checkEditMed = DB::table('permissions')->where('permission_name', 'edit_med')->value('id');
+            $checkDeleteMed = DB::table('permissions')->where('permission_name', 'delete_med')->value('id');
+            $checkCreateMed = DB::table('permissions')->where('permission_name', 'add_med')->value('id');
+?>
+
 @extends('layout/master')
 @section('content')
 <div class="card">
@@ -20,8 +35,9 @@
            </form>
 
     </div>
-
+      @if($permissionOfRole->contains($checkCreateMed))
     <div class="d-flex flex-row-reverse mr-3 mt-3"><a href="{{route('med.create')}}" class="btn btn-primary">Thêm thuốc</a></div>
+    @endif
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -34,8 +50,12 @@
                     <th>Số lượng</th>
                     <th>Giá bán</th>
                     <th>Đơn vị</th>
+                    @if($permissionOfRole->contains($checkEditMed))
                     <th>Edit</th>
+                    @endif
+                    @if($permissionOfRole->contains($checkDeleteMed))
                     <th>Delete</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -47,8 +67,12 @@
                     <td>{{ $medicine->medicine_amount }}</td>
                     <td>{{number_format($medicine->sell_price, 0, '', ',')}}</td>
                     <td>{{ $medicine->unit->unit_name }}</td>
+                    @if($permissionOfRole->contains($checkEditMed))
                     <td><a class="btn btn-info" href="{{route('med.edit', $medicine->id)}}">Edit</a></td>
+                    @endif
+                    @if($permissionOfRole->contains($checkDeleteMed))
                     <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteMed({{$medicine->id}})">Delete</a></td>
+                    @endif
                 </tr>
                 @endforeach
             </tbody>
@@ -60,8 +84,12 @@
                     <th>Số lượng</th>
                     <th>Giá bán</th>
                     <th>Đơn vị</th>
+                      @if($permissionOfRole->contains($checkEditMed))
                     <th>Edit</th>
+                    @endif
+                    @if($permissionOfRole->contains($checkDeleteMed))
                     <th>Delete</th>
+                    @endif
                 </tr>
             </tfoot>
         </table>
@@ -78,7 +106,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
         });
-        initEventEditButtons();
+        // initEventEditButtons();
     });
     function deleteMed(id){
         Swal.fire({

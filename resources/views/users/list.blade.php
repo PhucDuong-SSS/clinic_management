@@ -1,16 +1,16 @@
 <?php
-            $a=Illuminate\Support\Facades\Auth::user()->id;
+             $roleOfUser = DB::table('users')
+            ->join('user_role', 'users.id', '=', 'user_role.id_user')
+            ->join('roles', 'user_role.role_key', '=', 'roles.id')
+            ->where('users.id', auth()->id())->select('roles.*')->get()->pluck('id');
             $permissionOfRole = DB::table('roles')
             ->join('role_permission', 'roles.id', '=', 'role_permission.role_key')
             ->join('permissions', 'role_permission.permission_key', '=', 'permissions.id')
-            ->where('roles.id', $a)
+            ->where('roles.id', $roleOfUser)
             ->select('permissions.*')->get()->pluck('id')->unique();
-            $checkListUser = DB::table('permissions')->where('permission_name', 'list_user')->value('id');
             $checkEditUser = DB::table('permissions')->where('permission_name', 'edit_user')->value('id');
             $checkDeleteUser = DB::table('permissions')->where('permission_name', 'delete_user')->value('id');
-
-            $checkListUnit = DB::table('permissions')->where('permission_name', 'list_unit')->value('id');
-
+            $checkCreateUser = DB::table('permissions')->where('permission_name', 'add_user')->value('id');
 ?>
 @extends('layout/master')
 @section('content')
@@ -18,7 +18,9 @@
     <div class="card-header">
         <h3 class="card-title">Danh sách thành viên</h3>
     </div>
+     @if($permissionOfRole->contains($checkCreateUser))
     <div class="d-flex flex-row-reverse mr-3 mt-3"><a href="{{route('user.create')}}" class="btn btn-primary">Tạo thành viên</a></div>
+     @endif
     <!-- /.card-header -->
     <div class="card-body">
         <table id="example1" class="table table-bordered table-striped">
@@ -101,7 +103,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
         });
-        initEventEditButtons();
+        // initEventEditButtons();
     });
     function deleteUser(id){
         Swal.fire({

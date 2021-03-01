@@ -1,4 +1,17 @@
-
+<?php
+             $roleOfUser = DB::table('users')
+            ->join('user_role', 'users.id', '=', 'user_role.id_user')
+            ->join('roles', 'user_role.role_key', '=', 'roles.id')
+            ->where('users.id', auth()->id())->select('roles.*')->get()->pluck('id');
+            $permissionOfRole = DB::table('roles')
+            ->join('role_permission', 'roles.id', '=', 'role_permission.role_key')
+            ->join('permissions', 'role_permission.permission_key', '=', 'permissions.id')
+            ->where('roles.id', $roleOfUser)
+            ->select('permissions.*')->get()->pluck('id')->unique();
+            $checkEditLots = DB::table('permissions')->where('permission_name', 'edit_lot')->value('id');
+            $checkDeleteLots = DB::table('permissions')->where('permission_name', 'delete_lot')->value('id');
+            $checkCreateLots = DB::table('permissions')->where('permission_name', 'add_lot')->value('id');
+?>
 <?php
 $unit;
 $total_medicine=0;
@@ -42,8 +55,9 @@ if($data=='-2'){
             </form>
 
         </div>
-
+        @if($permissionOfRole->contains($checkCreateLots))
         <div class="d-flex flex-row-reverse mr-3 mt-3"><a href="{{route('lots.create')}}" class="btn btn-primary">Nhập kho</a></div>
+        @endif
     </div>
 
     <form role="form" action="{{route('lots.search')}}" method="post" >
@@ -75,8 +89,12 @@ if($data=='-2'){
                     <th>Ngày sản xuất</th>
                     <th>Ngày hết hạn</th>
                     <th>Tổng giá</th>
+                    @if($permissionOfRole->contains($checkEditLots))
                     <th>Edit</th>
+                    @endif
+                    @if($permissionOfRole->contains($checkDeleteLots))
                     <th>Delete</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -90,8 +108,12 @@ if($data=='-2'){
                     <td>{{ $lot->expired_date }}</td>
                     <td>{{ $lot->receipt_date }}</td>
                     <td>{{number_format($lot->total_price, 0, '', ',')}}</td>
+                    @if($permissionOfRole->contains($checkEditLots))
                     <td><a class="btn btn-info" href="{{route('lots.edit', $lot->id)}}">Edit</a></td>
+                    @endif
+                    @if($permissionOfRole->contains($checkDeleteLots))
                     <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteLots({{$lot->id}})">Delete</a></td>
+                    @endif
                 </tr>
                 @endforeach
             </tbody>
@@ -105,8 +127,12 @@ if($data=='-2'){
                     <th>Ngày sản xuất</th>
                     <th>Ngày hết hạn</th>
                     <th>Tổng giá</th>
+                    @if($permissionOfRole->contains($checkEditLots))
                     <th>Edit</th>
+                    @endif
+                    @if($permissionOfRole->contains($checkDeleteLots))
                     <th>Delete</th>
+                    @endif
                 </tr>
             </tfoot>
         </table>
@@ -134,7 +160,7 @@ if($data=='-2'){
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
         });
-        initEventEditButtons();
+        // initEventEditButtons();
     });
     function deleteLots(id){
         Swal.fire({

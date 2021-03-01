@@ -1,3 +1,17 @@
+<?php
+             $roleOfUser = DB::table('users')
+            ->join('user_role', 'users.id', '=', 'user_role.id_user')
+            ->join('roles', 'user_role.role_key', '=', 'roles.id')
+            ->where('users.id', auth()->id())->select('roles.*')->get()->pluck('id');
+            $permissionOfRole = DB::table('roles')
+            ->join('role_permission', 'roles.id', '=', 'role_permission.role_key')
+            ->join('permissions', 'role_permission.permission_key', '=', 'permissions.id')
+            ->where('roles.id', $roleOfUser)
+            ->select('permissions.*')->get()->pluck('id')->unique();
+            $checkPrintPres = DB::table('permissions')->where('permission_name', 'print_prescription')->value('id');
+            $checkDeletePres = DB::table('permissions')->where('permission_name', 'delete_prescription')->value('id');
+            $checkExPres = DB::table('permissions')->where('permission_name', 'word_prescription')->value('id');
+?>
 @extends('layout/master')
 @section('content')
     <section class="content">
@@ -31,12 +45,17 @@
                                     <td>{{$prescription->patient->phone_number}}</td>
                                     <td> {{$prescription->exam_date}}</td>
                                     <td>
+                                        @if($permissionOfRole->contains($checkPrintPres))
                                         <a href="{{route('prescription.print',$prescription->id)}}" class="btn btn-sm btnprn btn-warning" title="In"><i class="fas fa-print"></i>
                                         </a>
+                                        @endif
+                                        @if($permissionOfRole->contains($checkExPres))
                                         <a href="{{route('prescription.exportWord',$prescription->id)}}" class="btn btn-sm btnprn btn-warning" title="Export word"><i class="fas fa-file-export"></i>
                                         </a>
-
+                                        @endif
+                                         @if($permissionOfRole->contains($checkDeletePres))
                                         <a href="{{route('prescription.delete',$prescription->id)}}" class="btn btn-sm btn-danger" title="Xóa" id="delete"><i class="fa fa-trash"></i></a>
+                                        @endif
                                         @foreach($arrIndexByReExam as $arr)
                                             @if($arr == ($index+1))
                                                <a href="{{route('prescription.reExam',$prescription->id)}}" class="btn btn-sm btn-info" title="Tái khám"><i class="far fa-plus-square"></i></a>

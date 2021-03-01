@@ -21,7 +21,7 @@ class LoginController extends Controller
         if (!Auth::attempt($user)) {
             return redirect()->route('login')->with('login-error', 'Tài khoản hoặc mật khẩu không đúng!');
         } else {
-            return redirect()->route('user.index');
+            return redirect()->route('home.index');
         }
     }
     public function logout()

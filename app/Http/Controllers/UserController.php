@@ -6,6 +6,8 @@ use App\Http\Requests\FormChangePasswordRequest;
 use App\Http\Requests\FormEditUserRequest;
 use App\Http\Requests\FormUserRequest;
 use App\Http\Services\UserService;
+use App\Models\Medicine;
+use App\Models\Patient;
 use App\Models\Permission;
 use App\Models\Roles;
 use App\Models\User;
@@ -128,5 +130,14 @@ class UserController extends Controller
         $user->save();
         Session::flash('success', 'Cập nhật profile thành công');
         return redirect()->route('user.index');
+    }
+
+    function home()
+    {
+        $medicines = Medicine::where('medicine_amount', '<', 50)->get();
+        $patient = Patient::all();
+        $users = User::all();
+        $medicines = Medicine::all();
+        return view('layout.home', compact('medicines', 'patient', 'users', 'medicines'));
     }
 }

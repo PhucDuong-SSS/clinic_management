@@ -34,65 +34,6 @@ Route::get('/', function () {
 });
 
 
-
-Route::prefix('admin')->group(function () {
-    Route::prefix('prescription')->group(function () {
-        Route::get('', [PrescriptionController::class, 'index'])->name('prescription.index');
-        Route::get('create', [PrescriptionController::class, 'create'])->name('prescription.create');
-        Route::post('store', [PrescriptionController::class, 'store'])->name('prescription.store');
-        Route::get('/{id}/delete', [PrescriptionController::class, 'deletePrescription'])->name('prescription.delete');
-        Route::get('print/{id}', [PrescriptionController::class, 'print'])->name('prescription.print');
-        Route::get('exportWord/{id}', [PrescriptionController::class, 'exportWord'])->name('prescription.exportWord');
-        Route::get('re-exam/{id}', [PrescriptionController::class, 'reExam'])->name('prescription.reExam');
-        Route::post('re-exam/{id}', [PrescriptionController::class, 'storeExam'])->name('prescription.storeExam');
-    });
-
-    Route::prefix('report-revenue')->group(function () {
-        Route::get('show', [ReportRevenue::class, 'show'])->name('report.show');
-        Route::post('show-date-report', [ReportRevenue::class, 'dateReport'])->name('datereport.show');
-    });
-
-
-
-    Route::prefix('sympton')->group(function () {
-        Route::get('', [SymptonController::class, 'index'])->name('sympton.index');
-        Route::post('add-sympton-ajax', [SymptonController::class, 'addSympton']);
-        Route::post('/add-sympton', [SymptonController::class, 'store'])->name('sympton.store');
-        Route::get('/{id}/edit', [SymptonController::class, 'edit']);
-        Route::post('/{id}/edit', [SymptonController::class, 'update']);
-        Route::delete('/{id}/destroy', [SymptonController::class, 'destroy'])->name('sympton.destroy');
-    });
-
-
-    Route::prefix('prescription-medicine')->group(function () {
-        Route::post('add-prescription-medicine', [PrescriptionMedicineController::class, 'addPrescriptionMedicine'])->name('addPrescriptionMedicine');
-        Route::delete('delete-prescription-medicine/{id}', [PrescriptionMedicineController::class, 'delete'])->name('PrescriptionMedicine.delete');
-    });
-
-
-
-    Route::prefix('setting')->group(function () {
-        Route::get('/', [SettingAppController::class, 'index'])->name('setting.index');
-        Route::get('/create', [SettingAppController::class, 'create'])->name('setting.create');
-        Route::post('/create', [SettingAppController::class, 'store'])->name('setting.store');
-        Route::get('/{id}/edit', [SettingAppController::class, 'edit'])->name('setting.edit');
-        Route::post('/{id}/edit', [SettingAppController::class, 'update'])->name('setting.update');
-        Route::get('/{id}/destroy', [SettingAppController::class, 'destroy'])->name('setting.destroy');
-    });
-
-    Route::prefix('medicine')->group(function () {
-        Route::post('get-sell-price', [MedicineController::class, 'getSellPrice']);
-    });
-
-    Route::prefix('medCategory')->group(function () {
-        Route::get('', [MedCategoryController::class, 'index'])->name('medCategory.index');
-        Route::post('/add-med-category', [MedCategoryController::class, 'store'])->name('medCategory.store');
-        Route::get('/{id}/edit', [MedCategoryController::class, 'edit']);
-        Route::post('/{id}/edit', [MedCategoryController::class, 'update']);
-        Route::delete('/{id}/destroy', [MedCategoryController::class, 'destroy']);
-    });
-});
-
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('admin.login');
 Route::get('logout', [LoginController::class, 'logout'])->name('admin.logout');
@@ -102,6 +43,10 @@ Route::get('resetpw/{token}', [ForgetPasswordController::class, 'getPassword'])-
 Route::post('resetpw', [ForgetPasswordController::class, 'updatePassword'])->name('updatePw');
 
 Route::middleware('adminLogin')->prefix('admin')->group(function () {
+
+    Route::prefix('home')->group(function () {
+        Route::get('/', [UserController::class, 'home'])->name('home.index');
+    });
 
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('user.index')->middleware('permission:list_user');
@@ -155,7 +100,61 @@ Route::middleware('adminLogin')->prefix('admin')->group(function () {
         Route::delete('/destroy/{id}', [LotsController::class, 'destroy'])->name('lots.destroy')->middleware('permission:delete_lot');
     });
 
-    Route::prefix('history')->group(function () {
-        Route::get('/', [HistoryController::class, 'index'])->name('history.index')->middleware('permission:list_history');
+
+    Route::prefix('prescription')->group(function () {
+        Route::get('', [PrescriptionController::class, 'index'])->name('prescription.index')->middleware('permission:list_prescription');
+        Route::get('create', [PrescriptionController::class, 'create'])->name('prescription.create')->middleware('permission:add_prescription');
+        Route::post('store', [PrescriptionController::class, 'store'])->name('prescription.store');
+        Route::get('/{id}/delete', [PrescriptionController::class, 'deletePrescription'])->name('prescription.delete')->middleware('permission:delete_prescription');
+        Route::get('print/{id}', [PrescriptionController::class, 'print'])->name('prescription.print')->middleware('permission:print_prescription');
+        Route::get('exportWord/{id}', [PrescriptionController::class, 'exportWord'])->name('prescription.exportWord')->middleware('permission:word_prescription');
+        Route::get('re-exam/{id}', [PrescriptionController::class, 'reExam'])->name('prescription.reExam');
+        Route::post('re-exam/{id}', [PrescriptionController::class, 'storeExam'])->name('prescription.storeExam');
+    });
+
+
+    Route::prefix('report-revenue')->group(function () {
+        Route::get('show', [ReportRevenue::class, 'show'])->name('report.show')->middleware('permission:report_revenue');
+        Route::post('show-date-report', [ReportRevenue::class, 'dateReport'])->name('datereport.show');
+    });
+
+
+
+    Route::prefix('sympton')->group(function () {
+        Route::get('', [SymptonController::class, 'index'])->name('sympton.index')->middleware('permission:list_symton');
+        Route::post('add-sympton-ajax', [SymptonController::class, 'addSympton']);
+        Route::post('/add-sympton', [SymptonController::class, 'store'])->name('sympton.store')->middleware('permission:add_symton');
+        Route::get('/{id}/edit', [SymptonController::class, 'edit'])->middleware('permission:edit_symton');
+        Route::post('/{id}/edit', [SymptonController::class, 'update']);
+        Route::delete('/{id}/destroy', [SymptonController::class, 'destroy'])->name('sympton.destroy')->middleware('permission:delete_symton');
+    });
+
+
+    Route::prefix('prescription-medicine')->group(function () {
+        Route::post('add-prescription-medicine', [PrescriptionMedicineController::class, 'addPrescriptionMedicine'])->name('addPrescriptionMedicine');
+        Route::delete('delete-prescription-medicine/{id}', [PrescriptionMedicineController::class, 'delete'])->name('PrescriptionMedicine.delete');
+    });
+
+
+
+    Route::prefix('setting')->group(function () {
+        Route::get('/', [SettingAppController::class, 'index'])->name('setting.index')->middleware('permission:list_setting');
+        Route::get('/create', [SettingAppController::class, 'create'])->name('setting.create')->middleware('permission:add_setting');
+        Route::post('/create', [SettingAppController::class, 'store'])->name('setting.store');
+        Route::get('/{id}/edit', [SettingAppController::class, 'edit'])->name('setting.edit')->middleware('permission:edit_setting');
+        Route::post('/{id}/edit', [SettingAppController::class, 'update'])->name('setting.update');
+        Route::get('/{id}/destroy', [SettingAppController::class, 'destroy'])->name('setting.destroy')->middleware('permission:delete_setting');
+    });
+
+    Route::prefix('medicine')->group(function () {
+        Route::post('get-sell-price', [MedicineController::class, 'getSellPrice']);
+    });
+
+    Route::prefix('medCategory')->group(function () {
+        Route::get('', [MedCategoryController::class, 'index'])->name('medCategory.index')->middleware('permission:list_medCategory');
+        Route::post('/add-med-category', [MedCategoryController::class, 'store'])->name('medCategory.store')->middleware('permission:add_medCategory');
+        Route::get('/{id}/edit', [MedCategoryController::class, 'edit'])->middleware('permission:edit_medCategory');
+        Route::post('/{id}/edit', [MedCategoryController::class, 'update']);
+        Route::delete('/{id}/destroy', [MedCategoryController::class, 'destroy'])->middleware('permission:delete_medCategory');
     });
 });
