@@ -62,7 +62,7 @@
                 @foreach($medicines as $key => $medicine)
                 <tr class="mid{{$medicine->id}}">
                     <td>{{$medicine->medCategory->med_category_name}}</td>
-                    <td><img src="{{asset('/storage/'.substr($medicine->image,7))}}" alt="" style="width: 100px; height:100px" ></td>
+                    <td><img src="{{ $medicine->getUrl().$medicine->image}}" alt="" style="width: 100px; height:100px" ></td>
                     <td>{{ $medicine->medicine_name }}</td>
                     <td>{{ $medicine->medicine_amount }}</td>
                     <td>{{number_format($medicine->sell_price, 0, '', ',')}}</td>

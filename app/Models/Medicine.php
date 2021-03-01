@@ -22,6 +22,10 @@ class Medicine extends Model
     {
         return $this->belongsTo(Unit::class, 'id_unit', 'id');
     }
+    public function getUrl()
+    {
+        return "https://phucduongc8.s3.amazonaws.com/";
+    }
 
 
     // public function lot()

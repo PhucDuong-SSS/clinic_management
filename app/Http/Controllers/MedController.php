@@ -10,6 +10,8 @@ use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use SebastianBergmann\Environment\Console;
+use Illuminate\Support\Facades\Storage;
+
 
 class MedController extends Controller
 {
@@ -39,7 +41,10 @@ class MedController extends Controller
         $medicines->medicine_amount = 0;
         $medicines->sell_price = $request->sell_price;
         $medicines->id_unit = $request->unit;
-        $medicines->image = $request->image->store('public/images');
+        $pathImage = Storage::disk('s3')->put('clinicImages',$request->image,'public');
+        $medicines->image = $pathImage;
+//      luu storage
+//        $medicines->image = $request->image->store('public/images');
         $medicines->save();
 
         return redirect()->route('med.index')->with('success', "Thêm thuốc thành công");
@@ -69,9 +74,13 @@ class MedController extends Controller
     public function UpdateUpload($id, $request)
     {
         $medicine = Medicine::findOrFail($id);
+        $oldImage = $medicine->image;
         if ($request->hasFile('image')) {
-            $img = $request->image;
-            $path = $img->store('public/images');
+//            $img = $request->image;
+//            $path = $img->store('public/images');
+            $path = Storage::disk('s3')->put('clinicImages',$request->image,'public');
+            Storage::delete($oldImage);
+
             return $path;
         } else {
             return $medicine->image;
@@ -80,7 +89,9 @@ class MedController extends Controller
     function destroy($id)
     {
         $medicine = Medicine::findOrFail($id);
+        $oldImage = $medicine->image;
         $medicine->delete();
+        Storage::delete($oldImage);
         return response()->json(["success" => "Record has been delete"]);
     }
 

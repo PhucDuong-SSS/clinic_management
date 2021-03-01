@@ -49,7 +49,7 @@
                                         ->where('users.id', $user->id)->select('roles.*')->pluck('id')) ?>
                 <tr class="uid{{$user->id}}">
                     <td>{{$user->full_name}}</td>
-                    <td><img src="{{asset('/storage/'.substr($user->image,7))}}" alt="" style="width: 100px; height:100px" ></td>
+                    <td><img src="{{ $user->getUrl().$user->image}}"" alt="" style="width: 100px; height:100px" ></td>
                     <td>{{$user->user_name}}</td>
                     <td>
                         @foreach ($roles as $role)
