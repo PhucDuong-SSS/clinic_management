@@ -45,16 +45,16 @@
             <thead>
                 <tr>
                     <th>Tên Loại thuốc</th>
-                    <th>images</th>
+                    <th>Ảnh</th>
                     <th>Tên thuốc</th>
                     <th>Số lượng</th>
                     <th>Giá bán</th>
                     <th>Đơn vị</th>
                     @if($permissionOfRole->contains($checkEditMed))
-                    <th>Edit</th>
+                    <th>Sửa</th>
                     @endif
                     @if($permissionOfRole->contains($checkDeleteMed))
-                    <th>Delete</th>
+                    <th>Xóa</th>
                     @endif
                 </tr>
             </thead>
@@ -68,30 +68,14 @@
                     <td>{{number_format($medicine->sell_price, 0, '', ',')}}</td>
                     <td>{{ $medicine->unit->unit_name }}</td>
                     @if($permissionOfRole->contains($checkEditMed))
-                    <td><a class="btn btn-info" href="{{route('med.edit', $medicine->id)}}">Edit</a></td>
+                    <td><a class="btn btn-info" href="{{route('med.edit', $medicine->id)}}">Sửa</a></td>
                     @endif
                     @if($permissionOfRole->contains($checkDeleteMed))
-                    <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteMed({{$medicine->id}})">Delete</a></td>
+                    <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteMed({{$medicine->id}})">Xóa</a></td>
                     @endif
                 </tr>
                 @endforeach
             </tbody>
-            <tfoot>
-                <tr>
-                    <th>Tên Loại thuốc</th>
-                    <th>images</th>
-                    <th>Tên thuốc</th>
-                    <th>Số lượng</th>
-                    <th>Giá bán</th>
-                    <th>Đơn vị</th>
-                      @if($permissionOfRole->contains($checkEditMed))
-                    <th>Edit</th>
-                    @endif
-                    @if($permissionOfRole->contains($checkDeleteMed))
-                    <th>Delete</th>
-                    @endif
-                </tr>
-            </tfoot>
         </table>
     </div>
     <!-- /.card-body -->

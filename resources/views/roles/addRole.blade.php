@@ -7,15 +7,15 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label >Tên:</label>
-                        <input type="text" class="form-control" value="" name="role_name"  placeholder="Họ và tên">
+                        <label >Tên chức vụ:</label>
+                        <input type="text" class="form-control" value="" name="role_name"  placeholder="Tên chức vụ">
                          @error('role_name')
                                    <div style="color: red">*{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label >Tên Hiển Thị:</label>
-                        <input type="text" class="form-control" value="" name="display_name"  placeholder="Họ và tên">
+                        <label >Tên hiển Thị:</label>
+                        <input type="text" class="form-control" value="" name="display_name"  placeholder="Tên hiển thị">
                          @error('display_name')
                                    <div style="color: red">*{{ $message }}</div>
                         @enderror

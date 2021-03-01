@@ -22,7 +22,7 @@
             $checkCreatePrescription = DB::table('permissions')->where('permission_name', 'add_prescription')->value('id');
 
 ?>
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" >
 
     <div class="sidebar">
 
@@ -51,31 +51,32 @@
                 "
                 >
                     <a href="{{route('user.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-edit"></i>
+                        <i class="fas fa-users"></i>&nbsp;
                         <p>
                             Danh sách thành viên
                         </p>
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{route('user.changepasswordform')}}" class="nav-link">
-                        <i class="nav-icon fas fa-edit"></i>
-                        <p>
-                            Đổi mật khẩu
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item has-treeview">
                     <a href="{{route('user.changeprofileform')}}" class="nav-link">
-                        <i class="nav-icon fas fa-edit"></i>
+                        <i class="fas fa-user-edit"></i>&nbsp;
                         <p>
                             Đổi thông tin cá nhân
                         </p>
                     </a>
                 </li>
+                <li class="nav-item has-treeview">
+                    <a href="{{route('user.changepasswordform')}}" class="nav-link">
+                        <i class="fas fa-key"></i>&nbsp;
+                        <p>
+                            Đổi mật khẩu
+                        </p>
+                    </a>
+                </li>
+
                 <li class="nav-item has-treeview {{($permissionOfRole->contains($checkListPrescription) | $permissionOfRole->contains($checkCreatePrescription)) ? '': 'd-none'}}">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-edit"></i>
+                        <i class="fas fa-file-alt"></i>&nbsp;
                         <p>
                             Quản lý đơn thuốc
                             <i class="fas fa-angle-left right"></i>
@@ -102,7 +103,7 @@
                 {{$permissionOfRole->contains($checkReport) ? '': 'd-none'}}
                 ">
                     <a href="#" class="nav-link">
-                        <i class="far fa-money-bill-alt"></i>
+                        <i class="far fa-money-bill-alt"></i>&nbsp;
                         <p>
                             Báo cáo doanh thu
                             <i class="fas fa-angle-left right"></i>
@@ -119,50 +120,31 @@
                     </ul>
                 </li>
 
-                {{-- Cấu hình trang --}}
-                <li class="nav-item has-treeview
-                {{$permissionOfRole->contains($checkSetting) ? '': 'd-none'}}
-                ">
-                    <a href="{{route('setting.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
-                        <p>
-                            Cấu hình
-                        </p>
-                    </a>
-                </li>
+
                 <li class="nav-item has-treeview
                 {{$permissionOfRole->contains($checkListSymton) ? '': 'd-none'}}
                 ">
                     <a href="{{route('sympton.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
+                        <i class="fas fa-stethoscope"></i>&nbsp;
                         <p>
                             Triệu chứng
                         </p>
                     </a>
                 </li>
                 <li class="nav-item has-treeview
-                {{$permissionOfRole->contains($checkListAlmostOver) ? '': 'd-none'}}
-                ">
-                    <a href="{{route('med.aboutToExpire')}}" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
-                        <p>
-                           Các thuốc sắp hết
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item has-treeview
                 {{$permissionOfRole->contains($checkListMedCategory) ? '': 'd-none'}}
-                ">
+                    ">
                     <a href="{{route('medCategory.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
+                        <i class="fas fa-list-alt"></i>
                         <p>
                             Danh mục
                         </p>
                     </a>
                 </li>
+
                 <li class="nav-item has-treeview {{$permissionOfRole->contains($checkListLot) ? '': 'd-none'}}">
                     <a href="{{route('lots.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
+                        <i class="fas fa-boxes"></i>&nbsp;
                         <p>
                             Nhập thuốc
                         </p>
@@ -170,17 +152,38 @@
                 </li>
                 <li class="nav-item has-treeview {{$permissionOfRole->contains($checkListMed) ? '': 'd-none'}}">
                     <a href="{{route('med.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
+                        <i class="fas fa-capsules"></i>&nbsp;
                         <p>
                             Thuốc
                         </p>
                     </a>
                 </li>
+                <li class="nav-item has-treeview
+                {{$permissionOfRole->contains($checkListAlmostOver) ? '': 'd-none'}}
+                    ">
+                    <a href="{{route('med.aboutToExpire')}}" class="nav-link">
+                        <i class="fas fa-exclamation-circle"></i>&nbsp;
+                        <p>
+                            Thuốc sắp hết
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-item has-treeview {{$permissionOfRole->contains($checkListUnit) ? '': 'd-none'}}">
                     <a href="{{route('unit.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
+                        <i class="far fa-list-alt"></i>&nbsp;
                         <p>
                             Đơn vị
+                        </p>
+                    </a>
+                </li>
+                {{-- Cấu hình trang --}}
+                <li class="nav-item has-treeview
+                {{$permissionOfRole->contains($checkSetting) ? '': 'd-none'}}
+                    ">
+                    <a href="{{route('setting.index')}}" class="nav-link">
+                        <i class="fas fa-user-cog"></i>&nbsp;
+                        <p>
+                            Cấu hình
                         </p>
                     </a>
                 </li>
@@ -188,7 +191,7 @@
                 {{$permissionOfRole->contains($checkListRole) ? '': 'd-none'}}
                 ">
                     <a href="{{route('role.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
+                        <i class="fas fa-user-tag"></i>&nbsp;
                         <p>
                             Quyền
                         </p>
@@ -196,7 +199,10 @@
                 </li>
                 <li class="nav-item has-treeview">
                     <a href="{{route('admin.logout')}}" class="nav-link">
-                        Logout
+                     <i class="fas fa-sign-out-alt"></i>
+                        <p>
+                            Đăng xuất
+                        </p>
                     </a>
                 </li>
             </ul>

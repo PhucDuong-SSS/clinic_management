@@ -26,18 +26,18 @@
         <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>images</th>
-                    <th>UserName</th>
-                    <th>Roles</th>
-                    <th>Address</th>
-                    <th>Phone</th>
+                    <th>Họ tên</th>
+                    <th>Ảnh</th>
+                    <th>Tên tài khoản</th>
+                    <th>Quyền</th>
+                    <th>Địa chỉ</th>
+                    <th>Số điện thoại</th>
                     <th>Email</th>
                     @if($permissionOfRole->contains($checkEditUser))
-                    <th>Edit</th>
+                    <th>Sửa</th>
                     @endif
                     @if($permissionOfRole->contains($checkDeleteUser))
-                    <th>Delete</th>
+                    <th>Xóa</th>
                     @endif
                 </tr>
             </thead>
@@ -62,33 +62,17 @@
                     <td>{{$user->phone}}</td>
                     <td>{{$user->email}}</td>
                     @if($permissionOfRole->contains($checkEditUser))
-                    <td><a class="btn btn-info" href="{{route('user.edit', $user->id)}}">Edit</a></td>
+                    <td><a class="btn btn-info" href="{{route('user.edit', $user->id)}}">Sửa</a></td>
                     @endif
                     @if($permissionOfRole->contains($checkDeleteUser))
-                    <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteUser({{$user->id}})">Delete</a></td>
+                    <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteUser({{$user->id}})">Xóa</a></td>
                     @endif
                     {{-- <td><a class="btn btn-info" href="{{route('user.edit', $user->id)}}">Edit</a></td>
                     <td><a href="javascript:void(0)" class="btn btn-danger" onclick="deleteUser({{$user->id}})">Delete</a></td> --}}
                 </tr>
                 @endforeach
             </tbody>
-            <tfoot>
-                <tr>
-                    <th>Name</th>
-                    <th>images</th>
-                    <th>UserName</th>
-                    <th>Roles</th>
-                    <th>Address</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    @if($permissionOfRole->contains($checkEditUser))
-                    <th>Edit</th>
-                    @endif
-                    @if($permissionOfRole->contains($checkDeleteUser))
-                    <th>Delete</th>
-                    @endif
-                </tr>
-            </tfoot>
+
         </table>
     </div>
     <!-- /.card-body -->
