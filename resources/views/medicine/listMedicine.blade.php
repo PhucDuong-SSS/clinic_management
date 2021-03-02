@@ -113,16 +113,24 @@
                     console.log(response);
                     $("#mid"+id).remove();
                     location.reload();
-                }
-            })
-                Swal.fire(
-                    'Bạn đã xóa thành công!',
-                    'success',
+                    Swal.fire(
+                        'Bạn đã xóa thành công!',
+                        'success',
                     )
-                }
+                },
+                error: function (data) {
+                    console.log('Error', data);
+                    Swal.fire(
+                        'Bạn không thể xóa!',
+                        'Muốn xóa bạn phải xóa hết các thuốc có loại thuốc này'
+                    )
+                },
+                })
 
-            })
-        }
+            }
+
+            });
+        };
 
 </script>
 <script>
