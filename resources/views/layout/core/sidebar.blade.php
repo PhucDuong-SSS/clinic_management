@@ -31,7 +31,7 @@
             @if(isset(Illuminate\Support\Facades\Auth::user()->image))
                <div class="image">
                    <a href="{{route('home.index')}}">
-                <img src="{{Illuminate\Support\Facades\Auth::user()->getUrl()}}.{{(Illuminate\Support\Facades\Auth::user()->image))}}" style="object-fit:contain;width: 50px;height: 50px" class="img-circle elevation-2" alt="User Image">
+                <img src="{{Illuminate\Support\Facades\Auth::user()->getUrl()}}.{{(Illuminate\Support\Facades\Auth::user()->image)}}" style="object-fit:contain;width: 50px;height: 50px" class="img-circle elevation-2" alt="User Image">
                    </a>
             </div>
              @endif
