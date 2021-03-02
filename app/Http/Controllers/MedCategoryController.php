@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoriesEditRequest;
 use App\Http\Requests\CategoriesRequest;
 use App\Http\Services\MedCategoryService;
 use App\Models\medCategory;
@@ -37,7 +38,7 @@ class MedCategoryController extends Controller
         return response()->json(['medCategories' => $medCategories]);
     }
 
-    public function update(CategoriesRequest $request, $id)
+    public function update(CategoriesEditRequest $request, $id)
     {
         $medCategories = medCategory::findOrFail($id);
         $medCategories->med_category_name = $request->med_category_name;
