@@ -122,7 +122,6 @@
                     console.log('Error', data);
                     Swal.fire(
                         'Bạn không thể xóa!',
-                        'Muốn xóa bạn phải xóa hết các thuốc có loại thuốc này'
                     )
                 },
                 })
