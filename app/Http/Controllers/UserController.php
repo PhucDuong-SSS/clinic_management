@@ -30,13 +30,13 @@ class UserController extends Controller
     }
     function index()
     {
-        $roles = $this->role->all();
         $users = User::all();
+        $roles = Role::all();
         return view('users.list', compact('users', 'roles'));
     }
     function create()
     {
-        $roles = $this->role->all();
+        $roles = Role::all();
         return view('users.addUser', compact('roles'));
     }
     function store(FormUserRequest $request)
@@ -52,7 +52,7 @@ class UserController extends Controller
         $user->image   = $pathImage;
 //        $user->image   = $request->image->store('public/images');
         $user->save();
-        $user->role()->attach($request->role_key);
+//        $user->role()->attach($request->role_key);
         return redirect()->route('user.index')->with('success', "Thêm thành viên thành công");
     }
     function edit($id)
