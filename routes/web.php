@@ -50,7 +50,7 @@ Route::middleware('adminLogin')->prefix('admin')->group(function () {
 
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('user.index')->middleware('permission:list_user');
-        Route::get('/create', [UserController::class, 'create'])->name('user.create');
+        Route::get('/create', [UserController::class, 'create'])->name('user.create')->middleware('permission:add_user');
         Route::post('/create', [UserController::class, 'store'])->name('user.store');
         Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit')->middleware('permission:edit_user');
         Route::post('/{id}/edit', [UserController::class, 'update'])->name('user.update');
