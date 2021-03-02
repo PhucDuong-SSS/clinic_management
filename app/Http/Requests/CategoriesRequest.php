@@ -24,7 +24,7 @@ class CategoriesRequest extends FormRequest
     public function rules()
     {
         return [
-            'med_category_name' => 'required|max:200|min:2|unique:med_categories,med_category_name,' . $this->id,
+            'med_category_name' => 'required|max:200|min:2|unique:med_categories',
             'description' => 'required'
 
         ];
