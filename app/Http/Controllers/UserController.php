@@ -39,7 +39,7 @@ class UserController extends Controller
         $roles = Roles::all();
         return view('users.addUser', compact('roles'));
     }
-    function store(Request $request)
+    function store(FormUserRequest $request)
     {
         $user = new User();
         $user->full_name = $request->full_name;

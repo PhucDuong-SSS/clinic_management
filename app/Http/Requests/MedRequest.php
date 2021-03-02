@@ -25,7 +25,7 @@ class MedRequest extends FormRequest
     {
         return [
             'category' => 'required',
-            'medicine_name' => 'required|unique:medicines,medicine_name,' . $this->id,
+            'medicine_name' => 'required|unique:medicines,medicine_name,',
             'sell_price' => 'required|numeric',
             'unit' => 'required',
             'image' => 'required|image',

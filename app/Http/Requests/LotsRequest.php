@@ -24,7 +24,7 @@ class LotsRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required|unique:lots,code,' . $this->id,
+            'code' => 'required|unique:lots,code,',
             'medicine' => 'required',
             'medicine_amount' => 'required|numeric',
             'expired_date' => 'required',
