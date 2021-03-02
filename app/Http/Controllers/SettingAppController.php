@@ -37,7 +37,7 @@ class SettingAppController extends Controller
 
         $message = 'Thêm thành công!';
 
-        return redirect()->route('setting.index')->with('toast_success',$message);
+        return redirect()->route('setting.index')->with('success',$message);
     }
 
     public function edit($id)
@@ -56,7 +56,7 @@ class SettingAppController extends Controller
 
         $message = 'Sửa thành công!';
 
-        return redirect()->route('setting.index')->with('toast_success',$message);
+        return redirect()->route('setting.index')->with('success',$message);
 
     }
 
@@ -69,6 +69,6 @@ class SettingAppController extends Controller
 
         $message = 'Xóa thành công!';
 
-        return redirect()->route('setting.index')->with('toast_success',$message);
+        return redirect()->route('setting.index')->with('success',$message);
     }
 }
