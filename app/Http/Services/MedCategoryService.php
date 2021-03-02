@@ -27,7 +27,6 @@ class MedCategoryService implements ServiceInterface
     function add($request, $obj = null)
     {
         $obj = new medCategory();
-        $obj->id = $request->id;
         $obj->med_category_name = $request->med_category_name;
         $obj->description = $request->description;
         $this->medCategoryRepo->save($obj);
