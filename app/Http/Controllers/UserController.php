@@ -52,7 +52,7 @@ class UserController extends Controller
         $user->image   = $pathImage;
 //        $user->image   = $request->image->store('public/images');
         $user->save();
-//        $user->role()->attach($request->role_key);
+        $user->role()->attach($request->role_key);
         return redirect()->route('user.index')->with('success', "Thêm thành viên thành công");
     }
     function edit($id)
