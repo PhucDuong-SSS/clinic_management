@@ -18,7 +18,7 @@ class SymptonController extends Controller
     }
 
     // Phúc
-    public function addSympton(Request $request)
+    public function addSympton(SymptonRequest $request)
     {
             $sympton = new Sympton();
 
