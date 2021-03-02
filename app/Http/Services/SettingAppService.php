@@ -28,7 +28,6 @@ class SettingAppService implements ServiceInterface
     public function add($request, $obj = null)
     {
         $obj = new Setting();
-        $obj->id = $request ->id;
         $obj->name_doctor = $request->name_doctor;
         $obj->degree = $request->degree;
         $obj->name_clinic = $request->name_clinic;
