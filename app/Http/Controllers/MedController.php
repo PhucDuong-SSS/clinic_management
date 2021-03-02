@@ -91,15 +91,13 @@ class MedController extends Controller
     {
         $medicine = Medicine::findOrFail($id);
         $lot= Lot::where('id_med',$id)->get();
-        if(count($lot)){
-            $message="Bạn không thể xóa";
-            return response()->json(["warning" => $message]);
+        if(count($lot)) {
+            return redirect()->route('med.index')->with('warning', "Bạn không thể xóa");
         }else{
         $oldImage = $medicine->image;
         $medicine->delete();
         Storage::delete($oldImage);
-        $message="Xóa thành công";
-            return response()->json(["success" => $message]);
+            return redirect()->route('med.index')->with('success', "Đã xóa");
         }
     }
 
