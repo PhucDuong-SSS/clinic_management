@@ -31,12 +31,12 @@ class UserController extends Controller
     function index()
     {
         $users = User::all();
-        $roles = Role::all();
+        $roles = Roles::all();
         return view('users.list', compact('users', 'roles'));
     }
     function create()
     {
-        $roles = Role::all();
+        $roles = Roles::all();
         return view('users.addUser', compact('roles'));
     }
     function store(FormUserRequest $request)
