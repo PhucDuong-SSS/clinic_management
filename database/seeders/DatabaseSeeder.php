@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
     {
         $faker  = Faker::create();
 
-        foreach (range(1, 30) as $index) {
+        foreach (range(1, 2) as $index) {
             DB::table('med_categories')->insert([
                 'med_category_name' => $faker->word,
                 'description' => $faker->paragraph(1)
@@ -36,14 +36,14 @@ class DatabaseSeeder extends Seeder
         }
 
 
-        foreach (range(1, 3) as $index) {
+        foreach (range(1, 2) as $index) {
             DB::table('units')->insert([
                 'unit_name' => $faker->randomElement(['vỉ', 'chai', 'ống']),
             ]);
         }
 
 
-        foreach (range(1, 20) as $index) {
+        foreach (range(1, 2) as $index) {
             $categories = medCategory::all();
             // $lots = Lot::all();
             $units = Unit::all();
@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        foreach (range(1, 10) as $index) {
+        foreach (range(1, 2) as $index) {
             $medicines = Medicine::all();
             DB::table('lots')->insert([
                 'code' => $faker->unique()->word,
@@ -72,7 +72,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        foreach (range(1, 20) as $index) {
+        foreach (range(1, 2) as $index) {
 
             DB::table('patients')->insert([
                 'full_name' => $faker->name,
@@ -84,7 +84,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        foreach (range(1, 5) as $index) {
+        foreach (range(1, 2) as $index) {
 
             DB::table('symptons')->insert([
                 'sympton_name' => $faker->unique()->name,
@@ -92,7 +92,7 @@ class DatabaseSeeder extends Seeder
         }
 
 
-        foreach (range(1, 20) as $index) {
+        foreach (range(1, 2) as $index) {
             $patients = Patient::all();
             $symptons = Sympton::all();
 
