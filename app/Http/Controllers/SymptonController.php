@@ -39,7 +39,10 @@ class SymptonController extends Controller
 
     public function store(SymptonRequest $request)
     {
-        $symptons = $this->symtonService->add($request);
+        $symptons = new Sympton();
+        $symptons->sympton_name = $request->sympton_name;
+        $symptons->save();
+        $message = 'Thêm thành công!';
 
         $symptons = Sympton::all();
 
