@@ -93,13 +93,14 @@ class MedController extends Controller
         $lot= Lot::where('id_med',$id)->get();
         if(count($lot)){
             $message="Bạn không thể xóa";
+            return response()->json(["warning" => $message]);
         }else{
         $oldImage = $medicine->image;
         $medicine->delete();
         Storage::delete($oldImage);
         $message="Xóa thành công";
+            return response()->json(["success" => $message]);
         }
-        return response()->json(["success" => $message]);
     }
 
 
