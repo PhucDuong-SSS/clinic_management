@@ -26,8 +26,8 @@ class FormUserRequest extends FormRequest
         return [
             'full_name' => 'required|min:2|max:30',
             'user_name' => 'required|regex: /(^[a-z0-9]{8,30}$)/u|unique:users',
-            'email' => 'required|min:8|unique:users,email,' ,
-            'phone' => 'required|numeric|unique:users,phone,',
+            'email' => 'required|min:8|unique:users',
+            'phone' => 'required|numeric|unique:users',
             'address' => 'required|min:2',
             'image' => 'required|image',
             'password' => 'required|regex: /(^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$)/u',
