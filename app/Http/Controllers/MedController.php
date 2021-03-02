@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MedEditRequest;
 use App\Http\Requests\MedRequest;
+use App\Models\Lot;
 use App\Models\medCategory;
 use App\Models\Medicine;
 use App\Models\Unit;
@@ -89,10 +90,16 @@ class MedController extends Controller
     function destroy($id)
     {
         $medicine = Medicine::findOrFail($id);
+        $lot= Lot::where('id_med',$id)->get();
+        if(count($lot)){
+            $message="Bạn không thể xóa";
+        }else{
         $oldImage = $medicine->image;
         $medicine->delete();
         Storage::delete($oldImage);
-        return response()->json(["success" => "Record has been delete"]);
+        $message="Xóa thành công";
+        }
+        return response()->json(["success" => $message]);
     }
 
 
