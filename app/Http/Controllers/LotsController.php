@@ -38,7 +38,7 @@ class LotsController extends Controller
         $lots->expired_date = $request->expired_date;
         $lots->receipt_date = $request->receipt_date;
         $lots->total_price = $request->total_price;
-        $lots->unit_price = round(($request->total_price / $request->medicine_amount), 2);
+        $lots->unit_price = round(($request->total_price / $request->medicine_amount), 0);
         $lots->save();
 
         $medicine = Medicine::findOrFail($request->medicine);

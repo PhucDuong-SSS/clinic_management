@@ -51,9 +51,9 @@ Route::middleware('adminLogin')->prefix('admin')->group(function () {
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('user.index')->middleware('permission:list_user');
         Route::get('/create', [UserController::class, 'create'])->name('user.create')->middleware('permission:add_user');
-        Route::post('/create', [UserController::class, 'store'])->name('user.store')->middleware('permission:add_user');
+        Route::post('/create', [UserController::class, 'store'])->name('user.store');
         Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit')->middleware('permission:edit_user');
-        Route::post('/{id}/edit', [UserController::class, 'update'])->name('user.update')->middleware('permission:edit_user');
+        Route::post('/{id}/edit', [UserController::class, 'update'])->name('user.update');
         Route::delete('/destroy/{id}', [UserController::class, 'destroy'])->name('user.destroy')->middleware('permission:delete_user');
         Route::get('/changepassword', [UserController::class, 'changepasswordform'])->name('user.changepasswordform');
         Route::post('/changepassword/{id}', [UserController::class, 'changepassword'])->name('user.changepassword');
@@ -64,9 +64,9 @@ Route::middleware('adminLogin')->prefix('admin')->group(function () {
     Route::prefix('role')->group(function () {
         Route::get('/', [RoleController::class, 'index'])->name('role.index')->middleware('permission:list_role');
         Route::get('/create', [RoleController::class, 'create'])->name('role.create')->middleware('permission:add_role');
-        Route::post('/create', [RoleController::class, 'store'])->name('role.store')->middleware('permission:add_role');
+        Route::post('/create', [RoleController::class, 'store'])->name('role.store');
         Route::get('/{id}/edit', [RoleController::class, 'edit'])->name('role.edit')->middleware('permission:edit_role');
-        Route::post('/{id}/edit', [RoleController::class, 'update'])->name('role.update')->middleware('permission:edit_role');
+        Route::post('/{id}/edit', [RoleController::class, 'update'])->name('role.update');
         Route::delete('/destroy/{id}', [RoleController::class, 'destroy'])->name('role.destroy')->middleware('permission:delete_role');
     });
 
@@ -82,9 +82,9 @@ Route::middleware('adminLogin')->prefix('admin')->group(function () {
     });
     Route::prefix('med')->group(function () {
         Route::get('/create', [MedController::class, 'create'])->name('med.create')->middleware('permission:add_med');
-        Route::post('/create', [MedController::class, 'store'])->name('med.store')->middleware('permission:add_med');
+        Route::post('/create', [MedController::class, 'store'])->name('med.store');
         Route::get('/{id}/edit', [MedController::class, 'edit'])->name('med.edit')->middleware('permission:edit_med');
-        Route::post('/{id}/edit', [MedController::class, 'update'])->name('med.update')->middleware('permission:edit_med');
+        Route::post('/{id}/edit', [MedController::class, 'update'])->name('med.update');
         Route::delete('/destroy/{id}', [MedController::class, 'destroy'])->name('med.destroy')->middleware('permission:delete_med');
         Route::get('/almostOver', [MedController::class, 'almostOver'])->name('med.aboutToExpire')->middleware('permission:list_almostOver');
     });
@@ -94,9 +94,9 @@ Route::middleware('adminLogin')->prefix('admin')->group(function () {
     Route::prefix('lots')->group(function () {
         Route::post('/searchDate', [LotsController::class, 'search'])->name('lots.search');
         Route::get('/create', [LotsController::class, 'create'])->name('lots.create')->middleware('permission:add_lot');
-        Route::post('/create', [LotsController::class, 'store'])->name('lots.store')->middleware('permission:add_lot');
+        Route::post('/create', [LotsController::class, 'store'])->name('lots.store');
         Route::get('/{id}/edit', [LotsController::class, 'edit'])->name('lots.edit')->middleware('permission:edit_lot');
-        Route::post('/{id}/edit', [LotsController::class, 'update'])->name('lots.update')->middleware('permission:edit_lot');
+        Route::post('/{id}/edit', [LotsController::class, 'update'])->name('lots.update');
         Route::delete('/destroy/{id}', [LotsController::class, 'destroy'])->name('lots.destroy')->middleware('permission:delete_lot');
     });
 
