@@ -94,7 +94,7 @@
             Swal.fire({
                 text: 'Bạn muốn xóa đơn thuốc này phải không?',
                 showCancelButton: true,
-                confirmButtonText: 'Delete',g
+                confirmButtonText: 'Delete',
                 confirmButtonColor: '#e3342f',
             }).then((result) => {
                 if (result.value) {
