@@ -54,7 +54,7 @@
                                         </a>
                                         @endif
                                          @if($permissionOfRole->contains($checkDeletePres))
-                                        <a href="{{route('prescription.delete',$prescription->id)}}" class="btn btn-sm btn-danger" title="Xóa" id="delete"><i class="fa fa-trash"></i></a>
+                                        <a href="{{route('prescription.delete',$prescription->id)}}" class="btn btn-sm btn-danger delete-confirm" title="Xóa" id="delete"><i class="fa fa-trash"></i></a>
                                         @endif
 
                                         @foreach($arrIndexByReExam as $arr)
@@ -91,16 +91,16 @@
         $('.delete-confirm').on('click', function (event) {
     event.preventDefault();
     const url = $(this).attr('href');
-    swal({
-        title: 'Are you sure?',
-        text: 'Bạn có chắc chắn muốn xóa đơn thuốc này không?',
-        icon: 'warning',
-        buttons: ["Hủy", "Yes!"],
-    }).then(function(value) {
-        if (value) {
-            window.location.href = url;
-        }
-    });
+            Swal.fire({
+                text: 'Bạn muốn xóa đơn thuốc này phải không?',
+                showCancelButton: true,
+                confirmButtonText: 'Delete',g
+                confirmButtonColor: '#e3342f',
+            }).then((result) => {
+                if (result.value) {
+                    window.location.href = url;
+                }
+            });
 });
     });
 </script>

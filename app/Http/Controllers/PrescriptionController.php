@@ -249,7 +249,7 @@ class PrescriptionController extends Controller
         DB::table('prescription_medicine')->where('id_prescrition',$id)->delete();
 
         $message = 'Xóa thành công!';
-        return back()->with('success',$message);
+        return redirect()->route('prescription.index')->with('success',$message);
     }
 
     public function print($id)
